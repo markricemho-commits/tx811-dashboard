@@ -74,10 +74,10 @@
 </head>
 <body>
 <h1>Texas811 Dig Ticket Dashboard</h1>
-<div class="subtitle">As of August 03, 2026 09:45 AM &middot; click a company card to see every ticket</div>
+<div class="subtitle">As of August 03, 2026 12:18 PM &middot; click a company card to see every ticket</div>
 <div class="summary-row">
   <div class="summary-stat"><div class="num">24</div><div class="label">Total tickets</div></div>
-  <div class="summary-stat"><div class="num">1</div><div class="label">Companies</div></div>
+  <div class="summary-stat"><div class="num">2</div><div class="label">Companies</div></div>
   <div class="summary-stat flag"><div class="num">16</div><div class="label">No Response</div></div>
 </div>
 <main>
@@ -332,6 +332,24 @@
   <td>E VIEJO DR</td>
   <td>Directional Bore</td>
 </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="card">
+  <div class="card-head" onclick="toggleCompany('lv-electric-and-plumbing')">
+    <span class="chevron" id="chev-lv-electric-and-plumbing">&#9656;</span>
+    <span class="card-title">LV ELECTRIC AND PLUMBING</span>
+    <span class="card-stats">0 tickets &middot; 0 flagged</span>
+  </div>
+  <div class="panel" id="panel-lv-electric-and-plumbing" style="display:none">
+    <table>
+      <thead><tr>
+        <th>Ticket #</th><th>Type</th><th>Created</th><th>Work Date</th>
+        <th>County</th><th>City</th><th>Street</th><th>Nature of Work</th>
+      </tr></thead>
+      <tbody>
+        <tr><td colspan="8" class="empty">No tickets in range</td></tr>
       </tbody>
     </table>
   </div>
