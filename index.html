@@ -7,12 +7,27 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
-  #tm-map { height: 520px; width: 100%; border-radius: 0 0 8px 8px; }
+  .tm-wrap { display:flex; align-items:stretch; }
+  #tm-map { flex:1; min-width:0; height: 520px; }
   .tm-legend { display:flex; gap:18px; align-items:center; padding:10px 18px; font-size:12px; color:#555; border-top:1px solid #eee; }
   .tm-dot { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:5px; vertical-align:middle; }
   .tm-dot.red { background:#d9342b; }
   .tm-dot.green { background:#2e9e4f; }
   .tm-note { margin-left:auto; color:#999; }
+  #tmPanel { width:0; overflow:hidden; height:520px; background:#fff; border-left:1px solid #eee; transition: width .15s; flex-shrink:0; }
+  #tmPanel.open { width:320px; overflow-y:auto; }
+  .tmp-inner { width:320px; padding:16px 18px; }
+  .tmp-close { float:right; cursor:pointer; color:#999; font-size:18px; line-height:1; background:none; border:none; padding:0; }
+  .tmp-close:hover { color:#333; }
+  .tmp-title { font-size:17px; font-weight:700; color:var(--blue); margin:0 0 4px; }
+  .tmp-section { margin-top:16px; }
+  .tmp-section h4 { margin:0 0 8px; font-size:11px; text-transform:uppercase; letter-spacing:.04em; color:#888; border-bottom:1px solid #eee; padding-bottom:4px; }
+  .tmp-row { display:flex; justify-content:space-between; gap:10px; font-size:13px; padding:3px 0; }
+  .tmp-row .k { color:#777; }
+  .tmp-row .v { text-align:right; font-weight:500; }
+  .tmp-link-btn { display:block; text-align:center; margin-top:10px; background:var(--blue); color:#fff; text-decoration:none; padding:9px 12px; border-radius:6px; font-size:13px; font-weight:600; }
+  .tmp-link-btn:hover { opacity:.9; }
+  .tmp-note-box { font-size:12px; color:#666; background:#f4f6f8; border-radius:6px; padding:10px 12px; margin-top:8px; line-height:1.5; }
   :root {
     --blue: #1f4e79; --blue-light: #dce6f1; --red: #c00000; --red-light: #f8cbcb;
     --green: #2e9e4f; --green-light: #e3f5e8;
@@ -52,7 +67,7 @@
 <body>
 <header>
   <h1>Texas811 Dig Ticket Dashboard</h1>
-  <div class="sub">As of August 03, 2026 09:20 AM</div>
+  <div class="sub">As of August 03, 2026 09:27 AM</div>
 </header>
 <div class="stats">
   <div class="stat"><div class="num">24</div><div class="label">Total Tickets</div></div>
@@ -67,11 +82,14 @@
       <span class="card-stats">21 mapped &middot; 3 not yet mapped</span>
     </div>
     <div class="panel" id="panel-map" style="display:none">
-      <div id="tm-map"></div>
+      <div class="tm-wrap">
+        <div id="tm-map"></div>
+        <div id="tmPanel"><div class="tmp-inner" id="tmPanelInner"></div></div>
+      </div>
       <div class="tm-legend">
         <span><span class="tm-dot red"></span>No Response</span>
         <span><span class="tm-dot green"></span>Normal / other</span>
-        <span class="tm-note">Click a pin, then the ticket # in its popup to open the live GeoCall record.</span>
+        <span class="tm-note">Click a pin to see ticket details.</span>
       </div>
     </div>
   </div>
@@ -313,7 +331,7 @@
 </main>
 <footer>Click a ticket number to open its live record on GeoCall (Texas811) for full positive-response status.</footer>
 <script>
-const TM_POINTS = [{"num": "2671225610", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "S CENTURY CV, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:11 AM", "lat": 29.501491, "lon": -95.179432, "url": "https://txgc.texas811.org/ui/ticket/2671225610"}, {"num": "2671225604", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "N CENTURY CIR, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:10 AM", "lat": 29.501517, "lon": -95.180692, "url": "https://txgc.texas811.org/ui/ticket/2671225604"}, {"num": "2671225598", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "CENTURY DR, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:10 AM", "lat": 29.501619, "lon": -95.179789, "url": "https://txgc.texas811.org/ui/ticket/2671225598"}, {"num": "2671225584", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS LN, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:08 AM", "lat": 29.50461, "lon": -95.190029, "url": "https://txgc.texas811.org/ui/ticket/2671225584"}, {"num": "2671225575", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "OAK DR, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:07 AM", "lat": 29.502677, "lon": -95.180519, "url": "https://txgc.texas811.org/ui/ticket/2671225575"}, {"num": "2671225554", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS LN, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:05 AM", "lat": 29.50373, "lon": -95.191625, "url": "https://txgc.texas811.org/ui/ticket/2671225554"}, {"num": "2671225544", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS LN, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:04 AM", "lat": 29.503972, "lon": -95.189838, "url": "https://txgc.texas811.org/ui/ticket/2671225544"}, {"num": "2671225521", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS TRL, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:02 AM", "lat": 29.504344, "lon": -95.191279, "url": "https://txgc.texas811.org/ui/ticket/2671225521"}, {"num": "2671225512", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS LN, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:01 AM", "lat": 29.50447, "lon": -95.190484, "url": "https://txgc.texas811.org/ui/ticket/2671225512"}, {"num": "2671225499", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS BEND, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:00 AM", "lat": 29.504933, "lon": -95.189361, "url": "https://txgc.texas811.org/ui/ticket/2671225499"}, {"num": "2671225480", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "S FRIENDSWOOD DR, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 09:59 AM", "lat": 29.506514, "lon": -95.187638, "url": "https://txgc.texas811.org/ui/ticket/2671225480"}, {"num": "2671225467", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS FOREST, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 09:58 AM", "lat": 29.50502, "lon": -95.188107, "url": "https://txgc.texas811.org/ui/ticket/2671225467"}, {"num": "2671225433", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS COVE, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 09:55 AM", "lat": 29.505794, "lon": -95.187584, "url": "https://txgc.texas811.org/ui/ticket/2671225433"}, {"num": "2671225413", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS LN, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 09:53 AM", "lat": 29.505807, "lon": -95.187595, "url": "https://txgc.texas811.org/ui/ticket/2671225413"}, {"num": "2671092766", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "BLACKHAWK BLVD, HOUSTON, HARRIS", "created": "07/29/2026 04:18 PM", "lat": 29.522946, "lon": -95.169926, "url": "https://txgc.texas811.org/ui/ticket/2671092766"}, {"num": "2671092757", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "FM 528, HOUSTON, HARRIS", "created": "07/29/2026 04:14 PM", "lat": 29.568646, "lon": -95.092794, "url": "https://txgc.texas811.org/ui/ticket/2671092757"}, {"num": "2671092707", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "E PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "07/29/2026 03:58 PM", "lat": 29.513258, "lon": -95.18329, "url": "https://txgc.texas811.org/ui/ticket/2671092707"}, {"num": "2671092702", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "E PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "07/29/2026 03:56 PM", "lat": 29.513214, "lon": -95.188266, "url": "https://txgc.texas811.org/ui/ticket/2671092702"}, {"num": "2671092698", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "E PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "07/29/2026 03:53 PM", "lat": 29.524373, "lon": -95.190336, "url": "https://txgc.texas811.org/ui/ticket/2671092698"}, {"num": "2671091740", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "W VIEJO DR, FRIENDSWOOD, GALVESTON", "created": "07/29/2026 12:17 PM", "lat": 29.500477, "lon": -95.178601, "url": "https://txgc.texas811.org/ui/ticket/2671091740"}, {"num": "2671091686", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "E VIEJO DR, FRIENDSWOOD, GALVESTON", "created": "07/29/2026 12:03 PM", "lat": 29.501599, "lon": -95.177757, "url": "https://txgc.texas811.org/ui/ticket/2671091686"}];
+const TM_POINTS = [{"num": "2671225610", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "S CENTURY CV, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:11 AM", "workDate": "07/31/2026 10:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "S CENTURY CV", "intersection": "CENTURY DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.501491, "lon": -95.179432, "url": "https://txgc.texas811.org/ui/ticket/2671225610"}, {"num": "2671225604", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "N CENTURY CIR, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:10 AM", "workDate": "07/31/2026 10:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "N CENTURY CIR", "intersection": "CENTURY DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.501517, "lon": -95.180692, "url": "https://txgc.texas811.org/ui/ticket/2671225604"}, {"num": "2671225598", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "CENTURY DR, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:10 AM", "workDate": "07/31/2026 10:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "CENTURY DR", "intersection": "S FRIENDSWOOD DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.501619, "lon": -95.179789, "url": "https://txgc.texas811.org/ui/ticket/2671225598"}, {"num": "2671225584", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS LN, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:08 AM", "workDate": "07/31/2026 10:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS LN", "intersection": "HUNTERS TRL", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.50461, "lon": -95.190029, "url": "https://txgc.texas811.org/ui/ticket/2671225584"}, {"num": "2671225575", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "OAK DR, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:07 AM", "workDate": "07/31/2026 10:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "OAK DR", "intersection": "S FRIENDSWOOD DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.502677, "lon": -95.180519, "url": "https://txgc.texas811.org/ui/ticket/2671225575"}, {"num": "2671225554", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS LN, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:05 AM", "workDate": "07/31/2026 10:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS LN", "intersection": "HUNTERS TRL", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.50373, "lon": -95.191625, "url": "https://txgc.texas811.org/ui/ticket/2671225554"}, {"num": "2671225544", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS LN, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:04 AM", "workDate": "07/31/2026 10:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS LN", "intersection": "S FRIENDSWOOD DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.503972, "lon": -95.189838, "url": "https://txgc.texas811.org/ui/ticket/2671225544"}, {"num": "2671225521", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS TRL, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:02 AM", "workDate": "07/31/2026 10:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS TRL", "intersection": "HUNTERS LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.504344, "lon": -95.191279, "url": "https://txgc.texas811.org/ui/ticket/2671225521"}, {"num": "2671225512", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS LN, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:01 AM", "workDate": "07/31/2026 10:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS LN", "intersection": "HUNTERS TRL", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.50447, "lon": -95.190484, "url": "https://txgc.texas811.org/ui/ticket/2671225512"}, {"num": "2671225499", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS BEND, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:00 AM", "workDate": "07/31/2026 10:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS BEND", "intersection": "HUNTERS LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.504933, "lon": -95.189361, "url": "https://txgc.texas811.org/ui/ticket/2671225499"}, {"num": "2671225480", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "S FRIENDSWOOD DR, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 09:59 AM", "workDate": "07/31/2026 10:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "S FRIENDSWOOD DR", "intersection": "HUNTERS LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.506514, "lon": -95.187638, "url": "https://txgc.texas811.org/ui/ticket/2671225480"}, {"num": "2671225467", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS FOREST, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 09:58 AM", "workDate": "07/31/2026 10:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS FOREST", "intersection": "HUNTERS LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.50502, "lon": -95.188107, "url": "https://txgc.texas811.org/ui/ticket/2671225467"}, {"num": "2671225433", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS COVE, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 09:55 AM", "workDate": "07/31/2026 10:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS COVE", "intersection": "HUNTERS LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.505794, "lon": -95.187584, "url": "https://txgc.texas811.org/ui/ticket/2671225433"}, {"num": "2671225413", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS LN, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 09:53 AM", "workDate": "07/31/2026 10:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS LN", "intersection": "S FRIENDSWOOD DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.505807, "lon": -95.187595, "url": "https://txgc.texas811.org/ui/ticket/2671225413"}, {"num": "2671092766", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "BLACKHAWK BLVD, HOUSTON, HARRIS", "created": "07/29/2026 04:18 PM", "workDate": "07/31/2026 04:15 PM", "county": "HARRIS", "city": "HOUSTON", "street": "BLACKHAWK BLVD", "intersection": "FM 528", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.522946, "lon": -95.169926, "url": "https://txgc.texas811.org/ui/ticket/2671092766"}, {"num": "2671092757", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "FM 528, HOUSTON, HARRIS", "created": "07/29/2026 04:14 PM", "workDate": "07/31/2026 04:15 PM", "county": "HARRIS", "city": "HOUSTON", "street": "FM 528", "intersection": "BAY AREA BLVD", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.568646, "lon": -95.092794, "url": "https://txgc.texas811.org/ui/ticket/2671092757"}, {"num": "2671092707", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "E PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "07/29/2026 03:58 PM", "workDate": "07/31/2026 04:00 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E PARKWOOD AVE", "intersection": "PENNY LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.513258, "lon": -95.18329, "url": "https://txgc.texas811.org/ui/ticket/2671092707"}, {"num": "2671092702", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "E PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "07/29/2026 03:56 PM", "workDate": "07/31/2026 04:00 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E PARKWOOD AVE", "intersection": "WINDING WAY DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.513214, "lon": -95.188266, "url": "https://txgc.texas811.org/ui/ticket/2671092702"}, {"num": "2671092698", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "E PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "07/29/2026 03:53 PM", "workDate": "07/31/2026 03:45 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E PARKWOOD AVE", "intersection": "S FRIENDSWOOD", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.524373, "lon": -95.190336, "url": "https://txgc.texas811.org/ui/ticket/2671092698"}, {"num": "2671091740", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "W VIEJO DR, FRIENDSWOOD, GALVESTON", "created": "07/29/2026 12:17 PM", "workDate": "07/29/2026 12:15 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "W VIEJO DR", "intersection": "FM 518", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.500477, "lon": -95.178601, "url": "https://txgc.texas811.org/ui/ticket/2671091740"}, {"num": "2671091686", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "E VIEJO DR, FRIENDSWOOD, GALVESTON", "created": "07/29/2026 12:03 PM", "workDate": "07/29/2026 12:15 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E VIEJO DR", "intersection": "FM 518", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.501599, "lon": -95.177757, "url": "https://txgc.texas811.org/ui/ticket/2671091686"}];
 let tmMap = null;
 
 function toggleCompany(slug) {
@@ -332,6 +350,50 @@ function toggleMap() {
   chev.classList.toggle('open', !open);
   if (!open && !tmMap) initMap();
   if (!open && tmMap) setTimeout(() => tmMap.invalidateSize(), 50);
+}
+
+function tmRow(k, v) {
+  if (!v) return '';
+  return '<div class="tmp-row"><span class="k">' + k + '</span><span class="v">' + v + '</span></div>';
+}
+
+function openTmPanel(p) {
+  const panel = document.getElementById('tmPanel');
+  const inner = document.getElementById('tmPanelInner');
+  inner.innerHTML =
+    '<button class="tmp-close" onclick="closeTmPanel()">&times;</button>' +
+    '<div class="tmp-title">Ticket ' + p.num + '</div>' +
+    '<span class="chip ' + (p.flagged ? 'chip-bad' : 'chip-ok') + '">' + p.type + '</span>' +
+
+    '<div class="tmp-section"><h4>General Report</h4>' +
+    tmRow('Excavator', p.company) +
+    tmRow('Created', p.created) +
+    tmRow('Work Date', p.workDate) +
+    tmRow('Taken By', p.takenBy) +
+    tmRow('Work Done For', p.workDoneFor) +
+    tmRow('Phone', p.phone) +
+    '</div>' +
+
+    '<div class="tmp-section"><h4>Ticket Details</h4>' +
+    tmRow('County', p.county) +
+    tmRow('City', p.city) +
+    tmRow('Street', p.street) +
+    tmRow('Intersection', p.intersection) +
+    tmRow('Nature of Work', p.nature) +
+    tmRow('Duration', p.duration) +
+    '</div>' +
+
+    '<div class="tmp-section"><h4>Positive Response</h4>' +
+    '<div class="tmp-note-box">Per-utility Marked/Clear status isn\'t pulled into this dashboard -- open the live ticket on GeoCall for full response history.</div>' +
+    '<a class="tmp-link-btn" href="' + p.url + '" target="_blank" rel="noopener">Open Ticket on GeoCall &#8594;</a>' +
+    '</div>';
+  panel.classList.add('open');
+  setTimeout(() => tmMap.invalidateSize(), 160);
+}
+
+function closeTmPanel() {
+  document.getElementById('tmPanel').classList.remove('open');
+  setTimeout(() => tmMap.invalidateSize(), 160);
 }
 
 function initMap() {
@@ -357,14 +419,7 @@ function initMap() {
       iconAnchor: [8, 16]
     });
     const marker = L.marker([p.lat, p.lon], {icon: icon}).addTo(tmMap);
-    marker.bindPopup(
-      '<div style="font-size:13px;line-height:1.5;">' +
-      '<a href="' + p.url + '" target="_blank" rel="noopener" style="font-weight:700;">' + p.num + '</a><br>' +
-      '<span class="chip ' + (p.flagged ? 'chip-bad' : 'chip-ok') + '">' + p.type + '</span><br>' +
-      p.company + '<br>' + p.addr + '<br>' +
-      '<span style="color:#888;">' + p.created + '</span>' +
-      '</div>'
-    );
+    marker.on('click', function() { openTmPanel(p); });
     bounds.push([p.lat, p.lon]);
   });
   tmMap.fitBounds(bounds, {padding: [30, 30]});
