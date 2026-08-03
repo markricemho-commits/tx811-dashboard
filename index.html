@@ -4,7 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Texas811 Dig Ticket Dashboard</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
+  #tm-map { height: 520px; width: 100%; border-radius: 0 0 8px 8px; }
+  .tm-legend { display:flex; gap:18px; align-items:center; padding:10px 18px; font-size:12px; color:#555; border-top:1px solid #eee; }
+  .tm-dot { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:5px; vertical-align:middle; }
+  .tm-dot.red { background:#d9342b; }
+  .tm-dot.green { background:#2e9e4f; }
+  .tm-note { margin-left:auto; color:#999; }
   :root {
     --blue: #1f4e79; --blue-light: #dce6f1; --red: #c00000; --red-light: #f8cbcb;
     --green: #2e9e4f; --green-light: #e3f5e8;
@@ -44,7 +52,7 @@
 <body>
 <header>
   <h1>Texas811 Dig Ticket Dashboard</h1>
-  <div class="sub">As of August 03, 2026 08:17 AM</div>
+  <div class="sub">As of August 03, 2026 08:36 AM</div>
 </header>
 <div class="stats">
   <div class="stat"><div class="num">24</div><div class="label">Total Tickets</div></div>
@@ -52,6 +60,21 @@
   <div class="stat flag"><div class="num">16</div><div class="label">No Response</div></div>
 </div>
 <main>
+  <div class="card">
+    <div class="card-head" onclick="toggleMap()">
+      <span class="chevron" id="chev-map">&#9656;</span>
+      <span class="card-title">Ticket Map</span>
+      <span class="card-stats">4 mapped &middot; 20 not yet mapped</span>
+    </div>
+    <div class="panel" id="panel-map" style="display:none">
+      <div id="tm-map"></div>
+      <div class="tm-legend">
+        <span><span class="tm-dot red"></span>No Response</span>
+        <span><span class="tm-dot green"></span>Normal / other</span>
+        <span class="tm-note">Click a pin, then the ticket # in its popup to open the live GeoCall record.</span>
+      </div>
+    </div>
+  </div>
   
 <div class="card">
   <div class="card-head" onclick="toggleCompany('g-reed-llc')">
@@ -290,12 +313,61 @@
 </main>
 <footer>Click a ticket number to open its live record on GeoCall (Texas811) for full positive-response status.</footer>
 <script>
+const TM_POINTS = [{"num": "2671225610", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "S CENTURY CV, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:11 AM", "lat": 29.501491, "lon": -95.179432, "url": "https://txgc.texas811.org/ui/ticket/2671225610"}, {"num": "2671225604", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "N CENTURY CIR, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:10 AM", "lat": 29.501517, "lon": -95.180692, "url": "https://txgc.texas811.org/ui/ticket/2671225604"}, {"num": "2671225413", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS LN, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 09:53 AM", "lat": 29.505807, "lon": -95.187595, "url": "https://txgc.texas811.org/ui/ticket/2671225413"}, {"num": "2671092766", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "BLACKHAWK BLVD, HOUSTON, HARRIS", "created": "07/29/2026 04:18 PM", "lat": 29.522946, "lon": -95.169926, "url": "https://txgc.texas811.org/ui/ticket/2671092766"}];
+let tmMap = null;
+
 function toggleCompany(slug) {
   const panel = document.getElementById('panel-' + slug);
   const chev = document.getElementById('chev-' + slug);
   const open = panel.style.display !== 'none';
   panel.style.display = open ? 'none' : 'block';
   chev.classList.toggle('open', !open);
+}
+
+function toggleMap() {
+  const panel = document.getElementById('panel-map');
+  const chev = document.getElementById('chev-map');
+  const open = panel.style.display !== 'none';
+  panel.style.display = open ? 'none' : 'block';
+  chev.classList.toggle('open', !open);
+  if (!open && !tmMap) initMap();
+  if (!open && tmMap) setTimeout(() => tmMap.invalidateSize(), 50);
+}
+
+function initMap() {
+  if (!TM_POINTS.length) {
+    document.getElementById('tm-map').innerHTML =
+      '<div style="padding:40px;text-align:center;color:#999;">No mapped tickets yet.</div>';
+    return;
+  }
+  tmMap = L.map('tm-map');
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(tmMap);
+
+  const bounds = [];
+  TM_POINTS.forEach(function(p) {
+    const color = p.flagged ? '#d9342b' : '#2e9e4f';
+    const icon = L.divIcon({
+      className: '',
+      html: '<div style="width:16px;height:16px;border-radius:50% 50% 50% 0;background:' + color +
+            ';transform:rotate(-45deg);border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.4);"></div>',
+      iconSize: [16, 16],
+      iconAnchor: [8, 16]
+    });
+    const marker = L.marker([p.lat, p.lon], {icon: icon}).addTo(tmMap);
+    marker.bindPopup(
+      '<div style="font-size:13px;line-height:1.5;">' +
+      '<a href="' + p.url + '" target="_blank" rel="noopener" style="font-weight:700;">' + p.num + '</a><br>' +
+      '<span class="chip ' + (p.flagged ? 'chip-bad' : 'chip-ok') + '">' + p.type + '</span><br>' +
+      p.company + '<br>' + p.addr + '<br>' +
+      '<span style="color:#888;">' + p.created + '</span>' +
+      '</div>'
+    );
+    bounds.push([p.lat, p.lon]);
+  });
+  tmMap.fitBounds(bounds, {padding: [30, 30]});
 }
 </script>
 </body>
