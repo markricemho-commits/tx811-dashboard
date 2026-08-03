@@ -7,72 +7,78 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
-  .tm-wrap { display:flex; align-items:stretch; }
-  #tm-map { flex:1; min-width:0; height: 520px; }
-  .tm-legend { display:flex; gap:18px; align-items:center; padding:10px 18px; font-size:12px; color:#555; border-top:1px solid #eee; }
-  .tm-dot { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:5px; vertical-align:middle; }
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body {
+    margin:0; padding:24px; background:#F7F8FA;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    color:#1F2430;
+  }
+  h1 { font-size:20px; margin:0 0 4px 0; color:#2C3138; }
+  .subtitle { color:#6B7280; font-size:13px; margin-bottom:20px; padding-bottom:14px; border-bottom:3px solid #E87722; }
+
+  .summary-row { display:flex; gap:16px; margin-bottom:24px; flex-wrap:wrap; }
+  .summary-stat { background:#fff; border:1px solid #E5E7EB; border-radius:10px; padding:14px 18px; min-width:120px; }
+  .summary-stat .num { font-size:24px; font-weight:700; }
+  .summary-stat .label { font-size:12px; color:#6B7280; margin-top:2px; }
+  .summary-stat.flag .num { color:#B91C1C; }
+
+  main { max-width:1200px; margin:0 auto; }
+  .card { background:#fff; border:1px solid #E5E7EB; border-radius:10px; margin-bottom:14px; overflow:hidden; transition:box-shadow .15s, border-color .15s; }
+  .card:hover { box-shadow:0 2px 8px rgba(0,0,0,0.06); border-color:#F0C9A6; }
+  .card-head { display:flex; align-items:center; gap:10px; padding:16px; cursor:pointer; user-select:none; }
+  .chevron { transition: transform .15s; font-size:12px; color:#E87722; }
+  .chevron.open { transform: rotate(90deg); }
+  .card-title { font-weight:600; font-size:13px; flex:1; }
+  .card-stats { font-size:12px; color:#6B7280; }
+  .panel { border-top:1px solid #E5E7EB; }
+  table { width:100%; border-collapse: collapse; font-size:12px; }
+  th { background:#2C3138; color:#fff; text-align:left; padding:8px 10px; font-weight:600; position:sticky; top:0; }
+  td { padding:7px 10px; border-bottom:1px solid #EEF0F3; }
+  tr:nth-child(even) td { background:#F7FAFD; }
+  .ticket-link { color:#2C3138; text-decoration:none; font-weight:700; }
+  .ticket-link:hover { color:#E87722; text-decoration:underline; }
+  .chip { display:inline-block; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:600; white-space:nowrap; }
+  .chip-ok { background:#E8F5E9; color:#2E7D32; }
+  .chip-bad { background:#FDECEA; color:#8B0000; }
+  .empty { text-align:center; color:#9CA3AF; padding:20px; font-style:italic; }
+  .footer { text-align:center; color:#9CA3AF; font-size:11px; padding:20px 0 4px; }
+
+  #tmWrap { position:relative; height:520px; border-radius:8px; overflow:hidden; border:1px solid #E5E7EB; }
+  #tm-map { position:absolute; inset:0; }
+  .tm-legend { position:absolute; z-index:1000; bottom:16px; left:16px; background:#fff; border-radius:6px; padding:10px 12px; font-size:12px; box-shadow:0 1px 5px rgba(0,0,0,.2); max-width:260px; }
+  .tm-legend-row { display:flex; align-items:center; gap:7px; margin:3px 0; }
+  .tm-dot { display:inline-block; width:9px; height:9px; border-radius:50%; flex:0 0 auto; }
   .tm-dot.red { background:#d9342b; }
   .tm-dot.green { background:#2e9e4f; }
-  .tm-note { margin-left:auto; color:#999; }
-  #tmPanel { width:0; overflow:hidden; height:520px; background:#fff; border-left:1px solid #eee; transition: width .15s; flex-shrink:0; }
-  #tmPanel.open { width:320px; overflow-y:auto; }
-  .tmp-inner { width:320px; padding:16px 18px; }
-  .tmp-close { float:right; cursor:pointer; color:#999; font-size:18px; line-height:1; background:none; border:none; padding:0; }
-  .tmp-close:hover { color:#333; }
-  .tmp-title { font-size:17px; font-weight:700; color:var(--blue); margin:0 0 4px; }
-  .tmp-section { margin-top:16px; }
-  .tmp-section h4 { margin:0 0 8px; font-size:11px; text-transform:uppercase; letter-spacing:.04em; color:#888; border-bottom:1px solid #eee; padding-bottom:4px; }
-  .tmp-row { display:flex; justify-content:space-between; gap:10px; font-size:13px; padding:3px 0; }
-  .tmp-row .k { color:#777; }
-  .tmp-row .v { text-align:right; font-weight:500; }
-  .tmp-link-btn { display:block; text-align:center; margin-top:10px; background:var(--blue); color:#fff; text-decoration:none; padding:9px 12px; border-radius:6px; font-size:13px; font-weight:600; }
-  .tmp-link-btn:hover { opacity:.9; }
-  .tmp-note-box { font-size:12px; color:#666; background:#f4f6f8; border-radius:6px; padding:10px 12px; margin-top:8px; line-height:1.5; }
-  :root {
-    --blue: #1f4e79; --blue-light: #dce6f1; --red: #c00000; --red-light: #f8cbcb;
-    --green: #2e9e4f; --green-light: #e3f5e8;
-  }
-  * { box-sizing: border-box; }
-  body { font-family: -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin:0; background:#f4f6f8; color:#222; }
-  header { background: var(--blue); color:#fff; padding: 20px 28px; }
-  header h1 { margin:0; font-size: 22px; }
-  header .sub { opacity:.85; font-size:13px; margin-top:4px; }
-  .stats { display:flex; gap:16px; padding: 18px 28px 0; flex-wrap:wrap; }
-  .stat { background:#fff; border-radius:8px; padding:14px 20px; box-shadow:0 1px 3px rgba(0,0,0,.08); min-width:140px; }
-  .stat .num { font-size:26px; font-weight:700; color: var(--blue); }
-  .stat .label { font-size:12px; color:#666; text-transform:uppercase; letter-spacing:.03em; }
-  .stat.flag .num { color: var(--red); }
-  main { padding: 20px 28px 60px; max-width:1200px; margin:0 auto; }
-  .card { background:#fff; border-radius:8px; margin-bottom:14px; box-shadow:0 1px 3px rgba(0,0,0,.08); overflow:hidden; }
-  .card-head { display:flex; align-items:center; gap:10px; padding:14px 18px; cursor:pointer; user-select:none; }
-  .card-head:hover { background:#fafbfc; }
-  .chevron { transition: transform .15s; font-size:14px; color:var(--blue); }
-  .chevron.open { transform: rotate(90deg); }
-  .card-title { font-weight:600; flex:1; }
-  .card-stats { font-size:13px; color:#666; }
-  .panel { border-top:1px solid #eee; }
-  table { width:100%; border-collapse: collapse; font-size:13px; }
-  th { background:#f0f3f6; text-align:left; padding:8px 10px; font-weight:600; color:#444; position:sticky; top:0; }
-  td { padding:7px 10px; border-bottom:1px solid #f0f0f0; }
-  tr.flagged td { background: var(--red-light); }
-  .ticket-link { color: var(--blue); text-decoration:none; font-weight:600; }
-  .ticket-link:hover { text-decoration:underline; }
-  .chip { display:inline-block; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:600; }
-  .chip-ok { background: var(--green-light); color: var(--green); }
-  .chip-bad { background: var(--red-light); color: var(--red); }
-  .empty { text-align:center; color:#999; padding:20px; }
-  footer { text-align:center; color:#999; font-size:12px; padding:20px; }
+  #tmPanel { width:340px; max-width:88%; background:#fff; border-left:1px solid #d0d0d0; box-shadow:-2px 0 8px rgba(0,0,0,.12);
+    transform:translateX(100%); transition:transform .25s ease; overflow-y:auto; position:absolute; right:0; top:0; bottom:0; z-index:1200; }
+  #tmPanel.open { transform:translateX(0); }
+  .tmp-inner { min-height:100%; }
+  .tm-ph { background:#2C3138; color:#fff; padding:16px 18px; position:sticky; top:0; }
+  .tm-ph .tm-tk { font-size:18px; font-weight:bold; }
+  .tm-close { position:absolute; top:12px; right:14px; cursor:pointer; font-size:22px; line-height:1; color:#fff; opacity:.85; background:none; border:none; padding:0; }
+  .tm-close:hover { opacity:1; }
+  .tm-badge { display:inline-block; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:bold; color:#fff; margin-top:8px; }
+  .tm-b-red { background:#d9342b; }
+  .tm-b-green { background:#2e9e4f; }
+  .tm-sec { padding:14px 18px; border-bottom:1px solid #eee; }
+  .tm-sec h4 { margin:0 0 8px; font-size:12px; text-transform:uppercase; letter-spacing:.5px; color:#6b6b6b; }
+  .tm-kv { display:flex; justify-content:space-between; gap:10px; font-size:13px; padding:3px 0; }
+  .tm-kv span:first-child { color:#777; }
+  .tm-kv span:last-child { font-weight:600; text-align:right; }
+  .tm-report { font-size:12.5px; line-height:1.5; background:#f6f8fb; border:1px solid #e3e9f2; border-radius:6px; padding:10px 12px; }
+  .tm-link-btn { display:block; text-align:center; margin-top:10px; background:#E87722; color:#fff; text-decoration:none; padding:9px 12px; border-radius:6px; font-size:13px; font-weight:600; }
+  .tm-link-btn:hover { background:#c8681f; }
 </style>
 </head>
 <body>
-<header>
-  <h1>Texas811 Dig Ticket Dashboard</h1>
-  <div class="sub">As of August 03, 2026 09:27 AM</div>
-</header>
-<div class="stats">
-  <div class="stat"><div class="num">24</div><div class="label">Total Tickets</div></div>
-  <div class="stat"><div class="num">1</div><div class="label">Companies</div></div>
-  <div class="stat flag"><div class="num">16</div><div class="label">No Response</div></div>
+<h1>Texas811 Dig Ticket Dashboard</h1>
+<div class="subtitle">As of August 03, 2026 09:45 AM &middot; click a company card to see every ticket</div>
+<div class="summary-row">
+  <div class="summary-stat"><div class="num">24</div><div class="label">Total tickets</div></div>
+  <div class="summary-stat"><div class="num">1</div><div class="label">Companies</div></div>
+  <div class="summary-stat flag"><div class="num">16</div><div class="label">No Response</div></div>
 </div>
 <main>
   <div class="card">
@@ -82,14 +88,16 @@
       <span class="card-stats">21 mapped &middot; 3 not yet mapped</span>
     </div>
     <div class="panel" id="panel-map" style="display:none">
-      <div class="tm-wrap">
-        <div id="tm-map"></div>
-        <div id="tmPanel"><div class="tmp-inner" id="tmPanelInner"></div></div>
-      </div>
-      <div class="tm-legend">
-        <span><span class="tm-dot red"></span>No Response</span>
-        <span><span class="tm-dot green"></span>Normal / other</span>
-        <span class="tm-note">Click a pin to see ticket details.</span>
+      <div style="padding:16px;">
+        <div id="tmWrap">
+          <div id="tm-map"></div>
+          <div id="tmPanel"><div class="tmp-inner" id="tmPanelInner"></div></div>
+          <div class="tm-legend">
+            <div class="tm-legend-row"><span class="tm-dot red"></span>No Response</div>
+            <div class="tm-legend-row"><span class="tm-dot green"></span>Normal / other</div>
+            <div class="tm-legend-row" style="color:#9CA3AF;">Click a pin to see ticket details.</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -329,7 +337,7 @@
   </div>
 </div>
 </main>
-<footer>Click a ticket number to open its live record on GeoCall (Texas811) for full positive-response status.</footer>
+<div class="footer">Texas811 dig ticket status report &middot; click a ticket number to open its live record on GeoCall for full positive-response status.</div>
 <script>
 const TM_POINTS = [{"num": "2671225610", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "S CENTURY CV, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:11 AM", "workDate": "07/31/2026 10:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "S CENTURY CV", "intersection": "CENTURY DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.501491, "lon": -95.179432, "url": "https://txgc.texas811.org/ui/ticket/2671225610"}, {"num": "2671225604", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "N CENTURY CIR, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:10 AM", "workDate": "07/31/2026 10:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "N CENTURY CIR", "intersection": "CENTURY DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.501517, "lon": -95.180692, "url": "https://txgc.texas811.org/ui/ticket/2671225604"}, {"num": "2671225598", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "CENTURY DR, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:10 AM", "workDate": "07/31/2026 10:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "CENTURY DR", "intersection": "S FRIENDSWOOD DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.501619, "lon": -95.179789, "url": "https://txgc.texas811.org/ui/ticket/2671225598"}, {"num": "2671225584", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS LN, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:08 AM", "workDate": "07/31/2026 10:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS LN", "intersection": "HUNTERS TRL", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.50461, "lon": -95.190029, "url": "https://txgc.texas811.org/ui/ticket/2671225584"}, {"num": "2671225575", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "OAK DR, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:07 AM", "workDate": "07/31/2026 10:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "OAK DR", "intersection": "S FRIENDSWOOD DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.502677, "lon": -95.180519, "url": "https://txgc.texas811.org/ui/ticket/2671225575"}, {"num": "2671225554", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS LN, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:05 AM", "workDate": "07/31/2026 10:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS LN", "intersection": "HUNTERS TRL", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.50373, "lon": -95.191625, "url": "https://txgc.texas811.org/ui/ticket/2671225554"}, {"num": "2671225544", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS LN, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:04 AM", "workDate": "07/31/2026 10:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS LN", "intersection": "S FRIENDSWOOD DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.503972, "lon": -95.189838, "url": "https://txgc.texas811.org/ui/ticket/2671225544"}, {"num": "2671225521", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS TRL, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:02 AM", "workDate": "07/31/2026 10:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS TRL", "intersection": "HUNTERS LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.504344, "lon": -95.191279, "url": "https://txgc.texas811.org/ui/ticket/2671225521"}, {"num": "2671225512", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS LN, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:01 AM", "workDate": "07/31/2026 10:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS LN", "intersection": "HUNTERS TRL", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.50447, "lon": -95.190484, "url": "https://txgc.texas811.org/ui/ticket/2671225512"}, {"num": "2671225499", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS BEND, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:00 AM", "workDate": "07/31/2026 10:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS BEND", "intersection": "HUNTERS LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.504933, "lon": -95.189361, "url": "https://txgc.texas811.org/ui/ticket/2671225499"}, {"num": "2671225480", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "S FRIENDSWOOD DR, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 09:59 AM", "workDate": "07/31/2026 10:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "S FRIENDSWOOD DR", "intersection": "HUNTERS LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.506514, "lon": -95.187638, "url": "https://txgc.texas811.org/ui/ticket/2671225480"}, {"num": "2671225467", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS FOREST, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 09:58 AM", "workDate": "07/31/2026 10:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS FOREST", "intersection": "HUNTERS LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.50502, "lon": -95.188107, "url": "https://txgc.texas811.org/ui/ticket/2671225467"}, {"num": "2671225433", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS COVE, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 09:55 AM", "workDate": "07/31/2026 10:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS COVE", "intersection": "HUNTERS LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.505794, "lon": -95.187584, "url": "https://txgc.texas811.org/ui/ticket/2671225433"}, {"num": "2671225413", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS LN, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 09:53 AM", "workDate": "07/31/2026 10:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS LN", "intersection": "S FRIENDSWOOD DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.505807, "lon": -95.187595, "url": "https://txgc.texas811.org/ui/ticket/2671225413"}, {"num": "2671092766", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "BLACKHAWK BLVD, HOUSTON, HARRIS", "created": "07/29/2026 04:18 PM", "workDate": "07/31/2026 04:15 PM", "county": "HARRIS", "city": "HOUSTON", "street": "BLACKHAWK BLVD", "intersection": "FM 528", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.522946, "lon": -95.169926, "url": "https://txgc.texas811.org/ui/ticket/2671092766"}, {"num": "2671092757", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "FM 528, HOUSTON, HARRIS", "created": "07/29/2026 04:14 PM", "workDate": "07/31/2026 04:15 PM", "county": "HARRIS", "city": "HOUSTON", "street": "FM 528", "intersection": "BAY AREA BLVD", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.568646, "lon": -95.092794, "url": "https://txgc.texas811.org/ui/ticket/2671092757"}, {"num": "2671092707", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "E PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "07/29/2026 03:58 PM", "workDate": "07/31/2026 04:00 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E PARKWOOD AVE", "intersection": "PENNY LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.513258, "lon": -95.18329, "url": "https://txgc.texas811.org/ui/ticket/2671092707"}, {"num": "2671092702", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "E PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "07/29/2026 03:56 PM", "workDate": "07/31/2026 04:00 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E PARKWOOD AVE", "intersection": "WINDING WAY DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.513214, "lon": -95.188266, "url": "https://txgc.texas811.org/ui/ticket/2671092702"}, {"num": "2671092698", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "E PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "07/29/2026 03:53 PM", "workDate": "07/31/2026 03:45 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E PARKWOOD AVE", "intersection": "S FRIENDSWOOD", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.524373, "lon": -95.190336, "url": "https://txgc.texas811.org/ui/ticket/2671092698"}, {"num": "2671091740", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "W VIEJO DR, FRIENDSWOOD, GALVESTON", "created": "07/29/2026 12:17 PM", "workDate": "07/29/2026 12:15 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "W VIEJO DR", "intersection": "FM 518", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.500477, "lon": -95.178601, "url": "https://txgc.texas811.org/ui/ticket/2671091740"}, {"num": "2671091686", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "E VIEJO DR, FRIENDSWOOD, GALVESTON", "created": "07/29/2026 12:03 PM", "workDate": "07/29/2026 12:15 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E VIEJO DR", "intersection": "FM 518", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.501599, "lon": -95.177757, "url": "https://txgc.texas811.org/ui/ticket/2671091686"}];
 let tmMap = null;
@@ -354,18 +362,21 @@ function toggleMap() {
 
 function tmRow(k, v) {
   if (!v) return '';
-  return '<div class="tmp-row"><span class="k">' + k + '</span><span class="v">' + v + '</span></div>';
+  return '<div class="tm-kv"><span>' + k + '</span><span>' + v + '</span></div>';
 }
 
 function openTmPanel(p) {
   const panel = document.getElementById('tmPanel');
   const inner = document.getElementById('tmPanelInner');
   inner.innerHTML =
-    '<button class="tmp-close" onclick="closeTmPanel()">&times;</button>' +
-    '<div class="tmp-title">Ticket ' + p.num + '</div>' +
-    '<span class="chip ' + (p.flagged ? 'chip-bad' : 'chip-ok') + '">' + p.type + '</span>' +
+    '<div class="tm-ph">' +
+      '<button class="tm-close" onclick="closeTmPanel()">&times;</button>' +
+      '<div class="tm-tk">Ticket ' + p.num + '</div>' +
+      '<div class="tm-ad">' + p.addr + '</div>' +
+      '<span class="tm-badge ' + (p.flagged ? 'tm-b-red' : 'tm-b-green') + '">' + p.type + '</span>' +
+    '</div>' +
 
-    '<div class="tmp-section"><h4>General Report</h4>' +
+    '<div class="tm-sec"><h4>General Report</h4>' +
     tmRow('Excavator', p.company) +
     tmRow('Created', p.created) +
     tmRow('Work Date', p.workDate) +
@@ -374,7 +385,7 @@ function openTmPanel(p) {
     tmRow('Phone', p.phone) +
     '</div>' +
 
-    '<div class="tmp-section"><h4>Ticket Details</h4>' +
+    '<div class="tm-sec"><h4>Ticket Details</h4>' +
     tmRow('County', p.county) +
     tmRow('City', p.city) +
     tmRow('Street', p.street) +
@@ -383,17 +394,17 @@ function openTmPanel(p) {
     tmRow('Duration', p.duration) +
     '</div>' +
 
-    '<div class="tmp-section"><h4>Positive Response</h4>' +
-    '<div class="tmp-note-box">Per-utility Marked/Clear status isn\'t pulled into this dashboard -- open the live ticket on GeoCall for full response history.</div>' +
-    '<a class="tmp-link-btn" href="' + p.url + '" target="_blank" rel="noopener">Open Ticket on GeoCall &#8594;</a>' +
+    '<div class="tm-sec"><h4>Positive Response</h4>' +
+    '<div class="tm-report">Per-utility Marked/Clear status isn\'t pulled into this dashboard &mdash; open the live ticket on GeoCall for full response history.</div>' +
+    '<a class="tm-link-btn" href="' + p.url + '" target="_blank" rel="noopener">Open Ticket on GeoCall &#8594;</a>' +
     '</div>';
   panel.classList.add('open');
-  setTimeout(() => tmMap.invalidateSize(), 160);
+  setTimeout(() => tmMap.invalidateSize(), 260);
 }
 
 function closeTmPanel() {
   document.getElementById('tmPanel').classList.remove('open');
-  setTimeout(() => tmMap.invalidateSize(), 160);
+  setTimeout(() => tmMap.invalidateSize(), 260);
 }
 
 function initMap() {
