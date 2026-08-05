@@ -44,6 +44,23 @@
   .empty { text-align:center; color:#9CA3AF; padding:20px; font-style:italic; }
   .footer { text-align:center; color:#9CA3AF; font-size:11px; padding:20px 0 4px; }
 
+  .exp-sub { font-size:13px; color:#6B7280; margin-bottom:2px; }
+  .exp-meta { font-size:12px; color:#6B7280; font-style:italic; padding-bottom:10px; border-bottom:2px solid #E87722; margin-bottom:14px; }
+  .exp-summary { font-size:13px; margin-bottom:6px; }
+  .exp-summary ul { margin:6px 0 4px; padding-left:20px; }
+  .exp-summary li { font-size:13px; margin:2px 0; }
+  .exp-company { font-size:15px; font-weight:700; color:#2C3138; margin:20px 0 8px; padding-bottom:4px; border-bottom:2px solid #E87722; }
+  .exp-company:first-child { margin-top:0; }
+  .exp-none { font-size:13px; color:#6B7280; font-style:italic; margin:4px 0 14px; }
+  .exp-date { font-size:13px; font-weight:700; margin:12px 0 6px; }
+  .exp-date .cnt { font-size:12px; color:#6B7280; font-weight:400; }
+  table.exp-tbl { width:100%; border-collapse:collapse; font-size:12px; margin-bottom:10px; border:1px solid #E5E7EB; }
+  table.exp-tbl th { background:#2C3138; color:#fff; text-align:left; padding:7px 10px; font-weight:600; }
+  table.exp-tbl td { padding:6px 10px; border-bottom:1px solid #EEF0F3; }
+  table.exp-tbl tr:nth-child(even) td { background:#F7FAFD; }
+  .exp-open { color:#B91C1C; font-weight:700; }
+  .exp-soon { color:#B15C00; font-weight:600; }
+
   #tmWrap { position:relative; height:520px; border-radius:8px; overflow:hidden; border:1px solid #E5E7EB; }
   #tm-map { position:absolute; inset:0; }
   .tm-legend { position:absolute; z-index:1000; bottom:16px; left:16px; background:#fff; border-radius:6px; padding:10px 12px; font-size:12px; box-shadow:0 1px 5px rgba(0,0,0,.2); max-width:260px; }
@@ -74,18 +91,72 @@
 </head>
 <body>
 <h1>Texas811 Dig Ticket Dashboard</h1>
-<div class="subtitle">As of August 05, 2026 12:51 AM &middot; click a company card to see every ticket</div>
+<div class="subtitle">As of August 05, 2026 11:20 AM &middot; click a company card to see every ticket</div>
 <div class="summary-row">
-  <div class="summary-stat"><div class="num">149</div><div class="label">Total tickets</div></div>
+  <div class="summary-stat"><div class="num">88</div><div class="label">Total tickets</div></div>
   <div class="summary-stat"><div class="num">2</div><div class="label">Companies</div></div>
-  <div class="summary-stat flag"><div class="num">73</div><div class="label">No Response</div></div>
+  <div class="summary-stat flag"><div class="num">42</div><div class="label">No Response</div></div>
+  <div class="summary-stat flag"><div class="num">4</div><div class="label">Expiring &le; 4 days</div></div>
 </div>
 <main>
+  <div class="card">
+    <div class="card-head" onclick="toggleCompany('expiring-tickets')">
+      <span class="chevron open" id="chev-expiring-tickets">&#9656;</span>
+      <span class="card-title">Expiring Tickets</span>
+      <span class="card-stats">4 expiring within 4 days</span>
+    </div>
+    <div class="panel" id="panel-expiring-tickets" style="display:block">
+      <div style="padding:16px;">
+        
+  <div class="exp-sub">Texas811 Dig Tickets Expiring Within 4 Days</div>
+  <div class="exp-meta">Generated August 05, 2026 11:20 AM &middot; Expiration window: August 05, 2026 – August 09, 2026 &middot; ticket life assumed 14 calendar days from notification</div>
+  <div class="exp-summary"><b>4</b> tickets across
+    <b>1</b> company set to expire
+    within the next 4 days.
+    <ul><li><b>G-REED LLC:</b> 4 tickets</li><li><b>Lv electric and Plumbing:</b> none expiring</li></ul>
+  </div>
+  <div class="exp-company">G-REED LLC</div><div class="exp-date">Wednesday, August 05, 2026 <span class="cnt">(4 tickets)</span></div><table class="exp-tbl"><thead><tr><th>Ticket #</th><th>Type</th><th>Street</th><th>City</th><th>County</th><th>Expires</th><th>Countdown</th></tr></thead><tbody><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2670388492" target="_blank" rel="noopener">2670388492</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>FM 518</td>
+  <td>FRIENDSWOOD</td>
+  <td>GALVESTON</td>
+  <td>08/05/2026</td>
+  <td><span class="exp-open">expires today</span></td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2670388509" target="_blank" rel="noopener">2670388509</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>FM 518</td>
+  <td>FRIENDSWOOD</td>
+  <td>GALVESTON</td>
+  <td>08/05/2026</td>
+  <td><span class="exp-open">expires today</span></td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2670388525" target="_blank" rel="noopener">2670388525</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>FM 518</td>
+  <td>FRIENDSWOOD</td>
+  <td>GALVESTON</td>
+  <td>08/05/2026</td>
+  <td><span class="exp-open">expires today</span></td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2670388538" target="_blank" rel="noopener">2670388538</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>FM 518</td>
+  <td>FRIENDSWOOD</td>
+  <td>GALVESTON</td>
+  <td>08/05/2026</td>
+  <td><span class="exp-open">expires today</span></td>
+</tr></tbody></table><div class="exp-company">Lv electric and Plumbing</div><div class="exp-none">No tickets expiring within the next 4 days.</div>
+
+      </div>
+    </div>
+  </div>
   <div class="card">
     <div class="card-head" onclick="toggleMap()">
       <span class="chevron" id="chev-map">&#9656;</span>
       <span class="card-title">Ticket Map</span>
-      <span class="card-stats">120 mapped &middot; 29 not yet mapped</span>
+      <span class="card-stats">67 mapped &middot; 21 not yet mapped</span>
     </div>
     <div class="panel" id="panel-map" style="display:none">
       <div style="padding:16px;">
@@ -106,7 +177,7 @@
   <div class="card-head" onclick="toggleCompany('g-reed-llc')">
     <span class="chevron" id="chev-g-reed-llc">&#9656;</span>
     <span class="card-title">G-REED LLC</span>
-    <span class="card-stats">140 tickets &middot; 69 flagged</span>
+    <span class="card-stats">80 tickets &middot; 38 flagged</span>
   </div>
   <div class="panel" id="panel-g-reed-llc" style="display:none">
     <table>
@@ -835,546 +906,6 @@
   <td>FRIENDSWOOD</td>
   <td>FM 518</td>
   <td>Directional Bore</td>
-</tr><tr class="flagged">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2670143586" target="_blank" rel="noopener">2670143586</a></td>
-  <td><span class="chip chip-bad">No Response</span></td>
-  <td>07/20/2026 08:09 AM</td>
-  <td>07/20/2026 08:15 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>FM 518</td>
-  <td>Directional Bore</td>
-</tr><tr class="flagged">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2670143548" target="_blank" rel="noopener">2670143548</a></td>
-  <td><span class="chip chip-bad">No Response</span></td>
-  <td>07/20/2026 08:07 AM</td>
-  <td>07/20/2026 08:15 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>FM 528</td>
-  <td>Directional Bore</td>
-</tr><tr class="flagged">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2670143473" target="_blank" rel="noopener">2670143473</a></td>
-  <td><span class="chip chip-bad">No Response</span></td>
-  <td>07/20/2026 08:05 AM</td>
-  <td>07/20/2026 08:15 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>FM 528</td>
-  <td>Directional Bore</td>
-</tr><tr class="">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2670143404" target="_blank" rel="noopener">2670143404</a></td>
-  <td><span class="chip chip-ok">Normal</span></td>
-  <td>07/20/2026 08:02 AM</td>
-  <td>07/22/2026 08:00 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>FM 518</td>
-  <td>Directional Bore</td>
-</tr><tr class="">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2670143298" target="_blank" rel="noopener">2670143298</a></td>
-  <td><span class="chip chip-ok">Normal</span></td>
-  <td>07/20/2026 07:59 AM</td>
-  <td>07/22/2026 08:00 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>FM 518</td>
-  <td>Directional Bore</td>
-</tr><tr class="">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2670143141" target="_blank" rel="noopener">2670143141</a></td>
-  <td><span class="chip chip-ok">Normal</span></td>
-  <td>07/20/2026 07:54 AM</td>
-  <td>07/22/2026 08:00 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>FM 518</td>
-  <td>Directional Bore</td>
-</tr><tr class="">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2670142968" target="_blank" rel="noopener">2670142968</a></td>
-  <td><span class="chip chip-ok">Normal</span></td>
-  <td>07/20/2026 07:49 AM</td>
-  <td>07/22/2026 07:45 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>FM 518</td>
-  <td>Directional Bore</td>
-</tr><tr class="flagged">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2670129802" target="_blank" rel="noopener">2670129802</a></td>
-  <td><span class="chip chip-bad">No Response</span></td>
-  <td>07/20/2026 01:46 AM</td>
-  <td>07/20/2026 01:45 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>FM 528</td>
-  <td>Directional Bore</td>
-</tr><tr class="flagged">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2670129748" target="_blank" rel="noopener">2670129748</a></td>
-  <td><span class="chip chip-bad">No Response</span></td>
-  <td>07/20/2026 01:44 AM</td>
-  <td>07/20/2026 01:45 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>FM 528</td>
-  <td>Directional Bore</td>
-</tr><tr class="flagged">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2670129704" target="_blank" rel="noopener">2670129704</a></td>
-  <td><span class="chip chip-bad">No Response</span></td>
-  <td>07/20/2026 01:43 AM</td>
-  <td>07/20/2026 01:45 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>FM 528</td>
-  <td>Directional Bore</td>
-</tr><tr class="flagged">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2670129526" target="_blank" rel="noopener">2670129526</a></td>
-  <td><span class="chip chip-bad">No Response</span></td>
-  <td>07/20/2026 01:38 AM</td>
-  <td>07/20/2026 01:45 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>FM 528</td>
-  <td>Directional Bore</td>
-</tr><tr class="flagged">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2670129281" target="_blank" rel="noopener">2670129281</a></td>
-  <td><span class="chip chip-bad">No Response</span></td>
-  <td>07/20/2026 01:32 AM</td>
-  <td>07/20/2026 01:30 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>FM 518</td>
-  <td>Directional Bore</td>
-</tr><tr class="">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2669812959" target="_blank" rel="noopener">2669812959</a></td>
-  <td><span class="chip chip-ok">Cancellation</span></td>
-  <td>07/17/2026 03:43 AM</td>
-  <td>07/17/2026 03:45 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>FM 518</td>
-  <td>Directional Bore</td>
-</tr><tr class="">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2669812936" target="_blank" rel="noopener">2669812936</a></td>
-  <td><span class="chip chip-ok">Cancellation</span></td>
-  <td>07/17/2026 03:42 AM</td>
-  <td>07/17/2026 03:45 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>FM 518</td>
-  <td>Directional Bore</td>
-</tr><tr class="">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2669812927" target="_blank" rel="noopener">2669812927</a></td>
-  <td><span class="chip chip-ok">Cancellation</span></td>
-  <td>07/17/2026 03:41 AM</td>
-  <td>07/17/2026 03:45 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>FM 518</td>
-  <td>Directional Bore</td>
-</tr><tr class="">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2669812892" target="_blank" rel="noopener">2669812892</a></td>
-  <td><span class="chip chip-ok">Cancellation</span></td>
-  <td>07/17/2026 03:40 AM</td>
-  <td>07/17/2026 03:45 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>FM 518</td>
-  <td>Directional Bore</td>
-</tr><tr class="flagged">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2669705047" target="_blank" rel="noopener">2669705047</a></td>
-  <td><span class="chip chip-bad">No Response</span></td>
-  <td>07/16/2026 09:43 AM</td>
-  <td>07/16/2026 09:45 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>FM 518</td>
-  <td>Directional Bore</td>
-</tr><tr class="flagged">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2669705034" target="_blank" rel="noopener">2669705034</a></td>
-  <td><span class="chip chip-bad">No Response</span></td>
-  <td>07/16/2026 09:42 AM</td>
-  <td>07/16/2026 09:45 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>FM 518</td>
-  <td>Directional Bore</td>
-</tr><tr class="flagged">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2669705022" target="_blank" rel="noopener">2669705022</a></td>
-  <td><span class="chip chip-bad">No Response</span></td>
-  <td>07/16/2026 09:41 AM</td>
-  <td>07/16/2026 09:45 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>FM 518</td>
-  <td>Directional Bore</td>
-</tr><tr class="flagged">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2669705000" target="_blank" rel="noopener">2669705000</a></td>
-  <td><span class="chip chip-bad">No Response</span></td>
-  <td>07/16/2026 09:39 AM</td>
-  <td>07/16/2026 09:45 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>FM 518</td>
-  <td>Directional Bore</td>
-</tr><tr class="flagged">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2669704989" target="_blank" rel="noopener">2669704989</a></td>
-  <td><span class="chip chip-bad">No Response</span></td>
-  <td>07/16/2026 09:38 AM</td>
-  <td>07/16/2026 09:45 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>FM 518</td>
-  <td>Directional Bore</td>
-</tr><tr class="flagged">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2669704972" target="_blank" rel="noopener">2669704972</a></td>
-  <td><span class="chip chip-bad">No Response</span></td>
-  <td>07/16/2026 09:37 AM</td>
-  <td>07/16/2026 09:45 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>FM 518</td>
-  <td>Directional Bore</td>
-</tr><tr class="flagged">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2669704957" target="_blank" rel="noopener">2669704957</a></td>
-  <td><span class="chip chip-bad">No Response</span></td>
-  <td>07/16/2026 09:35 AM</td>
-  <td>07/16/2026 09:45 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>FM 528</td>
-  <td>Directional Bore</td>
-</tr><tr class="flagged">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2669704923" target="_blank" rel="noopener">2669704923</a></td>
-  <td><span class="chip chip-bad">No Response</span></td>
-  <td>07/16/2026 09:33 AM</td>
-  <td>07/16/2026 09:45 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>FM 528</td>
-  <td>Directional Bore</td>
-</tr><tr class="flagged">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2669704890" target="_blank" rel="noopener">2669704890</a></td>
-  <td><span class="chip chip-bad">No Response</span></td>
-  <td>07/16/2026 09:30 AM</td>
-  <td>07/16/2026 09:30 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>FM 528</td>
-  <td>Directional Bore</td>
-</tr><tr class="flagged">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2669704863" target="_blank" rel="noopener">2669704863</a></td>
-  <td><span class="chip chip-bad">No Response</span></td>
-  <td>07/16/2026 09:28 AM</td>
-  <td>07/16/2026 09:30 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>FM 528</td>
-  <td>Directional Bore</td>
-</tr><tr class="flagged">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2669704834" target="_blank" rel="noopener">2669704834</a></td>
-  <td><span class="chip chip-bad">No Response</span></td>
-  <td>07/16/2026 09:25 AM</td>
-  <td>07/16/2026 09:30 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>FM 528</td>
-  <td>Directional Bore</td>
-</tr><tr class="">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2669565164" target="_blank" rel="noopener">2669565164</a></td>
-  <td><span class="chip chip-ok">Normal</span></td>
-  <td>07/14/2026 07:50 AM</td>
-  <td>07/16/2026 08:00 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>FM 518</td>
-  <td>Directional Bore</td>
-</tr><tr class="">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2669565086" target="_blank" rel="noopener">2669565086</a></td>
-  <td><span class="chip chip-ok">Normal</span></td>
-  <td>07/14/2026 07:48 AM</td>
-  <td>07/16/2026 08:00 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>FM 518</td>
-  <td>Directional Bore</td>
-</tr><tr class="">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2669565016" target="_blank" rel="noopener">2669565016</a></td>
-  <td><span class="chip chip-ok">Normal</span></td>
-  <td>07/14/2026 07:45 AM</td>
-  <td>07/16/2026 07:45 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>FM 518</td>
-  <td>Directional Bore</td>
-</tr><tr class="">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2669564930" target="_blank" rel="noopener">2669564930</a></td>
-  <td><span class="chip chip-ok">Normal</span></td>
-  <td>07/14/2026 07:42 AM</td>
-  <td>07/16/2026 07:45 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>FM 518</td>
-  <td>Directional Bore</td>
-</tr><tr class="">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2669564840" target="_blank" rel="noopener">2669564840</a></td>
-  <td><span class="chip chip-ok">Normal</span></td>
-  <td>07/14/2026 07:39 AM</td>
-  <td>07/16/2026 07:45 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>FM 518</td>
-  <td>Directional Bore</td>
-</tr><tr class="">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2669564758" target="_blank" rel="noopener">2669564758</a></td>
-  <td><span class="chip chip-ok">Cancellation</span></td>
-  <td>07/14/2026 07:36 AM</td>
-  <td>07/14/2026 07:45 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>FM 528</td>
-  <td>Directional Bore</td>
-</tr><tr class="">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2669564737" target="_blank" rel="noopener">2669564737</a></td>
-  <td><span class="chip chip-ok">Normal</span></td>
-  <td>07/14/2026 07:35 AM</td>
-  <td>07/16/2026 07:45 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>FM 518</td>
-  <td>Directional Bore</td>
-</tr><tr class="">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2669564718" target="_blank" rel="noopener">2669564718</a></td>
-  <td><span class="chip chip-ok">Normal</span></td>
-  <td>07/14/2026 07:34 AM</td>
-  <td>07/16/2026 07:30 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>FM 528</td>
-  <td>Directional Bore</td>
-</tr><tr class="">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2669564505" target="_blank" rel="noopener">2669564505</a></td>
-  <td><span class="chip chip-ok">Normal</span></td>
-  <td>07/14/2026 07:26 AM</td>
-  <td>07/16/2026 07:30 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>FM 528</td>
-  <td>Directional Bore</td>
-</tr><tr class="">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2669564413" target="_blank" rel="noopener">2669564413</a></td>
-  <td><span class="chip chip-ok">Normal</span></td>
-  <td>07/14/2026 07:23 AM</td>
-  <td>07/16/2026 07:30 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>FM 528</td>
-  <td>Directional Bore</td>
-</tr><tr class="">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2669564305" target="_blank" rel="noopener">2669564305</a></td>
-  <td><span class="chip chip-ok">Normal</span></td>
-  <td>07/14/2026 07:20 AM</td>
-  <td>07/16/2026 07:30 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>FM 528</td>
-  <td>Directional Bore</td>
-</tr><tr class="">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2669564210" target="_blank" rel="noopener">2669564210</a></td>
-  <td><span class="chip chip-ok">Normal</span></td>
-  <td>07/14/2026 07:15 AM</td>
-  <td>07/16/2026 07:15 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>FM 528</td>
-  <td>Directional Bore</td>
-</tr><tr class="">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2669564090" target="_blank" rel="noopener">2669564090</a></td>
-  <td><span class="chip chip-ok">Normal</span></td>
-  <td>07/14/2026 07:10 AM</td>
-  <td>07/16/2026 07:00 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>FM 528</td>
-  <td>Directional Bore</td>
-</tr><tr class="">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2669448677" target="_blank" rel="noopener">2669448677</a></td>
-  <td><span class="chip chip-ok">Update</span></td>
-  <td>07/13/2026 09:55 AM</td>
-  <td>07/15/2026 10:00 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>WILDERNESS PINE CT</td>
-  <td>Directional Bore</td>
-</tr><tr class="flagged">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2669434590" target="_blank" rel="noopener">2669434590</a></td>
-  <td><span class="chip chip-bad">No Response</span></td>
-  <td>07/13/2026 02:40 AM</td>
-  <td>07/13/2026 02:45 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>WILDERNESS PINES DR</td>
-  <td>Directional Bore</td>
-</tr><tr class="">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2669434525" target="_blank" rel="noopener">2669434525</a></td>
-  <td><span class="chip chip-ok">Update</span></td>
-  <td>07/13/2026 02:38 AM</td>
-  <td>07/15/2026 02:45 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>PINE NEEDLE DR</td>
-  <td>Directional Bore</td>
-</tr><tr class="">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2669434461" target="_blank" rel="noopener">2669434461</a></td>
-  <td><span class="chip chip-ok">Update</span></td>
-  <td>07/13/2026 02:37 AM</td>
-  <td>07/15/2026 02:45 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>FERNWOOD DR</td>
-  <td>Directional Bore</td>
-</tr><tr class="">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2669434402" target="_blank" rel="noopener">2669434402</a></td>
-  <td><span class="chip chip-ok">Update</span></td>
-  <td>07/13/2026 02:35 AM</td>
-  <td>07/15/2026 02:45 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>LAKE FOREST DR</td>
-  <td>Directional Bore</td>
-</tr><tr class="flagged">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2668984853" target="_blank" rel="noopener">2668984853</a></td>
-  <td><span class="chip chip-bad">No Response</span></td>
-  <td>07/08/2026 10:34 AM</td>
-  <td>07/08/2026 10:45 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>BLUEBERRY LN</td>
-  <td>Directional Bore</td>
-</tr><tr class="flagged">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2668984836" target="_blank" rel="noopener">2668984836</a></td>
-  <td><span class="chip chip-bad">No Response</span></td>
-  <td>07/08/2026 10:32 AM</td>
-  <td>07/08/2026 10:45 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>WILDERNESS PINES DR</td>
-  <td>Directional Bore</td>
-</tr><tr class="flagged">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2668984826" target="_blank" rel="noopener">2668984826</a></td>
-  <td><span class="chip chip-bad">No Response</span></td>
-  <td>07/08/2026 10:31 AM</td>
-  <td>07/08/2026 10:30 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>BEECHWOOD DR</td>
-  <td>Directional Bore</td>
-</tr><tr class="flagged">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2668984805" target="_blank" rel="noopener">2668984805</a></td>
-  <td><span class="chip chip-bad">No Response</span></td>
-  <td>07/08/2026 10:29 AM</td>
-  <td>07/08/2026 10:30 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>PINE NEEDLE DR</td>
-  <td>Directional Bore</td>
-</tr><tr class="flagged">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2668984793" target="_blank" rel="noopener">2668984793</a></td>
-  <td><span class="chip chip-bad">No Response</span></td>
-  <td>07/08/2026 10:28 AM</td>
-  <td>07/08/2026 10:30 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>FERNWOOD DR</td>
-  <td>Directional Bore</td>
-</tr><tr class="flagged">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2668984753" target="_blank" rel="noopener">2668984753</a></td>
-  <td><span class="chip chip-bad">No Response</span></td>
-  <td>07/08/2026 10:25 AM</td>
-  <td>07/08/2026 10:30 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>LAKE FOREST DR</td>
-  <td>Directional Bore</td>
-</tr><tr class="flagged">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2668984741" target="_blank" rel="noopener">2668984741</a></td>
-  <td><span class="chip chip-bad">No Response</span></td>
-  <td>07/08/2026 10:24 AM</td>
-  <td>07/08/2026 10:30 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>WILDERNESS PINE CT</td>
-  <td>Directional Bore</td>
-</tr><tr class="flagged">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2668984726" target="_blank" rel="noopener">2668984726</a></td>
-  <td><span class="chip chip-bad">No Response</span></td>
-  <td>07/08/2026 10:23 AM</td>
-  <td>07/08/2026 10:30 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>WILDERNESS PINE DR</td>
-  <td>Directional Bore</td>
-</tr><tr class="">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2668864108" target="_blank" rel="noopener">2668864108</a></td>
-  <td><span class="chip chip-ok">Normal</span></td>
-  <td>07/07/2026 01:05 PM</td>
-  <td>07/09/2026 01:15 PM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>wilderness pines dr</td>
-  <td>Bury-Fiber Optic Cable</td>
-</tr><tr class="">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2668864101" target="_blank" rel="noopener">2668864101</a></td>
-  <td><span class="chip chip-ok">Normal</span></td>
-  <td>07/07/2026 01:03 PM</td>
-  <td>07/09/2026 01:15 PM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>wilderness pines dr</td>
-  <td>Bury-Fiber Optic Cable</td>
-</tr><tr class="">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2668864092" target="_blank" rel="noopener">2668864092</a></td>
-  <td><span class="chip chip-ok">Normal</span></td>
-  <td>07/07/2026 01:02 PM</td>
-  <td>07/09/2026 01:00 PM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>beechwood dr</td>
-  <td>Bury-Fiber Optic Cable</td>
-</tr><tr class="">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2668864078" target="_blank" rel="noopener">2668864078</a></td>
-  <td><span class="chip chip-ok">Emergency</span></td>
-  <td>07/07/2026 01:00 PM</td>
-  <td>07/07/2026 01:00 PM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>blueberry ln</td>
-  <td>Emergency-Fiber</td>
-</tr><tr class="flagged">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2668726844" target="_blank" rel="noopener">2668726844</a></td>
-  <td><span class="chip chip-bad">No Response</span></td>
-  <td>07/06/2026 03:15 AM</td>
-  <td>07/06/2026 03:15 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>BEECHWOOD DR</td>
-  <td>Directional Bore</td>
-</tr><tr class="flagged">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2668726747" target="_blank" rel="noopener">2668726747</a></td>
-  <td><span class="chip chip-bad">No Response</span></td>
-  <td>07/06/2026 03:12 AM</td>
-  <td>07/06/2026 03:15 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>BEECHWOOD DR</td>
-  <td>Directional Bore</td>
-</tr><tr class="flagged">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2668726632" target="_blank" rel="noopener">2668726632</a></td>
-  <td><span class="chip chip-bad">No Response</span></td>
-  <td>07/06/2026 03:09 AM</td>
-  <td>07/06/2026 03:15 AM</td>
-  <td>GALVESTON</td>
-  <td>FRIENDSWOOD</td>
-  <td>BEECHWOOD DR</td>
-  <td>Directional Bore</td>
 </tr>
       </tbody>
     </table>
@@ -1384,7 +915,7 @@
   <div class="card-head" onclick="toggleCompany('lv-electric-and-plumbing')">
     <span class="chevron" id="chev-lv-electric-and-plumbing">&#9656;</span>
     <span class="card-title">Lv electric and Plumbing</span>
-    <span class="card-stats">9 tickets &middot; 4 flagged</span>
+    <span class="card-stats">8 tickets &middot; 4 flagged</span>
   </div>
   <div class="panel" id="panel-lv-electric-and-plumbing" style="display:none">
     <table>
@@ -1465,15 +996,6 @@
   <td>MAGNOLIA</td>
   <td>N GRAND TRAILS BLVD</td>
   <td>Directional Bore</td>
-</tr><tr class="">
-  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2668742564" target="_blank" rel="noopener">2668742564</a></td>
-  <td><span class="chip chip-ok">Update</span></td>
-  <td>07/06/2026 04:23 PM</td>
-  <td>07/08/2026 04:30 PM</td>
-  <td>MONTGOMERY</td>
-  <td>MAGNOLIA</td>
-  <td>GOLDEN BROOK CT</td>
-  <td>Directional Bore</td>
 </tr>
       </tbody>
     </table>
@@ -1482,7 +1004,7 @@
 </main>
 <div class="footer">Texas811 dig ticket status report &middot; click a ticket number to open its live record on GeoCall for full positive-response status.</div>
 <script>
-const TM_POINTS = [{"num": "2671670924", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FM 528, HOUSTON, HARRIS", "created": "08/04/2026 07:54 AM", "workDate": "08/04/2026 08:00 AM", "county": "HARRIS", "city": "HOUSTON", "street": "FM 528", "intersection": "BAY AREA BLVD", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.568855, "lon": -95.092682, "url": "https://txgc.texas811.org/ui/ticket/2671670924"}, {"num": "2671670645", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "E PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "08/04/2026 07:45 AM", "workDate": "08/04/2026 07:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E PARKWOOD AVE", "intersection": "PENNY LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.516358, "lon": -95.179988, "url": "https://txgc.texas811.org/ui/ticket/2671670645"}, {"num": "2671670594", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "E PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "08/04/2026 07:43 AM", "workDate": "08/04/2026 07:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E PARKWOOD AVE", "intersection": "WINDING WAY DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.516078, "lon": -95.185116, "url": "https://txgc.texas811.org/ui/ticket/2671670594"}, {"num": "2671670534", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "E PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "08/04/2026 07:41 AM", "workDate": "08/04/2026 07:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E PARKWOOD AVE", "intersection": "S FRIENDSWOOD", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.527668, "lon": -95.186731, "url": "https://txgc.texas811.org/ui/ticket/2671670534"}, {"num": "2671669717", "company": "G-REED LLC", "type": "DigUp", "flagged": false, "addr": "W VIEJO DR, FRIENDSWOOD, GALVESTON", "created": "08/04/2026 07:11 AM", "workDate": "08/04/2026 07:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "W VIEJO DR", "intersection": "PLAYA", "nature": "DigUp - Cut Gas line", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.486499, "lon": -95.172688, "url": "https://txgc.texas811.org/ui/ticket/2671669717"}, {"num": "2671660693", "company": "G-REED LLC", "type": "Update", "flagged": false, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "08/04/2026 02:34 AM", "workDate": "08/06/2026 02:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "W RANCH DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZZE FIBER", "phone": "9196199019", "lat": 29.503571, "lon": -95.181913, "url": "https://txgc.texas811.org/ui/ticket/2671660693"}, {"num": "2671660648", "company": "G-REED LLC", "type": "Update", "flagged": false, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "08/04/2026 02:32 AM", "workDate": "08/06/2026 02:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "STONE CREEK TERRACE", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZZE FIBER", "phone": "9196199019", "lat": 29.504361, "lon": -95.182629, "url": "https://txgc.texas811.org/ui/ticket/2671660648"}, {"num": "2671660584", "company": "G-REED LLC", "type": "Update", "flagged": false, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "08/04/2026 02:31 AM", "workDate": "08/06/2026 02:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "OLD RD", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZZE FIBER", "phone": "9196199019", "lat": 29.503472, "lon": -95.184241, "url": "https://txgc.texas811.org/ui/ticket/2671660584"}, {"num": "2671660538", "company": "G-REED LLC", "type": "Update", "flagged": false, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "08/04/2026 02:30 AM", "workDate": "08/06/2026 02:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "OAK DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZZE FIBER", "phone": "9196199019", "lat": 29.506415, "lon": -95.184788, "url": "https://txgc.texas811.org/ui/ticket/2671660538"}, {"num": "2671660444", "company": "G-REED LLC", "type": "Update", "flagged": false, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "08/04/2026 02:28 AM", "workDate": "08/06/2026 02:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "LEISURE LN ", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.509784, "lon": -95.185356, "url": "https://txgc.texas811.org/ui/ticket/2671660444"}, {"num": "2671660421", "company": "G-REED LLC", "type": "Update", "flagged": false, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "08/04/2026 02:27 AM", "workDate": "08/06/2026 02:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "FM 528", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.510537, "lon": -95.187756, "url": "https://txgc.texas811.org/ui/ticket/2671660421"}, {"num": "2671660266", "company": "G-REED LLC", "type": "Update", "flagged": false, "addr": "FM 528, FRIENDSWOOD, GALVESTON", "created": "08/04/2026 02:24 AM", "workDate": "08/06/2026 02:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 528", "intersection": "FALCON RIDGE BLVD", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.50378, "lon": -95.190794, "url": "https://txgc.texas811.org/ui/ticket/2671660266"}, {"num": "2671660214", "company": "G-REED LLC", "type": "Update", "flagged": false, "addr": "FM 528, FRIENDSWOOD, GALVESTON", "created": "08/04/2026 02:22 AM", "workDate": "08/06/2026 02:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 528", "intersection": "LAYFAIR PL", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.506565, "lon": -95.190351, "url": "https://txgc.texas811.org/ui/ticket/2671660214"}, {"num": "2671660168", "company": "G-REED LLC", "type": "Update", "flagged": false, "addr": "FM 528, FRIENDSWOOD, GALVESTON", "created": "08/04/2026 02:21 AM", "workDate": "08/06/2026 02:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 528", "intersection": "SUNSET DR", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.515325, "lon": -95.197182, "url": "https://txgc.texas811.org/ui/ticket/2671660168"}, {"num": "2671660119", "company": "G-REED LLC", "type": "Update", "flagged": false, "addr": "FM 528, FRIENDSWOOD, GALVESTON", "created": "08/04/2026 02:20 AM", "workDate": "08/06/2026 02:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 528", "intersection": "FM 518", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.510537, "lon": -95.187756, "url": "https://txgc.texas811.org/ui/ticket/2671660119"}, {"num": "2671544727", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "E PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "08/03/2026 05:37 AM", "workDate": "08/03/2026 05:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E PARKWOOD AVE", "intersection": "PENNY LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.515652, "lon": -95.180666, "url": "https://txgc.texas811.org/ui/ticket/2671544727"}, {"num": "2671544667", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "E PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "08/03/2026 05:34 AM", "workDate": "08/03/2026 05:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E PARKWOOD AVE", "intersection": "WINDING WAY DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.513668, "lon": -95.187444, "url": "https://txgc.texas811.org/ui/ticket/2671544667"}, {"num": "2671544540", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "E PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "08/03/2026 05:30 AM", "workDate": "08/03/2026 05:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E PARKWOOD AVE", "intersection": "S FRIENDSWOOD", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.527238, "lon": -95.187186, "url": "https://txgc.texas811.org/ui/ticket/2671544540"}, {"num": "2671225610", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "S CENTURY CV, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:11 AM", "workDate": "07/31/2026 10:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "S CENTURY CV", "intersection": "CENTURY DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.501491, "lon": -95.179432, "url": "https://txgc.texas811.org/ui/ticket/2671225610"}, {"num": "2671225604", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "N CENTURY CIR, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:10 AM", "workDate": "07/31/2026 10:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "N CENTURY CIR", "intersection": "CENTURY DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.501517, "lon": -95.180692, "url": "https://txgc.texas811.org/ui/ticket/2671225604"}, {"num": "2671225598", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "CENTURY DR, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:10 AM", "workDate": "07/31/2026 10:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "CENTURY DR", "intersection": "S FRIENDSWOOD DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.501619, "lon": -95.179789, "url": "https://txgc.texas811.org/ui/ticket/2671225598"}, {"num": "2671225584", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS LN, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:08 AM", "workDate": "07/31/2026 10:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS LN", "intersection": "HUNTERS TRL", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.50461, "lon": -95.190029, "url": "https://txgc.texas811.org/ui/ticket/2671225584"}, {"num": "2671225575", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "OAK DR, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:07 AM", "workDate": "07/31/2026 10:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "OAK DR", "intersection": "S FRIENDSWOOD DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.502677, "lon": -95.180519, "url": "https://txgc.texas811.org/ui/ticket/2671225575"}, {"num": "2671225554", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS LN, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:05 AM", "workDate": "07/31/2026 10:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS LN", "intersection": "HUNTERS TRL", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.50373, "lon": -95.191625, "url": "https://txgc.texas811.org/ui/ticket/2671225554"}, {"num": "2671225544", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS LN, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:04 AM", "workDate": "07/31/2026 10:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS LN", "intersection": "S FRIENDSWOOD DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.503972, "lon": -95.189838, "url": "https://txgc.texas811.org/ui/ticket/2671225544"}, {"num": "2671225521", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS TRL, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:02 AM", "workDate": "07/31/2026 10:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS TRL", "intersection": "HUNTERS LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.504344, "lon": -95.191279, "url": "https://txgc.texas811.org/ui/ticket/2671225521"}, {"num": "2671225512", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS LN, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:01 AM", "workDate": "07/31/2026 10:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS LN", "intersection": "HUNTERS TRL", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.50447, "lon": -95.190484, "url": "https://txgc.texas811.org/ui/ticket/2671225512"}, {"num": "2671225499", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS BEND, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:00 AM", "workDate": "07/31/2026 10:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS BEND", "intersection": "HUNTERS LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.504933, "lon": -95.189361, "url": "https://txgc.texas811.org/ui/ticket/2671225499"}, {"num": "2671225480", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "S FRIENDSWOOD DR, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 09:59 AM", "workDate": "07/31/2026 10:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "S FRIENDSWOOD DR", "intersection": "HUNTERS LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.506514, "lon": -95.187638, "url": "https://txgc.texas811.org/ui/ticket/2671225480"}, {"num": "2671225467", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS FOREST, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 09:58 AM", "workDate": "07/31/2026 10:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS FOREST", "intersection": "HUNTERS LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.50502, "lon": -95.188107, "url": "https://txgc.texas811.org/ui/ticket/2671225467"}, {"num": "2671225433", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS COVE, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 09:55 AM", "workDate": "07/31/2026 10:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS COVE", "intersection": "HUNTERS LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.505794, "lon": -95.187584, "url": "https://txgc.texas811.org/ui/ticket/2671225433"}, {"num": "2671225413", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS LN, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 09:53 AM", "workDate": "07/31/2026 10:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS LN", "intersection": "S FRIENDSWOOD DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.505807, "lon": -95.187595, "url": "https://txgc.texas811.org/ui/ticket/2671225413"}, {"num": "2671092766", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "BLACKHAWK BLVD, HOUSTON, HARRIS", "created": "07/29/2026 04:18 PM", "workDate": "07/31/2026 04:15 PM", "county": "HARRIS", "city": "HOUSTON", "street": "BLACKHAWK BLVD", "intersection": "FM 528", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.522946, "lon": -95.169926, "url": "https://txgc.texas811.org/ui/ticket/2671092766"}, {"num": "2671092757", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "FM 528, HOUSTON, HARRIS", "created": "07/29/2026 04:14 PM", "workDate": "07/31/2026 04:15 PM", "county": "HARRIS", "city": "HOUSTON", "street": "FM 528", "intersection": "BAY AREA BLVD", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.568646, "lon": -95.092794, "url": "https://txgc.texas811.org/ui/ticket/2671092757"}, {"num": "2671092707", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "E PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "07/29/2026 03:58 PM", "workDate": "07/31/2026 04:00 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E PARKWOOD AVE", "intersection": "PENNY LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.513258, "lon": -95.18329, "url": "https://txgc.texas811.org/ui/ticket/2671092707"}, {"num": "2671092702", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "E PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "07/29/2026 03:56 PM", "workDate": "07/31/2026 04:00 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E PARKWOOD AVE", "intersection": "WINDING WAY DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.513214, "lon": -95.188266, "url": "https://txgc.texas811.org/ui/ticket/2671092702"}, {"num": "2671092698", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "E PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "07/29/2026 03:53 PM", "workDate": "07/31/2026 03:45 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E PARKWOOD AVE", "intersection": "S FRIENDSWOOD", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.524373, "lon": -95.190336, "url": "https://txgc.texas811.org/ui/ticket/2671092698"}, {"num": "2671091740", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "W VIEJO DR, FRIENDSWOOD, GALVESTON", "created": "07/29/2026 12:17 PM", "workDate": "07/29/2026 12:15 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "W VIEJO DR", "intersection": "FM 518", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.500477, "lon": -95.178601, "url": "https://txgc.texas811.org/ui/ticket/2671091740"}, {"num": "2671091686", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "E VIEJO DR, FRIENDSWOOD, GALVESTON", "created": "07/29/2026 12:03 PM", "workDate": "07/29/2026 12:15 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E VIEJO DR", "intersection": "FM 518", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.501599, "lon": -95.177757, "url": "https://txgc.texas811.org/ui/ticket/2671091686"}, {"num": "2670971658", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "07/28/2026 02:53 PM", "workDate": "07/28/2026 03:00 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "FM 528", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.514893, "lon": -95.184742, "url": "https://txgc.texas811.org/ui/ticket/2670971658"}, {"num": "2670971652", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "07/28/2026 02:51 PM", "workDate": "07/28/2026 03:00 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "OAK DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZZE FIBER", "phone": "9196199019", "lat": 29.508454, "lon": -95.183529, "url": "https://txgc.texas811.org/ui/ticket/2670971652"}, {"num": "2670971642", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FM 528, FRIENDSWOOD, GALVESTON", "created": "07/28/2026 02:48 PM", "workDate": "07/28/2026 02:45 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 528", "intersection": "FM 518", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.514893, "lon": -95.184742, "url": "https://txgc.texas811.org/ui/ticket/2670971642"}, {"num": "2670964971", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "N CENTURY CIR, FRIENDSWOOD, GALVESTON", "created": "07/28/2026 06:37 AM", "workDate": "07/30/2026 06:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "N CENTURY CIR", "intersection": "CENTURY DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.501426, "lon": -95.180153, "url": "https://txgc.texas811.org/ui/ticket/2670964971"}, {"num": "2670964748", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "CENTURY DR, FRIENDSWOOD, GALVESTON", "created": "07/28/2026 06:29 AM", "workDate": "07/30/2026 06:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "CENTURY DR", "intersection": "S FRIENDSWOOD DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.512184, "lon": -95.185667, "url": "https://txgc.texas811.org/ui/ticket/2670964748"}, {"num": "2670964330", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "OAK DR, FRIENDSWOOD, GALVESTON", "created": "07/28/2026 06:15 AM", "workDate": "07/30/2026 06:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "OAK DR", "intersection": "S FRIENDSWOOD DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.51525, "lon": -95.184503, "url": "https://txgc.texas811.org/ui/ticket/2670964330"}, {"num": "2670962260", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "HUNTERS LN, FRIENDSWOOD, GALVESTON", "created": "07/28/2026 04:49 AM", "workDate": "07/30/2026 05:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS LN", "intersection": "HUNTERS TRL", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.50373, "lon": -95.190814, "url": "https://txgc.texas811.org/ui/ticket/2670962260"}, {"num": "2670962242", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "HUNTERS TRL, FRIENDSWOOD, GALVESTON", "created": "07/28/2026 04:48 AM", "workDate": "07/30/2026 05:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS TRL", "intersection": "HUNTERS LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.50373, "lon": -95.190814, "url": "https://txgc.texas811.org/ui/ticket/2670962242"}, {"num": "2670962196", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "HUNTERS LN, FRIENDSWOOD, GALVESTON", "created": "07/28/2026 04:47 AM", "workDate": "07/30/2026 05:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS LN", "intersection": "HUNTERS TRL", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.50373, "lon": -95.190814, "url": "https://txgc.texas811.org/ui/ticket/2670962196"}, {"num": "2670962162", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "HUNTERS LN, FRIENDSWOOD, GALVESTON", "created": "07/28/2026 04:46 AM", "workDate": "07/30/2026 04:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS LN", "intersection": "HUNTERS TRL", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.50373, "lon": -95.190814, "url": "https://txgc.texas811.org/ui/ticket/2670962162"}, {"num": "2670962098", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "HUNTERS BEND, FRIENDSWOOD, GALVESTON", "created": "07/28/2026 04:44 AM", "workDate": "07/30/2026 04:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS BEND", "intersection": "HUNTERS LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.50447, "lon": -95.189099, "url": "https://txgc.texas811.org/ui/ticket/2670962098"}, {"num": "2670962063", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "HUNTERS FOREST, FRIENDSWOOD, GALVESTON", "created": "07/28/2026 04:43 AM", "workDate": "07/30/2026 04:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS FOREST", "intersection": "HUNTERS LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.50502, "lon": -95.188107, "url": "https://txgc.texas811.org/ui/ticket/2670962063"}, {"num": "2670961953", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "HUNTERS COVE, FRIENDSWOOD, GALVESTON", "created": "07/28/2026 04:41 AM", "workDate": "07/30/2026 04:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS COVE", "intersection": "HUNTERS LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.505794, "lon": -95.187584, "url": "https://txgc.texas811.org/ui/ticket/2670961953"}, {"num": "2670961837", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "S FRIENDSWOOD DR, FRIENDSWOOD, GALVESTON", "created": "07/28/2026 04:37 AM", "workDate": "07/30/2026 04:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "S FRIENDSWOOD DR", "intersection": "HUNTERS LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.514082, "lon": -95.189634, "url": "https://txgc.texas811.org/ui/ticket/2670961837"}, {"num": "2670961767", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "HUNTERS LN, FRIENDSWOOD, GALVESTON", "created": "07/28/2026 04:35 AM", "workDate": "07/30/2026 04:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS LN", "intersection": "S FRIENDSWOOD DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.514082, "lon": -95.189634, "url": "https://txgc.texas811.org/ui/ticket/2670961767"}, {"num": "2670961732", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "HUNTERS LN, FRIENDSWOOD, GALVESTON", "created": "07/28/2026 04:34 AM", "workDate": "07/30/2026 04:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS LN", "intersection": "S FRIENDSWOOD DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.514082, "lon": -95.189634, "url": "https://txgc.texas811.org/ui/ticket/2670961732"}, {"num": "2670842949", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "W VIEJO DR, FRIENDSWOOD, GALVESTON", "created": "07/27/2026 06:45 AM", "workDate": "07/29/2026 06:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "W VIEJO DR", "intersection": "FM 518", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.500477, "lon": -95.178601, "url": "https://txgc.texas811.org/ui/ticket/2670842949"}, {"num": "2670842877", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "W VIEJO DR, FRIENDSWOOD, GALVESTON", "created": "07/27/2026 06:43 AM", "workDate": "07/29/2026 06:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "W VIEJO DR", "intersection": "FM 518", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.500477, "lon": -95.178601, "url": "https://txgc.texas811.org/ui/ticket/2670842877"}, {"num": "2670842816", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "W VIEJO DR, FRIENDSWOOD, GALVESTON", "created": "07/27/2026 06:41 AM", "workDate": "07/29/2026 06:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "W VIEJO DR", "intersection": "FM 518", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.500477, "lon": -95.178601, "url": "https://txgc.texas811.org/ui/ticket/2670842816"}, {"num": "2670842619", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "RANCHO CIR, FRIENDSWOOD, GALVESTON", "created": "07/27/2026 06:36 AM", "workDate": "07/29/2026 06:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "RANCHO CIR", "intersection": "E VIEJO DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.495547, "lon": -95.165145, "url": "https://txgc.texas811.org/ui/ticket/2670842619"}, {"num": "2670842518", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "E VIEJO DR, FRIENDSWOOD, GALVESTON", "created": "07/27/2026 06:33 AM", "workDate": "07/29/2026 06:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E VIEJO DR", "intersection": "FM 518", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.501599, "lon": -95.177757, "url": "https://txgc.texas811.org/ui/ticket/2670842518"}, {"num": "2670842485", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "E VIEJO DR, FRIENDSWOOD, GALVESTON", "created": "07/27/2026 06:32 AM", "workDate": "07/29/2026 06:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E VIEJO DR", "intersection": "FM 518", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.501599, "lon": -95.177757, "url": "https://txgc.texas811.org/ui/ticket/2670842485"}, {"num": "2670842420", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "E VIEJO DR, FRIENDSWOOD, GALVESTON", "created": "07/27/2026 06:31 AM", "workDate": "07/29/2026 06:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E VIEJO DR", "intersection": "FM 518", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.501599, "lon": -95.177757, "url": "https://txgc.texas811.org/ui/ticket/2670842420"}, {"num": "2670838550", "company": "G-REED LLC", "type": "DigUp", "flagged": false, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "07/27/2026 04:32 AM", "workDate": "07/27/2026 04:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "E VIEJO DR ", "nature": "DigUp - Hit Water line", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZZE FIBER", "phone": "9196199019", "lat": 29.501599, "lon": -95.177757, "url": "https://txgc.texas811.org/ui/ticket/2670838550"}, {"num": "2670388538", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "07/22/2026 10:55 AM", "workDate": "07/22/2026 11:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "W RANCH DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZZE FIBER", "phone": "9196199019", "lat": 29.503571, "lon": -95.181913, "url": "https://txgc.texas811.org/ui/ticket/2670388538"}, {"num": "2670388525", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "07/22/2026 10:51 AM", "workDate": "07/22/2026 11:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "STONE CREEK TERRACE", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZZE FIBER", "phone": "9196199019", "lat": 29.504361, "lon": -95.182629, "url": "https://txgc.texas811.org/ui/ticket/2670388525"}, {"num": "2670388509", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "07/22/2026 10:49 AM", "workDate": "07/22/2026 11:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "OLD RD", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZZE FIBER", "phone": "9196199019", "lat": 29.503472, "lon": -95.184241, "url": "https://txgc.texas811.org/ui/ticket/2670388509"}, {"num": "2670388492", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "07/22/2026 10:46 AM", "workDate": "07/22/2026 10:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "OAK DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZZE FIBER", "phone": "9196199019", "lat": 29.508454, "lon": -95.183529, "url": "https://txgc.texas811.org/ui/ticket/2670388492"}, {"num": "2670143586", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "07/20/2026 08:09 AM", "workDate": "07/20/2026 08:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "FM 528", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.514893, "lon": -95.184742, "url": "https://txgc.texas811.org/ui/ticket/2670143586"}, {"num": "2670143473", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FM 528, FRIENDSWOOD, GALVESTON", "created": "07/20/2026 08:05 AM", "workDate": "07/20/2026 08:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 528", "intersection": "FM 518", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.514893, "lon": -95.184742, "url": "https://txgc.texas811.org/ui/ticket/2670143473"}, {"num": "2670143404", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "07/20/2026 08:02 AM", "workDate": "07/22/2026 08:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "W RANCH DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZZE FIBER", "phone": "9196199019", "lat": 29.503571, "lon": -95.181913, "url": "https://txgc.texas811.org/ui/ticket/2670143404"}, {"num": "2670143298", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "07/20/2026 07:59 AM", "workDate": "07/22/2026 08:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "STONE CREEK TERRACE", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZZE FIBER", "phone": "9196199019", "lat": 29.504361, "lon": -95.182629, "url": "https://txgc.texas811.org/ui/ticket/2670143298"}, {"num": "2670143141", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "07/20/2026 07:54 AM", "workDate": "07/22/2026 08:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "OLD RD", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZZE FIBER", "phone": "9196199019", "lat": 29.503472, "lon": -95.184241, "url": "https://txgc.texas811.org/ui/ticket/2670143141"}, {"num": "2670142968", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "07/20/2026 07:49 AM", "workDate": "07/22/2026 07:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "OAK DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZZE FIBER", "phone": "9196199019", "lat": 29.508454, "lon": -95.183529, "url": "https://txgc.texas811.org/ui/ticket/2670142968"}, {"num": "2670129748", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FM 528, FRIENDSWOOD, GALVESTON", "created": "07/20/2026 01:44 AM", "workDate": "07/20/2026 01:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 528", "intersection": "FALCON RIDGE BLVD", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.506088, "lon": -95.185812, "url": "https://txgc.texas811.org/ui/ticket/2670129748"}, {"num": "2670129704", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FM 528, FRIENDSWOOD, GALVESTON", "created": "07/20/2026 01:43 AM", "workDate": "07/20/2026 01:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 528", "intersection": "LAYFAIR PL", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.509105, "lon": -95.186537, "url": "https://txgc.texas811.org/ui/ticket/2670129704"}, {"num": "2670129526", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FM 528, FRIENDSWOOD, GALVESTON", "created": "07/20/2026 01:38 AM", "workDate": "07/20/2026 01:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 528", "intersection": "FM 518", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.514893, "lon": -95.184742, "url": "https://txgc.texas811.org/ui/ticket/2670129526"}, {"num": "2670129281", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "07/20/2026 01:32 AM", "workDate": "07/20/2026 01:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "FM 528", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.514893, "lon": -95.184742, "url": "https://txgc.texas811.org/ui/ticket/2670129281"}, {"num": "2669812959", "company": "G-REED LLC", "type": "Cancellation", "flagged": false, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "07/17/2026 03:43 AM", "workDate": "07/17/2026 03:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "W RANCH DR ", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.503571, "lon": -95.181913, "url": "https://txgc.texas811.org/ui/ticket/2669812959"}, {"num": "2669812936", "company": "G-REED LLC", "type": "Cancellation", "flagged": false, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "07/17/2026 03:42 AM", "workDate": "07/17/2026 03:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "STONE CREEK TERRACE", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.504361, "lon": -95.182629, "url": "https://txgc.texas811.org/ui/ticket/2669812936"}, {"num": "2669812927", "company": "G-REED LLC", "type": "Cancellation", "flagged": false, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "07/17/2026 03:41 AM", "workDate": "07/17/2026 03:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "OLD RD ", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.503472, "lon": -95.184241, "url": "https://txgc.texas811.org/ui/ticket/2669812927"}, {"num": "2669812892", "company": "G-REED LLC", "type": "Cancellation", "flagged": false, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "07/17/2026 03:40 AM", "workDate": "07/17/2026 03:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "OAK DR ", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.508454, "lon": -95.183529, "url": "https://txgc.texas811.org/ui/ticket/2669812892"}, {"num": "2669705047", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "07/16/2026 09:43 AM", "workDate": "07/16/2026 09:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "W RANCH DR ", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.503571, "lon": -95.181913, "url": "https://txgc.texas811.org/ui/ticket/2669705047"}, {"num": "2669705034", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "07/16/2026 09:42 AM", "workDate": "07/16/2026 09:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "STONE CREEK TERRACE", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.504361, "lon": -95.182629, "url": "https://txgc.texas811.org/ui/ticket/2669705034"}, {"num": "2669705022", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "07/16/2026 09:41 AM", "workDate": "07/16/2026 09:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "OLD RD ", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.503472, "lon": -95.184241, "url": "https://txgc.texas811.org/ui/ticket/2669705022"}, {"num": "2669705000", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "07/16/2026 09:39 AM", "workDate": "07/16/2026 09:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "OAK DR ", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.508454, "lon": -95.183529, "url": "https://txgc.texas811.org/ui/ticket/2669705000"}, {"num": "2669704989", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "07/16/2026 09:38 AM", "workDate": "07/16/2026 09:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "LEISURE LN ", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.509784, "lon": -95.185356, "url": "https://txgc.texas811.org/ui/ticket/2669704989"}, {"num": "2669704972", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "07/16/2026 09:37 AM", "workDate": "07/16/2026 09:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "FM 528", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.514893, "lon": -95.184742, "url": "https://txgc.texas811.org/ui/ticket/2669704972"}, {"num": "2669704923", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FM 528, FRIENDSWOOD, GALVESTON", "created": "07/16/2026 09:33 AM", "workDate": "07/16/2026 09:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 528", "intersection": "FALCON RIDGE BLVD", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.506088, "lon": -95.185812, "url": "https://txgc.texas811.org/ui/ticket/2669704923"}, {"num": "2669704890", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FM 528, FRIENDSWOOD, GALVESTON", "created": "07/16/2026 09:30 AM", "workDate": "07/16/2026 09:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 528", "intersection": "LAYFAIR PL", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.509105, "lon": -95.186537, "url": "https://txgc.texas811.org/ui/ticket/2669704890"}, {"num": "2669704863", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FM 528, FRIENDSWOOD, GALVESTON", "created": "07/16/2026 09:28 AM", "workDate": "07/16/2026 09:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 528", "intersection": "SUNSET DR", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.518316, "lon": -95.193891, "url": "https://txgc.texas811.org/ui/ticket/2669704863"}, {"num": "2669704834", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FM 528, FRIENDSWOOD, GALVESTON", "created": "07/16/2026 09:25 AM", "workDate": "07/16/2026 09:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 528", "intersection": "FM 518", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.514893, "lon": -95.184742, "url": "https://txgc.texas811.org/ui/ticket/2669704834"}, {"num": "2669565164", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "07/14/2026 07:50 AM", "workDate": "07/16/2026 08:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "W RANCH DR ", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.503571, "lon": -95.181913, "url": "https://txgc.texas811.org/ui/ticket/2669565164"}, {"num": "2669565086", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "07/14/2026 07:48 AM", "workDate": "07/16/2026 08:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "STONE CREEK TERRACE", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.504361, "lon": -95.182629, "url": "https://txgc.texas811.org/ui/ticket/2669565086"}, {"num": "2669565016", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "07/14/2026 07:45 AM", "workDate": "07/16/2026 07:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "OLD RD ", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.503472, "lon": -95.184241, "url": "https://txgc.texas811.org/ui/ticket/2669565016"}, {"num": "2669564930", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "07/14/2026 07:42 AM", "workDate": "07/16/2026 07:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "OAK DR ", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.508454, "lon": -95.183529, "url": "https://txgc.texas811.org/ui/ticket/2669564930"}, {"num": "2669564840", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "07/14/2026 07:39 AM", "workDate": "07/16/2026 07:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "LEISURE LN ", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.509784, "lon": -95.185356, "url": "https://txgc.texas811.org/ui/ticket/2669564840"}, {"num": "2669564758", "company": "G-REED LLC", "type": "Cancellation", "flagged": false, "addr": "FM 528, FRIENDSWOOD, GALVESTON", "created": "07/14/2026 07:36 AM", "workDate": "07/14/2026 07:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 528", "intersection": "FM 518", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.514893, "lon": -95.184742, "url": "https://txgc.texas811.org/ui/ticket/2669564758"}, {"num": "2669564737", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "07/14/2026 07:35 AM", "workDate": "07/16/2026 07:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "FM 528", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.514893, "lon": -95.184742, "url": "https://txgc.texas811.org/ui/ticket/2669564737"}, {"num": "2669564718", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "FM 528, FRIENDSWOOD, GALVESTON", "created": "07/14/2026 07:34 AM", "workDate": "07/16/2026 07:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 528", "intersection": "FM 518", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.514893, "lon": -95.184742, "url": "https://txgc.texas811.org/ui/ticket/2669564718"}, {"num": "2669564413", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "FM 528, FRIENDSWOOD, GALVESTON", "created": "07/14/2026 07:23 AM", "workDate": "07/16/2026 07:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 528", "intersection": "FALCON RIDGE BLVD", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.506088, "lon": -95.185812, "url": "https://txgc.texas811.org/ui/ticket/2669564413"}, {"num": "2669564305", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "FM 528, FRIENDSWOOD, GALVESTON", "created": "07/14/2026 07:20 AM", "workDate": "07/16/2026 07:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 528", "intersection": "LAYFAIR PL", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.509105, "lon": -95.186537, "url": "https://txgc.texas811.org/ui/ticket/2669564305"}, {"num": "2669564210", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "FM 528, FRIENDSWOOD, GALVESTON", "created": "07/14/2026 07:15 AM", "workDate": "07/16/2026 07:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 528", "intersection": "SUNSET DR", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.518316, "lon": -95.193891, "url": "https://txgc.texas811.org/ui/ticket/2669564210"}, {"num": "2669564090", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "FM 528, FRIENDSWOOD, GALVESTON", "created": "07/14/2026 07:10 AM", "workDate": "07/16/2026 07:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 528", "intersection": "FM 518", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.514893, "lon": -95.184742, "url": "https://txgc.texas811.org/ui/ticket/2669564090"}, {"num": "2669434590", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "WILDERNESS PINES DR, FRIENDSWOOD, GALVESTON", "created": "07/13/2026 02:40 AM", "workDate": "07/13/2026 02:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "WILDERNESS PINES DR", "intersection": "PINE NEEDLE DR ", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EASY FIBER ", "phone": "9196199019", "lat": 29.508035, "lon": -95.216725, "url": "https://txgc.texas811.org/ui/ticket/2669434590"}, {"num": "2669434525", "company": "G-REED LLC", "type": "Update", "flagged": false, "addr": "PINE NEEDLE DR, FRIENDSWOOD, GALVESTON", "created": "07/13/2026 02:38 AM", "workDate": "07/15/2026 02:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "PINE NEEDLE DR", "intersection": "WILDERNESS PINES DR ", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EASY FIBER ", "phone": "9196199019", "lat": 29.508035, "lon": -95.216725, "url": "https://txgc.texas811.org/ui/ticket/2669434525"}, {"num": "2669434461", "company": "G-REED LLC", "type": "Update", "flagged": false, "addr": "FERNWOOD DR, FRIENDSWOOD, GALVESTON", "created": "07/13/2026 02:37 AM", "workDate": "07/15/2026 02:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FERNWOOD DR", "intersection": "WILDERNESS PINES DR ", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EASY FIBER ", "phone": "9196199019", "lat": 29.508862, "lon": -95.215562, "url": "https://txgc.texas811.org/ui/ticket/2669434461"}, {"num": "2669434402", "company": "G-REED LLC", "type": "Update", "flagged": false, "addr": "LAKE FOREST DR, FRIENDSWOOD, GALVESTON", "created": "07/13/2026 02:35 AM", "workDate": "07/15/2026 02:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "LAKE FOREST DR", "intersection": "WILDERNESS PINES DR ", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EASY FIBER ", "phone": "9196199019", "lat": 29.509504, "lon": -95.214853, "url": "https://txgc.texas811.org/ui/ticket/2669434402"}, {"num": "2668984853", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "BLUEBERRY LN, FRIENDSWOOD, GALVESTON", "created": "07/08/2026 10:34 AM", "workDate": "07/08/2026 10:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "BLUEBERRY LN", "intersection": "BUTTONWOOD DR ", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EASY FIBER ", "phone": "9196199019", "lat": 29.50586, "lon": -95.215714, "url": "https://txgc.texas811.org/ui/ticket/2668984853"}, {"num": "2668984836", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "WILDERNESS PINES DR, FRIENDSWOOD, GALVESTON", "created": "07/08/2026 10:32 AM", "workDate": "07/08/2026 10:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "WILDERNESS PINES DR", "intersection": "PINE NEEDLE DR ", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EASY FIBER ", "phone": "9196199019", "lat": 29.508035, "lon": -95.216725, "url": "https://txgc.texas811.org/ui/ticket/2668984836"}, {"num": "2668984826", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "BEECHWOOD DR, FRIENDSWOOD, GALVESTON", "created": "07/08/2026 10:31 AM", "workDate": "07/08/2026 10:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "BEECHWOOD DR", "intersection": "PINE NEEDLE DR ", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EASY FIBER ", "phone": "9196199019", "lat": 29.507124, "lon": -95.216334, "url": "https://txgc.texas811.org/ui/ticket/2668984826"}, {"num": "2668984805", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "PINE NEEDLE DR, FRIENDSWOOD, GALVESTON", "created": "07/08/2026 10:29 AM", "workDate": "07/08/2026 10:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "PINE NEEDLE DR", "intersection": "WILDERNESS PINES DR ", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EASY FIBER ", "phone": "9196199019", "lat": 29.508035, "lon": -95.216725, "url": "https://txgc.texas811.org/ui/ticket/2668984805"}, {"num": "2668984793", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FERNWOOD DR, FRIENDSWOOD, GALVESTON", "created": "07/08/2026 10:28 AM", "workDate": "07/08/2026 10:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FERNWOOD DR", "intersection": "WILDERNESS PINES DR ", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EASY FIBER ", "phone": "9196199019", "lat": 29.508862, "lon": -95.215562, "url": "https://txgc.texas811.org/ui/ticket/2668984793"}, {"num": "2668984753", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "LAKE FOREST DR, FRIENDSWOOD, GALVESTON", "created": "07/08/2026 10:25 AM", "workDate": "07/08/2026 10:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "LAKE FOREST DR", "intersection": "WILDERNESS PINES DR ", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EASY FIBER ", "phone": "9196199019", "lat": 29.509504, "lon": -95.214853, "url": "https://txgc.texas811.org/ui/ticket/2668984753"}, {"num": "2668864108", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "wilderness pines dr, FRIENDSWOOD, GALVESTON", "created": "07/07/2026 01:05 PM", "workDate": "07/09/2026 01:15 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "wilderness pines dr", "intersection": "buttonwood dr", "nature": "Bury-Fiber Optic Cable", "duration": "15 days", "takenBy": "Texas811", "workDoneFor": "ezee fiber", "phone": "9196199019", "lat": 29.50732, "lon": -95.215145, "url": "https://txgc.texas811.org/ui/ticket/2668864108"}, {"num": "2668864101", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "wilderness pines dr, FRIENDSWOOD, GALVESTON", "created": "07/07/2026 01:03 PM", "workDate": "07/09/2026 01:15 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "wilderness pines dr", "intersection": "buttonwood dr", "nature": "Bury-Fiber Optic Cable", "duration": "15 days", "takenBy": "Texas811", "workDoneFor": "ezee fiber", "phone": "9196199019", "lat": 29.50732, "lon": -95.215145, "url": "https://txgc.texas811.org/ui/ticket/2668864101"}, {"num": "2668864092", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "beechwood dr, FRIENDSWOOD, GALVESTON", "created": "07/07/2026 01:02 PM", "workDate": "07/09/2026 01:00 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "beechwood dr", "intersection": "buttonwood dr", "nature": "Bury-Fiber Optic Cable", "duration": "15 days", "takenBy": "Texas811", "workDoneFor": "ezee fiber", "phone": "9196199019", "lat": 29.506292, "lon": -95.215858, "url": "https://txgc.texas811.org/ui/ticket/2668864092"}, {"num": "2668864078", "company": "G-REED LLC", "type": "Emergency", "flagged": false, "addr": "blueberry ln, FRIENDSWOOD, GALVESTON", "created": "07/07/2026 01:00 PM", "workDate": "07/07/2026 01:00 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "blueberry ln", "intersection": "buttonwood dr", "nature": "Emergency-Fiber", "duration": "15 days", "takenBy": "Texas811", "workDoneFor": "ezee fiber", "phone": "9196199019", "lat": 29.50586, "lon": -95.215714, "url": "https://txgc.texas811.org/ui/ticket/2668864078"}, {"num": "2668726844", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "BEECHWOOD DR, FRIENDSWOOD, GALVESTON", "created": "07/06/2026 03:15 AM", "workDate": "07/06/2026 03:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "BEECHWOOD DR", "intersection": "PINE NEEDLE DR ", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EASY FIBER ", "phone": "9196199019", "lat": 29.507124, "lon": -95.216334, "url": "https://txgc.texas811.org/ui/ticket/2668726844"}, {"num": "2668726747", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "BEECHWOOD DR, FRIENDSWOOD, GALVESTON", "created": "07/06/2026 03:12 AM", "workDate": "07/06/2026 03:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "BEECHWOOD DR", "intersection": "LAKE FOREST DR ", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EASY FIBER ", "phone": "9196199019", "lat": 29.508897, "lon": -95.214129, "url": "https://txgc.texas811.org/ui/ticket/2668726747"}, {"num": "2668726632", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "BEECHWOOD DR, FRIENDSWOOD, GALVESTON", "created": "07/06/2026 03:09 AM", "workDate": "07/06/2026 03:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "BEECHWOOD DR", "intersection": "LAKE FOREST DR ", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EASY FIBER ", "phone": "9196199019", "lat": 29.508897, "lon": -95.214129, "url": "https://txgc.texas811.org/ui/ticket/2668726632"}];
+const TM_POINTS = [{"num": "2671670924", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FM 528, HOUSTON, HARRIS", "created": "08/04/2026 07:54 AM", "workDate": "08/04/2026 08:00 AM", "county": "HARRIS", "city": "HOUSTON", "street": "FM 528", "intersection": "BAY AREA BLVD", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.568855, "lon": -95.092682, "url": "https://txgc.texas811.org/ui/ticket/2671670924"}, {"num": "2671670645", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "E PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "08/04/2026 07:45 AM", "workDate": "08/04/2026 07:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E PARKWOOD AVE", "intersection": "PENNY LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.516358, "lon": -95.179988, "url": "https://txgc.texas811.org/ui/ticket/2671670645"}, {"num": "2671670594", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "E PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "08/04/2026 07:43 AM", "workDate": "08/04/2026 07:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E PARKWOOD AVE", "intersection": "WINDING WAY DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.516078, "lon": -95.185116, "url": "https://txgc.texas811.org/ui/ticket/2671670594"}, {"num": "2671670534", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "E PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "08/04/2026 07:41 AM", "workDate": "08/04/2026 07:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E PARKWOOD AVE", "intersection": "S FRIENDSWOOD", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.527668, "lon": -95.186731, "url": "https://txgc.texas811.org/ui/ticket/2671670534"}, {"num": "2671669717", "company": "G-REED LLC", "type": "DigUp", "flagged": false, "addr": "W VIEJO DR, FRIENDSWOOD, GALVESTON", "created": "08/04/2026 07:11 AM", "workDate": "08/04/2026 07:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "W VIEJO DR", "intersection": "PLAYA", "nature": "DigUp - Cut Gas line", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.486499, "lon": -95.172688, "url": "https://txgc.texas811.org/ui/ticket/2671669717"}, {"num": "2671660693", "company": "G-REED LLC", "type": "Update", "flagged": false, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "08/04/2026 02:34 AM", "workDate": "08/06/2026 02:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "W RANCH DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZZE FIBER", "phone": "9196199019", "lat": 29.503571, "lon": -95.181913, "url": "https://txgc.texas811.org/ui/ticket/2671660693"}, {"num": "2671660648", "company": "G-REED LLC", "type": "Update", "flagged": false, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "08/04/2026 02:32 AM", "workDate": "08/06/2026 02:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "STONE CREEK TERRACE", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZZE FIBER", "phone": "9196199019", "lat": 29.504361, "lon": -95.182629, "url": "https://txgc.texas811.org/ui/ticket/2671660648"}, {"num": "2671660584", "company": "G-REED LLC", "type": "Update", "flagged": false, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "08/04/2026 02:31 AM", "workDate": "08/06/2026 02:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "OLD RD", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZZE FIBER", "phone": "9196199019", "lat": 29.503472, "lon": -95.184241, "url": "https://txgc.texas811.org/ui/ticket/2671660584"}, {"num": "2671660538", "company": "G-REED LLC", "type": "Update", "flagged": false, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "08/04/2026 02:30 AM", "workDate": "08/06/2026 02:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "OAK DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZZE FIBER", "phone": "9196199019", "lat": 29.506415, "lon": -95.184788, "url": "https://txgc.texas811.org/ui/ticket/2671660538"}, {"num": "2671660444", "company": "G-REED LLC", "type": "Update", "flagged": false, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "08/04/2026 02:28 AM", "workDate": "08/06/2026 02:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "LEISURE LN ", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.509784, "lon": -95.185356, "url": "https://txgc.texas811.org/ui/ticket/2671660444"}, {"num": "2671660421", "company": "G-REED LLC", "type": "Update", "flagged": false, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "08/04/2026 02:27 AM", "workDate": "08/06/2026 02:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "FM 528", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.510537, "lon": -95.187756, "url": "https://txgc.texas811.org/ui/ticket/2671660421"}, {"num": "2671660266", "company": "G-REED LLC", "type": "Update", "flagged": false, "addr": "FM 528, FRIENDSWOOD, GALVESTON", "created": "08/04/2026 02:24 AM", "workDate": "08/06/2026 02:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 528", "intersection": "FALCON RIDGE BLVD", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.50378, "lon": -95.190794, "url": "https://txgc.texas811.org/ui/ticket/2671660266"}, {"num": "2671660214", "company": "G-REED LLC", "type": "Update", "flagged": false, "addr": "FM 528, FRIENDSWOOD, GALVESTON", "created": "08/04/2026 02:22 AM", "workDate": "08/06/2026 02:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 528", "intersection": "LAYFAIR PL", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.506565, "lon": -95.190351, "url": "https://txgc.texas811.org/ui/ticket/2671660214"}, {"num": "2671660168", "company": "G-REED LLC", "type": "Update", "flagged": false, "addr": "FM 528, FRIENDSWOOD, GALVESTON", "created": "08/04/2026 02:21 AM", "workDate": "08/06/2026 02:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 528", "intersection": "SUNSET DR", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.515325, "lon": -95.197182, "url": "https://txgc.texas811.org/ui/ticket/2671660168"}, {"num": "2671660119", "company": "G-REED LLC", "type": "Update", "flagged": false, "addr": "FM 528, FRIENDSWOOD, GALVESTON", "created": "08/04/2026 02:20 AM", "workDate": "08/06/2026 02:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 528", "intersection": "FM 518", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.510537, "lon": -95.187756, "url": "https://txgc.texas811.org/ui/ticket/2671660119"}, {"num": "2671544727", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "E PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "08/03/2026 05:37 AM", "workDate": "08/03/2026 05:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E PARKWOOD AVE", "intersection": "PENNY LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.515652, "lon": -95.180666, "url": "https://txgc.texas811.org/ui/ticket/2671544727"}, {"num": "2671544667", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "E PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "08/03/2026 05:34 AM", "workDate": "08/03/2026 05:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E PARKWOOD AVE", "intersection": "WINDING WAY DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.513668, "lon": -95.187444, "url": "https://txgc.texas811.org/ui/ticket/2671544667"}, {"num": "2671544540", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "E PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "08/03/2026 05:30 AM", "workDate": "08/03/2026 05:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E PARKWOOD AVE", "intersection": "S FRIENDSWOOD", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.527238, "lon": -95.187186, "url": "https://txgc.texas811.org/ui/ticket/2671544540"}, {"num": "2671225610", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "S CENTURY CV, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:11 AM", "workDate": "07/31/2026 10:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "S CENTURY CV", "intersection": "CENTURY DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.501491, "lon": -95.179432, "url": "https://txgc.texas811.org/ui/ticket/2671225610"}, {"num": "2671225604", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "N CENTURY CIR, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:10 AM", "workDate": "07/31/2026 10:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "N CENTURY CIR", "intersection": "CENTURY DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.501517, "lon": -95.180692, "url": "https://txgc.texas811.org/ui/ticket/2671225604"}, {"num": "2671225598", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "CENTURY DR, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:10 AM", "workDate": "07/31/2026 10:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "CENTURY DR", "intersection": "S FRIENDSWOOD DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.501619, "lon": -95.179789, "url": "https://txgc.texas811.org/ui/ticket/2671225598"}, {"num": "2671225584", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS LN, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:08 AM", "workDate": "07/31/2026 10:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS LN", "intersection": "HUNTERS TRL", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.50461, "lon": -95.190029, "url": "https://txgc.texas811.org/ui/ticket/2671225584"}, {"num": "2671225575", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "OAK DR, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:07 AM", "workDate": "07/31/2026 10:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "OAK DR", "intersection": "S FRIENDSWOOD DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.502677, "lon": -95.180519, "url": "https://txgc.texas811.org/ui/ticket/2671225575"}, {"num": "2671225554", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS LN, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:05 AM", "workDate": "07/31/2026 10:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS LN", "intersection": "HUNTERS TRL", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.50373, "lon": -95.191625, "url": "https://txgc.texas811.org/ui/ticket/2671225554"}, {"num": "2671225544", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS LN, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:04 AM", "workDate": "07/31/2026 10:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS LN", "intersection": "S FRIENDSWOOD DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.503972, "lon": -95.189838, "url": "https://txgc.texas811.org/ui/ticket/2671225544"}, {"num": "2671225521", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS TRL, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:02 AM", "workDate": "07/31/2026 10:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS TRL", "intersection": "HUNTERS LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.504344, "lon": -95.191279, "url": "https://txgc.texas811.org/ui/ticket/2671225521"}, {"num": "2671225512", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS LN, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:01 AM", "workDate": "07/31/2026 10:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS LN", "intersection": "HUNTERS TRL", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.50447, "lon": -95.190484, "url": "https://txgc.texas811.org/ui/ticket/2671225512"}, {"num": "2671225499", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS BEND, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 10:00 AM", "workDate": "07/31/2026 10:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS BEND", "intersection": "HUNTERS LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.504933, "lon": -95.189361, "url": "https://txgc.texas811.org/ui/ticket/2671225499"}, {"num": "2671225480", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "S FRIENDSWOOD DR, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 09:59 AM", "workDate": "07/31/2026 10:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "S FRIENDSWOOD DR", "intersection": "HUNTERS LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.506514, "lon": -95.187638, "url": "https://txgc.texas811.org/ui/ticket/2671225480"}, {"num": "2671225467", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS FOREST, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 09:58 AM", "workDate": "07/31/2026 10:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS FOREST", "intersection": "HUNTERS LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.50502, "lon": -95.188107, "url": "https://txgc.texas811.org/ui/ticket/2671225467"}, {"num": "2671225433", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS COVE, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 09:55 AM", "workDate": "07/31/2026 10:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS COVE", "intersection": "HUNTERS LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.505794, "lon": -95.187584, "url": "https://txgc.texas811.org/ui/ticket/2671225433"}, {"num": "2671225413", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "HUNTERS LN, FRIENDSWOOD, GALVESTON", "created": "07/31/2026 09:53 AM", "workDate": "07/31/2026 10:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS LN", "intersection": "S FRIENDSWOOD DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.505807, "lon": -95.187595, "url": "https://txgc.texas811.org/ui/ticket/2671225413"}, {"num": "2671092766", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "BLACKHAWK BLVD, HOUSTON, HARRIS", "created": "07/29/2026 04:18 PM", "workDate": "07/31/2026 04:15 PM", "county": "HARRIS", "city": "HOUSTON", "street": "BLACKHAWK BLVD", "intersection": "FM 528", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.522946, "lon": -95.169926, "url": "https://txgc.texas811.org/ui/ticket/2671092766"}, {"num": "2671092757", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "FM 528, HOUSTON, HARRIS", "created": "07/29/2026 04:14 PM", "workDate": "07/31/2026 04:15 PM", "county": "HARRIS", "city": "HOUSTON", "street": "FM 528", "intersection": "BAY AREA BLVD", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.568646, "lon": -95.092794, "url": "https://txgc.texas811.org/ui/ticket/2671092757"}, {"num": "2671092707", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "E PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "07/29/2026 03:58 PM", "workDate": "07/31/2026 04:00 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E PARKWOOD AVE", "intersection": "PENNY LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.513258, "lon": -95.18329, "url": "https://txgc.texas811.org/ui/ticket/2671092707"}, {"num": "2671092702", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "E PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "07/29/2026 03:56 PM", "workDate": "07/31/2026 04:00 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E PARKWOOD AVE", "intersection": "WINDING WAY DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.513214, "lon": -95.188266, "url": "https://txgc.texas811.org/ui/ticket/2671092702"}, {"num": "2671092698", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "E PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "07/29/2026 03:53 PM", "workDate": "07/31/2026 03:45 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E PARKWOOD AVE", "intersection": "S FRIENDSWOOD", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.524373, "lon": -95.190336, "url": "https://txgc.texas811.org/ui/ticket/2671092698"}, {"num": "2671091740", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "W VIEJO DR, FRIENDSWOOD, GALVESTON", "created": "07/29/2026 12:17 PM", "workDate": "07/29/2026 12:15 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "W VIEJO DR", "intersection": "FM 518", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.500477, "lon": -95.178601, "url": "https://txgc.texas811.org/ui/ticket/2671091740"}, {"num": "2671091686", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "E VIEJO DR, FRIENDSWOOD, GALVESTON", "created": "07/29/2026 12:03 PM", "workDate": "07/29/2026 12:15 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E VIEJO DR", "intersection": "FM 518", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.501599, "lon": -95.177757, "url": "https://txgc.texas811.org/ui/ticket/2671091686"}, {"num": "2670971658", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "07/28/2026 02:53 PM", "workDate": "07/28/2026 03:00 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "FM 528", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.514893, "lon": -95.184742, "url": "https://txgc.texas811.org/ui/ticket/2670971658"}, {"num": "2670971652", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "07/28/2026 02:51 PM", "workDate": "07/28/2026 03:00 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "OAK DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZZE FIBER", "phone": "9196199019", "lat": 29.508454, "lon": -95.183529, "url": "https://txgc.texas811.org/ui/ticket/2670971652"}, {"num": "2670971642", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FM 528, FRIENDSWOOD, GALVESTON", "created": "07/28/2026 02:48 PM", "workDate": "07/28/2026 02:45 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 528", "intersection": "FM 518", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.514893, "lon": -95.184742, "url": "https://txgc.texas811.org/ui/ticket/2670971642"}, {"num": "2670964971", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "N CENTURY CIR, FRIENDSWOOD, GALVESTON", "created": "07/28/2026 06:37 AM", "workDate": "07/30/2026 06:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "N CENTURY CIR", "intersection": "CENTURY DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.501426, "lon": -95.180153, "url": "https://txgc.texas811.org/ui/ticket/2670964971"}, {"num": "2670964748", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "CENTURY DR, FRIENDSWOOD, GALVESTON", "created": "07/28/2026 06:29 AM", "workDate": "07/30/2026 06:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "CENTURY DR", "intersection": "S FRIENDSWOOD DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.512184, "lon": -95.185667, "url": "https://txgc.texas811.org/ui/ticket/2670964748"}, {"num": "2670964330", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "OAK DR, FRIENDSWOOD, GALVESTON", "created": "07/28/2026 06:15 AM", "workDate": "07/30/2026 06:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "OAK DR", "intersection": "S FRIENDSWOOD DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.51525, "lon": -95.184503, "url": "https://txgc.texas811.org/ui/ticket/2670964330"}, {"num": "2670962260", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "HUNTERS LN, FRIENDSWOOD, GALVESTON", "created": "07/28/2026 04:49 AM", "workDate": "07/30/2026 05:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS LN", "intersection": "HUNTERS TRL", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.50373, "lon": -95.190814, "url": "https://txgc.texas811.org/ui/ticket/2670962260"}, {"num": "2670962242", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "HUNTERS TRL, FRIENDSWOOD, GALVESTON", "created": "07/28/2026 04:48 AM", "workDate": "07/30/2026 05:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS TRL", "intersection": "HUNTERS LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.50373, "lon": -95.190814, "url": "https://txgc.texas811.org/ui/ticket/2670962242"}, {"num": "2670962196", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "HUNTERS LN, FRIENDSWOOD, GALVESTON", "created": "07/28/2026 04:47 AM", "workDate": "07/30/2026 05:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS LN", "intersection": "HUNTERS TRL", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.50373, "lon": -95.190814, "url": "https://txgc.texas811.org/ui/ticket/2670962196"}, {"num": "2670962162", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "HUNTERS LN, FRIENDSWOOD, GALVESTON", "created": "07/28/2026 04:46 AM", "workDate": "07/30/2026 04:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS LN", "intersection": "HUNTERS TRL", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.50373, "lon": -95.190814, "url": "https://txgc.texas811.org/ui/ticket/2670962162"}, {"num": "2670962098", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "HUNTERS BEND, FRIENDSWOOD, GALVESTON", "created": "07/28/2026 04:44 AM", "workDate": "07/30/2026 04:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS BEND", "intersection": "HUNTERS LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.50447, "lon": -95.189099, "url": "https://txgc.texas811.org/ui/ticket/2670962098"}, {"num": "2670962063", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "HUNTERS FOREST, FRIENDSWOOD, GALVESTON", "created": "07/28/2026 04:43 AM", "workDate": "07/30/2026 04:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS FOREST", "intersection": "HUNTERS LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.50502, "lon": -95.188107, "url": "https://txgc.texas811.org/ui/ticket/2670962063"}, {"num": "2670961953", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "HUNTERS COVE, FRIENDSWOOD, GALVESTON", "created": "07/28/2026 04:41 AM", "workDate": "07/30/2026 04:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS COVE", "intersection": "HUNTERS LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.505794, "lon": -95.187584, "url": "https://txgc.texas811.org/ui/ticket/2670961953"}, {"num": "2670961837", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "S FRIENDSWOOD DR, FRIENDSWOOD, GALVESTON", "created": "07/28/2026 04:37 AM", "workDate": "07/30/2026 04:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "S FRIENDSWOOD DR", "intersection": "HUNTERS LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.514082, "lon": -95.189634, "url": "https://txgc.texas811.org/ui/ticket/2670961837"}, {"num": "2670961767", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "HUNTERS LN, FRIENDSWOOD, GALVESTON", "created": "07/28/2026 04:35 AM", "workDate": "07/30/2026 04:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS LN", "intersection": "S FRIENDSWOOD DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.514082, "lon": -95.189634, "url": "https://txgc.texas811.org/ui/ticket/2670961767"}, {"num": "2670961732", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "HUNTERS LN, FRIENDSWOOD, GALVESTON", "created": "07/28/2026 04:34 AM", "workDate": "07/30/2026 04:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HUNTERS LN", "intersection": "S FRIENDSWOOD DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.514082, "lon": -95.189634, "url": "https://txgc.texas811.org/ui/ticket/2670961732"}, {"num": "2670842949", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "W VIEJO DR, FRIENDSWOOD, GALVESTON", "created": "07/27/2026 06:45 AM", "workDate": "07/29/2026 06:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "W VIEJO DR", "intersection": "FM 518", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.500477, "lon": -95.178601, "url": "https://txgc.texas811.org/ui/ticket/2670842949"}, {"num": "2670842877", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "W VIEJO DR, FRIENDSWOOD, GALVESTON", "created": "07/27/2026 06:43 AM", "workDate": "07/29/2026 06:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "W VIEJO DR", "intersection": "FM 518", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.500477, "lon": -95.178601, "url": "https://txgc.texas811.org/ui/ticket/2670842877"}, {"num": "2670842816", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "W VIEJO DR, FRIENDSWOOD, GALVESTON", "created": "07/27/2026 06:41 AM", "workDate": "07/29/2026 06:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "W VIEJO DR", "intersection": "FM 518", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.500477, "lon": -95.178601, "url": "https://txgc.texas811.org/ui/ticket/2670842816"}, {"num": "2670842619", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "RANCHO CIR, FRIENDSWOOD, GALVESTON", "created": "07/27/2026 06:36 AM", "workDate": "07/29/2026 06:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "RANCHO CIR", "intersection": "E VIEJO DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.495547, "lon": -95.165145, "url": "https://txgc.texas811.org/ui/ticket/2670842619"}, {"num": "2670842518", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "E VIEJO DR, FRIENDSWOOD, GALVESTON", "created": "07/27/2026 06:33 AM", "workDate": "07/29/2026 06:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E VIEJO DR", "intersection": "FM 518", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.501599, "lon": -95.177757, "url": "https://txgc.texas811.org/ui/ticket/2670842518"}, {"num": "2670842485", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "E VIEJO DR, FRIENDSWOOD, GALVESTON", "created": "07/27/2026 06:32 AM", "workDate": "07/29/2026 06:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E VIEJO DR", "intersection": "FM 518", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.501599, "lon": -95.177757, "url": "https://txgc.texas811.org/ui/ticket/2670842485"}, {"num": "2670842420", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "E VIEJO DR, FRIENDSWOOD, GALVESTON", "created": "07/27/2026 06:31 AM", "workDate": "07/29/2026 06:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E VIEJO DR", "intersection": "FM 518", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZEE FIBER", "phone": "9196199019", "lat": 29.501599, "lon": -95.177757, "url": "https://txgc.texas811.org/ui/ticket/2670842420"}, {"num": "2670838550", "company": "G-REED LLC", "type": "DigUp", "flagged": false, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "07/27/2026 04:32 AM", "workDate": "07/27/2026 04:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "E VIEJO DR ", "nature": "DigUp - Hit Water line", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZZE FIBER", "phone": "9196199019", "lat": 29.501599, "lon": -95.177757, "url": "https://txgc.texas811.org/ui/ticket/2670838550"}, {"num": "2670388538", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "07/22/2026 10:55 AM", "workDate": "07/22/2026 11:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "W RANCH DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZZE FIBER", "phone": "9196199019", "lat": 29.503571, "lon": -95.181913, "url": "https://txgc.texas811.org/ui/ticket/2670388538"}, {"num": "2670388525", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "07/22/2026 10:51 AM", "workDate": "07/22/2026 11:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "STONE CREEK TERRACE", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZZE FIBER", "phone": "9196199019", "lat": 29.504361, "lon": -95.182629, "url": "https://txgc.texas811.org/ui/ticket/2670388525"}, {"num": "2670388509", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "07/22/2026 10:49 AM", "workDate": "07/22/2026 11:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "OLD RD", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZZE FIBER", "phone": "9196199019", "lat": 29.503472, "lon": -95.184241, "url": "https://txgc.texas811.org/ui/ticket/2670388509"}, {"num": "2670388492", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FM 518, FRIENDSWOOD, GALVESTON", "created": "07/22/2026 10:46 AM", "workDate": "07/22/2026 10:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FM 518", "intersection": "OAK DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "EZZE FIBER", "phone": "9196199019", "lat": 29.508454, "lon": -95.183529, "url": "https://txgc.texas811.org/ui/ticket/2670388492"}];
 let tmMap = null;
 
 function toggleCompany(slug) {
