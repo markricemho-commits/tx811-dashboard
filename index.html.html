@@ -1,0 +1,2080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Texas811 Dig Ticket Dashboard</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body {
+    margin:0; padding:24px; background:#F7F8FA;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    color:#1F2430;
+  }
+  h1 { font-size:20px; margin:0 0 4px 0; color:#2C3138; }
+  .subtitle { color:#6B7280; font-size:13px; margin-bottom:20px; padding-bottom:14px; border-bottom:3px solid #E87722; }
+
+  .summary-row { display:flex; gap:16px; margin-bottom:24px; flex-wrap:wrap; }
+  .summary-stat { background:#fff; border:1px solid #E5E7EB; border-radius:10px; padding:14px 18px; min-width:120px; }
+  .summary-stat .num { font-size:24px; font-weight:700; }
+  .summary-stat .label { font-size:12px; color:#6B7280; margin-top:2px; }
+  .summary-stat.flag .num { color:#B91C1C; }
+
+  main { max-width:1200px; margin:0 auto; }
+  .card { background:#fff; border:1px solid #E5E7EB; border-radius:10px; margin-bottom:14px; overflow:hidden; transition:box-shadow .15s, border-color .15s; }
+  .card:hover { box-shadow:0 2px 8px rgba(0,0,0,0.06); border-color:#F0C9A6; }
+  .card-head { display:flex; align-items:center; gap:10px; padding:16px; cursor:pointer; user-select:none; }
+  .chevron { transition: transform .15s; font-size:12px; color:#E87722; }
+  .chevron.open { transform: rotate(90deg); }
+  .card-title { font-weight:600; font-size:13px; flex:1; }
+  .card-stats { font-size:12px; color:#6B7280; }
+  .panel { border-top:1px solid #E5E7EB; }
+  table { width:100%; border-collapse: collapse; font-size:12px; }
+  th { background:#2C3138; color:#fff; text-align:left; padding:8px 10px; font-weight:600; position:sticky; top:0; }
+  td { padding:7px 10px; border-bottom:1px solid #EEF0F3; }
+  tr:nth-child(even) td { background:#F7FAFD; }
+  .ticket-link { color:#2C3138; text-decoration:none; font-weight:700; }
+  .ticket-link:hover { color:#E87722; text-decoration:underline; }
+  .chip { display:inline-block; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:600; white-space:nowrap; }
+  .chip-ok { background:#E8F5E9; color:#2E7D32; }
+  .chip-bad { background:#FDECEA; color:#8B0000; }
+  .empty { text-align:center; color:#9CA3AF; padding:20px; font-style:italic; }
+  .footer { text-align:center; color:#9CA3AF; font-size:11px; padding:20px 0 4px; }
+
+  .exp-sub { font-size:13px; color:#6B7280; margin-bottom:2px; }
+  .exp-meta { font-size:12px; color:#6B7280; font-style:italic; padding-bottom:10px; border-bottom:2px solid #E87722; margin-bottom:14px; }
+  .exp-summary { font-size:13px; margin-bottom:6px; }
+  .exp-summary ul { margin:6px 0 4px; padding-left:20px; }
+  .exp-summary li { font-size:13px; margin:2px 0; }
+  .exp-company { font-size:15px; font-weight:700; color:#2C3138; margin:20px 0 8px; padding-bottom:4px; border-bottom:2px solid #E87722; }
+  .exp-company:first-child { margin-top:0; }
+  .exp-none { font-size:13px; color:#6B7280; font-style:italic; margin:4px 0 14px; }
+  .exp-date { font-size:13px; font-weight:700; margin:12px 0 6px; }
+  .exp-date .cnt { font-size:12px; color:#6B7280; font-weight:400; }
+  table.exp-tbl { width:100%; border-collapse:collapse; font-size:12px; margin-bottom:10px; border:1px solid #E5E7EB; }
+  table.exp-tbl th { background:#2C3138; color:#fff; text-align:left; padding:7px 10px; font-weight:600; }
+  table.exp-tbl td { padding:6px 10px; border-bottom:1px solid #EEF0F3; }
+  table.exp-tbl tr:nth-child(even) td { background:#F7FAFD; }
+  .exp-open { color:#B91C1C; font-weight:700; }
+  .exp-soon { color:#B15C00; font-weight:600; }
+
+  #tmWrap { position:relative; height:520px; border-radius:8px; overflow:hidden; border:1px solid #E5E7EB; }
+  #tm-map { position:absolute; inset:0; }
+  .tm-legend { position:absolute; z-index:1000; bottom:16px; left:16px; background:#fff; border-radius:6px; padding:10px 12px; font-size:12px; box-shadow:0 1px 5px rgba(0,0,0,.2); max-width:260px; }
+  .tm-legend-row { display:flex; align-items:center; gap:7px; margin:3px 0; }
+  .tm-dot { display:inline-block; width:9px; height:9px; border-radius:50%; flex:0 0 auto; }
+  .tm-dot.red { background:#d9342b; }
+  .tm-dot.green { background:#2e9e4f; }
+  #tmPanel { width:340px; max-width:88%; background:#fff; border-left:1px solid #d0d0d0; box-shadow:-2px 0 8px rgba(0,0,0,.12);
+    transform:translateX(100%); transition:transform .25s ease; overflow-y:auto; position:absolute; right:0; top:0; bottom:0; z-index:1200; }
+  #tmPanel.open { transform:translateX(0); }
+  .tmp-inner { min-height:100%; }
+  .tm-ph { background:#2C3138; color:#fff; padding:16px 18px; position:sticky; top:0; }
+  .tm-ph .tm-tk { font-size:18px; font-weight:bold; }
+  .tm-close { position:absolute; top:12px; right:14px; cursor:pointer; font-size:22px; line-height:1; color:#fff; opacity:.85; background:none; border:none; padding:0; }
+  .tm-close:hover { opacity:1; }
+  .tm-badge { display:inline-block; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:bold; color:#fff; margin-top:8px; }
+  .tm-b-red { background:#d9342b; }
+  .tm-b-green { background:#2e9e4f; }
+  .tm-sec { padding:14px 18px; border-bottom:1px solid #eee; }
+  .tm-sec h4 { margin:0 0 8px; font-size:12px; text-transform:uppercase; letter-spacing:.5px; color:#6b6b6b; }
+  .tm-kv { display:flex; justify-content:space-between; gap:10px; font-size:13px; padding:3px 0; }
+  .tm-kv span:first-child { color:#777; }
+  .tm-kv span:last-child { font-weight:600; text-align:right; }
+  .tm-report { font-size:12.5px; line-height:1.5; background:#f6f8fb; border:1px solid #e3e9f2; border-radius:6px; padding:10px 12px; }
+  .tm-link-btn { display:block; text-align:center; margin-top:10px; background:#E87722; color:#fff; text-decoration:none; padding:9px 12px; border-radius:6px; font-size:13px; font-weight:600; }
+  .tm-link-btn:hover { background:#c8681f; }
+</style>
+</head>
+<body>
+<h1>Texas811 Dig Ticket Dashboard</h1>
+<div class="subtitle">As of September 10, 2026 05:37 AM &middot; click a company card to see every ticket</div>
+<div class="summary-row">
+  <div class="summary-stat"><div class="num">171</div><div class="label">Total tickets</div></div>
+  <div class="summary-stat"><div class="num">4</div><div class="label">Companies</div></div>
+  <div class="summary-stat flag"><div class="num">52</div><div class="label">No Response</div></div>
+  <div class="summary-stat flag"><div class="num">28</div><div class="label">Expiring &le; 4 days</div></div>
+</div>
+<main>
+  <div class="card">
+    <div class="card-head" onclick="toggleCompany('expiring-tickets')">
+      <span class="chevron open" id="chev-expiring-tickets">&#9656;</span>
+      <span class="card-title">Expiring Tickets</span>
+      <span class="card-stats">28 expiring within 4 days</span>
+    </div>
+    <div class="panel" id="panel-expiring-tickets" style="display:block">
+      <div style="padding:16px;">
+        
+  <div class="exp-sub">Texas811 Dig Tickets Expiring Within 4 Days</div>
+  <div class="exp-meta">Generated September 10, 2026 05:37 AM &middot; Expiration window: September 10, 2026 – September 14, 2026 &middot; ticket life assumed 14 calendar days from notification</div>
+  <div class="exp-summary"><b>28</b> tickets across
+    <b>4</b> companies set to expire
+    within the next 4 days.
+    <ul><li><b>CABLE JIMENEZ:</b> 1 ticket</li><li><b>G&amp;J FIBER GROUP:</b> 1 ticket</li><li><b>G-REED LLC:</b> 24 tickets</li><li><b>Lv electric and Plumbing:</b> 2 tickets</li></ul>
+  </div>
+  <div class="exp-company">CABLE JIMENEZ</div><div class="exp-date">Monday, September 14, 2026 <span class="cnt">(1 ticket)</span></div><table class="exp-tbl"><thead><tr><th>Ticket #</th><th>Type</th><th>Street</th><th>City</th><th>County</th><th>Expires</th><th>Countdown</th></tr></thead><tbody><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674361788" target="_blank" rel="noopener">2674361788</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>Kingsland blvd</td>
+  <td>KATY</td>
+  <td>FORT BEND</td>
+  <td>09/14/2026</td>
+  <td><span class="exp-soon">4 days left</span></td>
+</tr></tbody></table><div class="exp-company">G&amp;J FIBER GROUP</div><div class="exp-date">Monday, September 14, 2026 <span class="cnt">(1 ticket)</span></div><table class="exp-tbl"><thead><tr><th>Ticket #</th><th>Type</th><th>Street</th><th>City</th><th>County</th><th>Expires</th><th>Countdown</th></tr></thead><tbody><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674361913" target="_blank" rel="noopener">2674361913</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>Eagle Lakes Dr</td>
+  <td>FRIENDSWOOD</td>
+  <td>GALVESTON</td>
+  <td>09/14/2026</td>
+  <td><span class="exp-soon">4 days left</span></td>
+</tr></tbody></table><div class="exp-company">G-REED LLC</div><div class="exp-date">Friday, September 11, 2026 <span class="cnt">(8 tickets)</span></div><table class="exp-tbl"><thead><tr><th>Ticket #</th><th>Type</th><th>Street</th><th>City</th><th>County</th><th>Expires</th><th>Countdown</th></tr></thead><tbody><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674039003" target="_blank" rel="noopener">2674039003</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>BLACKHAWK BLVD</td>
+  <td>HOUSTON</td>
+  <td>HARRIS</td>
+  <td>09/11/2026</td>
+  <td><span class="exp-open">expires tomorrow</span></td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674039103" target="_blank" rel="noopener">2674039103</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>FM 528</td>
+  <td>HOUSTON</td>
+  <td>HARRIS</td>
+  <td>09/11/2026</td>
+  <td><span class="exp-open">expires tomorrow</span></td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674039155" target="_blank" rel="noopener">2674039155</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>FM 528</td>
+  <td>HOUSTON</td>
+  <td>HARRIS</td>
+  <td>09/11/2026</td>
+  <td><span class="exp-open">expires tomorrow</span></td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674039197" target="_blank" rel="noopener">2674039197</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>FM 528</td>
+  <td>HOUSTON</td>
+  <td>HARRIS</td>
+  <td>09/11/2026</td>
+  <td><span class="exp-open">expires tomorrow</span></td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674039264" target="_blank" rel="noopener">2674039264</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>FM 528</td>
+  <td>HOUSTON</td>
+  <td>HARRIS</td>
+  <td>09/11/2026</td>
+  <td><span class="exp-open">expires tomorrow</span></td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674039314" target="_blank" rel="noopener">2674039314</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>E PARKWOOD AVE</td>
+  <td>FRIENDSWOOD</td>
+  <td>GALVESTON</td>
+  <td>09/11/2026</td>
+  <td><span class="exp-open">expires tomorrow</span></td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674039364" target="_blank" rel="noopener">2674039364</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>E PARKWOOD AVE</td>
+  <td>FRIENDSWOOD</td>
+  <td>GALVESTON</td>
+  <td>09/11/2026</td>
+  <td><span class="exp-open">expires tomorrow</span></td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674039416" target="_blank" rel="noopener">2674039416</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>E PARKWOOD AVE</td>
+  <td>FRIENDSWOOD</td>
+  <td>GALVESTON</td>
+  <td>09/11/2026</td>
+  <td><span class="exp-open">expires tomorrow</span></td>
+</tr></tbody></table><div class="exp-date">Monday, September 14, 2026 <span class="cnt">(16 tickets)</span></div><table class="exp-tbl"><thead><tr><th>Ticket #</th><th>Type</th><th>Street</th><th>City</th><th>County</th><th>Expires</th><th>Countdown</th></tr></thead><tbody><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674370758" target="_blank" rel="noopener">2674370758</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>FRIENDSWOOD PKWY</td>
+  <td>FRIENDSWOOD</td>
+  <td>GALVESTON</td>
+  <td>09/14/2026</td>
+  <td><span class="exp-soon">4 days left</span></td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674370775" target="_blank" rel="noopener">2674370775</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>FRIENDSWOOD PKWY</td>
+  <td>FRIENDSWOOD</td>
+  <td>GALVESTON</td>
+  <td>09/14/2026</td>
+  <td><span class="exp-soon">4 days left</span></td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674370778" target="_blank" rel="noopener">2674370778</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>FRIENDSWOOD PKWY</td>
+  <td>FRIENDSWOOD</td>
+  <td>GALVESTON</td>
+  <td>09/14/2026</td>
+  <td><span class="exp-soon">4 days left</span></td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674370793" target="_blank" rel="noopener">2674370793</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>FRIENDSWOOD PKWY</td>
+  <td>FRIENDSWOOD</td>
+  <td>GALVESTON</td>
+  <td>09/14/2026</td>
+  <td><span class="exp-soon">4 days left</span></td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674370803" target="_blank" rel="noopener">2674370803</a></td>
+  <td><span class="chip chip-ok">Cancellation</span></td>
+  <td>FRIENDSWOOD PKWY</td>
+  <td>FRIENDSWOOD</td>
+  <td>GALVESTON</td>
+  <td>09/14/2026</td>
+  <td><span class="exp-soon">4 days left</span></td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674370816" target="_blank" rel="noopener">2674370816</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>SANDY LAKE DR</td>
+  <td>FRIENDSWOOD</td>
+  <td>GALVESTON</td>
+  <td>09/14/2026</td>
+  <td><span class="exp-soon">4 days left</span></td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674370829" target="_blank" rel="noopener">2674370829</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>SILVER POINT CT</td>
+  <td>FRIENDSWOOD</td>
+  <td>GALVESTON</td>
+  <td>09/14/2026</td>
+  <td><span class="exp-soon">4 days left</span></td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674370863" target="_blank" rel="noopener">2674370863</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>SANDY LAKE DR</td>
+  <td>FRIENDSWOOD</td>
+  <td>GALVESTON</td>
+  <td>09/14/2026</td>
+  <td><span class="exp-soon">4 days left</span></td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674370876" target="_blank" rel="noopener">2674370876</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>SANDY LAKE DR</td>
+  <td>FRIENDSWOOD</td>
+  <td>GALVESTON</td>
+  <td>09/14/2026</td>
+  <td><span class="exp-soon">4 days left</span></td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674370904" target="_blank" rel="noopener">2674370904</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>SPRING VIEW</td>
+  <td>FRIENDSWOOD</td>
+  <td>GALVESTON</td>
+  <td>09/14/2026</td>
+  <td><span class="exp-soon">4 days left</span></td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674370923" target="_blank" rel="noopener">2674370923</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>CANYONVIEW CT</td>
+  <td>FRIENDSWOOD</td>
+  <td>GALVESTON</td>
+  <td>09/14/2026</td>
+  <td><span class="exp-soon">4 days left</span></td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674370932" target="_blank" rel="noopener">2674370932</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>SPRING VIEW</td>
+  <td>FRIENDSWOOD</td>
+  <td>GALVESTON</td>
+  <td>09/14/2026</td>
+  <td><span class="exp-soon">4 days left</span></td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674370942" target="_blank" rel="noopener">2674370942</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>SPRING VIEW</td>
+  <td>FRIENDSWOOD</td>
+  <td>GALVESTON</td>
+  <td>09/14/2026</td>
+  <td><span class="exp-soon">4 days left</span></td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674370955" target="_blank" rel="noopener">2674370955</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>NORTHGATE CROSSING</td>
+  <td>FRIENDSWOOD</td>
+  <td>GALVESTON</td>
+  <td>09/14/2026</td>
+  <td><span class="exp-soon">4 days left</span></td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674370972" target="_blank" rel="noopener">2674370972</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>S  POINTE DR</td>
+  <td>FRIENDSWOOD</td>
+  <td>GALVESTON</td>
+  <td>09/14/2026</td>
+  <td><span class="exp-soon">4 days left</span></td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674370984" target="_blank" rel="noopener">2674370984</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>S  POINTE DR</td>
+  <td>FRIENDSWOOD</td>
+  <td>GALVESTON</td>
+  <td>09/14/2026</td>
+  <td><span class="exp-soon">4 days left</span></td>
+</tr></tbody></table><div class="exp-company">Lv electric and Plumbing</div><div class="exp-date">Monday, September 14, 2026 <span class="cnt">(2 tickets)</span></div><table class="exp-tbl"><thead><tr><th>Ticket #</th><th>Type</th><th>Street</th><th>City</th><th>County</th><th>Expires</th><th>Countdown</th></tr></thead><tbody><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674358242" target="_blank" rel="noopener">2674358242</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>E WALLY WILKERSON PKWY</td>
+  <td>CONROE</td>
+  <td>MONTGOMERY</td>
+  <td>09/14/2026</td>
+  <td><span class="exp-soon">4 days left</span></td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674358416" target="_blank" rel="noopener">2674358416</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>AIRPORT RD</td>
+  <td>CONROE</td>
+  <td>MONTGOMERY</td>
+  <td>09/14/2026</td>
+  <td><span class="exp-soon">4 days left</span></td>
+</tr></tbody></table>
+
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-head" onclick="toggleMap()">
+      <span class="chevron" id="chev-map">&#9656;</span>
+      <span class="card-title">Ticket Map</span>
+      <span class="card-stats">141 mapped &middot; 30 not yet mapped</span>
+    </div>
+    <div class="panel" id="panel-map" style="display:none">
+      <div style="padding:16px;">
+        <div id="tmWrap">
+          <div id="tm-map"></div>
+          <div id="tmPanel"><div class="tmp-inner" id="tmPanelInner"></div></div>
+          <div class="tm-legend">
+            <div class="tm-legend-row"><span class="tm-dot red"></span>No Response</div>
+            <div class="tm-legend-row"><span class="tm-dot green"></span>Normal / other</div>
+            <div class="tm-legend-row" style="color:#9CA3AF;">Click a pin to see ticket details.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+<div class="card">
+  <div class="card-head" onclick="toggleCompany('cable-jimenez')">
+    <span class="chevron" id="chev-cable-jimenez">&#9656;</span>
+    <span class="card-title">CABLE JIMENEZ</span>
+    <span class="card-stats">12 tickets &middot; 0 flagged</span>
+  </div>
+  <div class="panel" id="panel-cable-jimenez" style="display:none">
+    <table>
+      <thead><tr>
+        <th>Ticket #</th><th>Type</th><th>Created</th><th>Work Date</th>
+        <th>County</th><th>City</th><th>Street</th><th>Nature of Work</th>
+      </tr></thead>
+      <tbody>
+        <tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2675178455" target="_blank" rel="noopener">2675178455</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/08/2026 04:33 PM</td>
+  <td>09/10/2026 04:30 PM</td>
+  <td>MONTGOMERY</td>
+  <td>CONROE</td>
+  <td>McCROREY RD</td>
+  <td>Install-Conduit</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2675178433" target="_blank" rel="noopener">2675178433</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/08/2026 04:30 PM</td>
+  <td>09/10/2026 04:30 PM</td>
+  <td>MONTGOMERY</td>
+  <td>CONROE</td>
+  <td>CLINT PARKER RD</td>
+  <td>Install-Conduit</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2675178430" target="_blank" rel="noopener">2675178430</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/08/2026 04:28 PM</td>
+  <td>09/10/2026 04:30 PM</td>
+  <td>MONTGOMERY</td>
+  <td>CONROE</td>
+  <td>CLINT PARKER RD</td>
+  <td>Install-Conduit</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2675178425" target="_blank" rel="noopener">2675178425</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/08/2026 04:27 PM</td>
+  <td>09/10/2026 04:30 PM</td>
+  <td>HARRIS</td>
+  <td>HOUSTON</td>
+  <td>Pierce St</td>
+  <td>Install-Conduit</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674630589" target="_blank" rel="noopener">2674630589</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/03/2026 04:53 PM</td>
+  <td>09/08/2026 05:00 PM</td>
+  <td>HARRIS</td>
+  <td>HOUSTON</td>
+  <td>Pierce St</td>
+  <td>Install-Conduit</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674630350" target="_blank" rel="noopener">2674630350</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/03/2026 02:40 PM</td>
+  <td>09/08/2026 02:45 PM</td>
+  <td>MONTGOMERY</td>
+  <td>CONROE</td>
+  <td>FM 1484</td>
+  <td>Install-Conduit</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674630346" target="_blank" rel="noopener">2674630346</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/03/2026 02:35 PM</td>
+  <td>09/08/2026 02:45 PM</td>
+  <td>MONTGOMERY</td>
+  <td>CONROE</td>
+  <td>E WILLIAMS RD</td>
+  <td>Install-Conduit</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674630345" target="_blank" rel="noopener">2674630345</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/03/2026 02:34 PM</td>
+  <td>09/08/2026 02:45 PM</td>
+  <td>MONTGOMERY</td>
+  <td>CONROE</td>
+  <td>FM 1484</td>
+  <td>Install-Conduit</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674630344" target="_blank" rel="noopener">2674630344</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/03/2026 02:34 PM</td>
+  <td>09/08/2026 02:45 PM</td>
+  <td>MONTGOMERY</td>
+  <td>CONROE</td>
+  <td>BROWDER TRAYLOR RD</td>
+  <td>Install-Conduit</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674630333" target="_blank" rel="noopener">2674630333</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/03/2026 02:31 PM</td>
+  <td>09/08/2026 02:30 PM</td>
+  <td>MONTGOMERY</td>
+  <td>CONROE</td>
+  <td>FM 1484</td>
+  <td>Install-Conduit</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674361788" target="_blank" rel="noopener">2674361788</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>08/31/2026 05:17 AM</td>
+  <td>09/02/2026 05:30 AM</td>
+  <td>FORT BEND</td>
+  <td>KATY</td>
+  <td>Kingsland blvd</td>
+  <td>Install-Conduit</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2673788738" target="_blank" rel="noopener">2673788738</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>08/25/2026 10:50 AM</td>
+  <td>08/28/2026 11:00 AM</td>
+  <td>HARRIS</td>
+  <td>CROSBY</td>
+  <td>Normandy St</td>
+  <td>Install-Conduit</td>
+</tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="card">
+  <div class="card-head" onclick="toggleCompany('g-j-fiber-group')">
+    <span class="chevron" id="chev-g-j-fiber-group">&#9656;</span>
+    <span class="card-title">G&amp;J FIBER GROUP</span>
+    <span class="card-stats">2 tickets &middot; 1 flagged</span>
+  </div>
+  <div class="panel" id="panel-g-j-fiber-group" style="display:none">
+    <table>
+      <thead><tr>
+        <th>Ticket #</th><th>Type</th><th>Created</th><th>Work Date</th>
+        <th>County</th><th>City</th><th>Street</th><th>Nature of Work</th>
+      </tr></thead>
+      <tbody>
+        <tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674509261" target="_blank" rel="noopener">2674509261</a></td>
+  <td><span class="chip chip-ok">DigUp</span></td>
+  <td>09/02/2026 09:28 AM</td>
+  <td>09/02/2026 09:30 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>FALCON LAKE DR</td>
+  <td>Bore-Auger-directional</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674361913" target="_blank" rel="noopener">2674361913</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>08/31/2026 05:22 AM</td>
+  <td>08/31/2026 05:30 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>Eagle Lakes Dr</td>
+  <td>Directional Bore</td>
+</tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="card">
+  <div class="card-head" onclick="toggleCompany('g-reed-llc')">
+    <span class="chevron" id="chev-g-reed-llc">&#9656;</span>
+    <span class="card-title">G-REED LLC</span>
+    <span class="card-stats">151 tickets &middot; 48 flagged</span>
+  </div>
+  <div class="panel" id="panel-g-reed-llc" style="display:none">
+    <table>
+      <thead><tr>
+        <th>Ticket #</th><th>Type</th><th>Created</th><th>Work Date</th>
+        <th>County</th><th>City</th><th>Street</th><th>Nature of Work</th>
+      </tr></thead>
+      <tbody>
+        <tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2675288684" target="_blank" rel="noopener">2675288684</a></td>
+  <td><span class="chip chip-ok">DigUp</span></td>
+  <td>09/09/2026 04:27 AM</td>
+  <td>09/09/2026 04:30 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>E PARKWOOD AVE</td>
+  <td>DigUp - Hit Telephone line</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2675052374" target="_blank" rel="noopener">2675052374</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/07/2026 09:33 AM</td>
+  <td>09/07/2026 09:45 AM</td>
+  <td>HARRIS</td>
+  <td>HOUSTON</td>
+  <td>BLACKHAWK BLVD</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2675052370" target="_blank" rel="noopener">2675052370</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/07/2026 09:31 AM</td>
+  <td>09/07/2026 09:30 AM</td>
+  <td>HARRIS</td>
+  <td>HOUSTON</td>
+  <td>FM 528</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2675052367" target="_blank" rel="noopener">2675052367</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/07/2026 09:29 AM</td>
+  <td>09/07/2026 09:30 AM</td>
+  <td>HARRIS</td>
+  <td>HOUSTON</td>
+  <td>FM 528</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2675052363" target="_blank" rel="noopener">2675052363</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/07/2026 09:27 AM</td>
+  <td>09/07/2026 09:30 AM</td>
+  <td>HARRIS</td>
+  <td>HOUSTON</td>
+  <td>FM 528</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2675052356" target="_blank" rel="noopener">2675052356</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/07/2026 09:26 AM</td>
+  <td>09/07/2026 09:30 AM</td>
+  <td>HARRIS</td>
+  <td>HOUSTON</td>
+  <td>FM 528</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2675052350" target="_blank" rel="noopener">2675052350</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/07/2026 09:24 AM</td>
+  <td>09/07/2026 09:30 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>E PARKWOOD AVE</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2675052346" target="_blank" rel="noopener">2675052346</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/07/2026 09:22 AM</td>
+  <td>09/07/2026 09:30 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>E PARKWOOD AVE</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2675052340" target="_blank" rel="noopener">2675052340</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/07/2026 09:20 AM</td>
+  <td>09/07/2026 09:30 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>E PARKWOOD AVE</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747287" target="_blank" rel="noopener">2674747287</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/04/2026 04:32 PM</td>
+  <td>09/04/2026 04:45 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>DOMINION CT</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747286" target="_blank" rel="noopener">2674747286</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/04/2026 04:32 PM</td>
+  <td>09/04/2026 04:45 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>ROLLING STONE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747282" target="_blank" rel="noopener">2674747282</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/04/2026 04:31 PM</td>
+  <td>09/04/2026 04:30 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>ROLLING STONE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747280" target="_blank" rel="noopener">2674747280</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/04/2026 04:30 PM</td>
+  <td>09/04/2026 04:30 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>SANDLY LAKE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747277" target="_blank" rel="noopener">2674747277</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/04/2026 04:29 PM</td>
+  <td>09/04/2026 04:30 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>SKIP ROCK ST</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747275" target="_blank" rel="noopener">2674747275</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/04/2026 04:28 PM</td>
+  <td>09/04/2026 04:30 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>ROUND ROCK ST</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747273" target="_blank" rel="noopener">2674747273</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/04/2026 04:27 PM</td>
+  <td>09/04/2026 04:30 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>ROUND ROCK ST</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747271" target="_blank" rel="noopener">2674747271</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/04/2026 04:26 PM</td>
+  <td>09/04/2026 04:30 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>CASCADE FALLS DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747270" target="_blank" rel="noopener">2674747270</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/04/2026 04:26 PM</td>
+  <td>09/04/2026 04:30 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>CASCADE FALLS DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747267" target="_blank" rel="noopener">2674747267</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/04/2026 04:25 PM</td>
+  <td>09/04/2026 04:30 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>CASCADE FALLS DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747266" target="_blank" rel="noopener">2674747266</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/04/2026 04:24 PM</td>
+  <td>09/04/2026 04:30 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>CASCADE FALLS DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747262" target="_blank" rel="noopener">2674747262</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/04/2026 04:23 PM</td>
+  <td>09/04/2026 04:30 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>SANDY LAKE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747253" target="_blank" rel="noopener">2674747253</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/04/2026 04:22 PM</td>
+  <td>09/04/2026 04:30 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>SANDY LAKE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747247" target="_blank" rel="noopener">2674747247</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/04/2026 04:20 PM</td>
+  <td>09/04/2026 04:30 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>SANDLY LAKE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747236" target="_blank" rel="noopener">2674747236</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/04/2026 04:18 PM</td>
+  <td>09/04/2026 04:30 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>SANDLY LAKE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747229" target="_blank" rel="noopener">2674747229</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/04/2026 04:17 PM</td>
+  <td>09/04/2026 04:30 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>MOSSY STONE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747227" target="_blank" rel="noopener">2674747227</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/04/2026 04:16 PM</td>
+  <td>09/04/2026 04:15 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>MOSSY STONE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747221" target="_blank" rel="noopener">2674747221</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/04/2026 04:15 PM</td>
+  <td>09/04/2026 04:15 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>FLAT ROCK ST</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747211" target="_blank" rel="noopener">2674747211</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/04/2026 04:13 PM</td>
+  <td>09/04/2026 04:15 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>PAMPAS TRAIL DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747207" target="_blank" rel="noopener">2674747207</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/04/2026 04:11 PM</td>
+  <td>09/04/2026 04:15 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>SKIP ROCK ST</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747204" target="_blank" rel="noopener">2674747204</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/04/2026 04:10 PM</td>
+  <td>09/04/2026 04:15 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>SKIP ROCK ST</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747199" target="_blank" rel="noopener">2674747199</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/04/2026 04:09 PM</td>
+  <td>09/09/2026 04:15 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>SANDY LAKE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747191" target="_blank" rel="noopener">2674747191</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/04/2026 04:06 PM</td>
+  <td>09/09/2026 04:00 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>SANDY LAKE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747164" target="_blank" rel="noopener">2674747164</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/04/2026 03:58 PM</td>
+  <td>09/04/2026 04:00 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>SANDLY LAKE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747153" target="_blank" rel="noopener">2674747153</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/04/2026 03:56 PM</td>
+  <td>09/04/2026 04:00 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>SANDY LAKE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747140" target="_blank" rel="noopener">2674747140</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/04/2026 03:52 PM</td>
+  <td>09/04/2026 04:00 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>STONEY LAKE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747127" target="_blank" rel="noopener">2674747127</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/04/2026 03:50 PM</td>
+  <td>09/04/2026 04:00 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>FRIENDSWOOD PKWY</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747121" target="_blank" rel="noopener">2674747121</a></td>
+  <td><span class="chip chip-ok">Cancellation</span></td>
+  <td>09/04/2026 03:47 PM</td>
+  <td>09/04/2026 04:00 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>FLAT ROCK ST</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747119" target="_blank" rel="noopener">2674747119</a></td>
+  <td><span class="chip chip-ok">Cancellation</span></td>
+  <td>09/04/2026 03:47 PM</td>
+  <td>09/04/2026 04:00 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>RIVER ROCK CT</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747118" target="_blank" rel="noopener">2674747118</a></td>
+  <td><span class="chip chip-ok">Cancellation</span></td>
+  <td>09/04/2026 03:46 PM</td>
+  <td>09/04/2026 04:00 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>RIVER ROCK CT</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747113" target="_blank" rel="noopener">2674747113</a></td>
+  <td><span class="chip chip-ok">Cancellation</span></td>
+  <td>09/04/2026 03:45 PM</td>
+  <td>09/04/2026 03:45 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>PAMPAS TRAIL DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747111" target="_blank" rel="noopener">2674747111</a></td>
+  <td><span class="chip chip-ok">Cancellation</span></td>
+  <td>09/04/2026 03:45 PM</td>
+  <td>09/04/2026 03:45 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>PAMPAS TRAIL DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747109" target="_blank" rel="noopener">2674747109</a></td>
+  <td><span class="chip chip-ok">Cancellation</span></td>
+  <td>09/04/2026 03:43 PM</td>
+  <td>09/04/2026 03:45 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>FRIENDSWOOD PKWY</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747105" target="_blank" rel="noopener">2674747105</a></td>
+  <td><span class="chip chip-ok">Cancellation</span></td>
+  <td>09/04/2026 03:42 PM</td>
+  <td>09/04/2026 03:45 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>STONEY LAKE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747100" target="_blank" rel="noopener">2674747100</a></td>
+  <td><span class="chip chip-ok">Cancellation</span></td>
+  <td>09/04/2026 03:41 PM</td>
+  <td>09/04/2026 03:45 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>STONEY LAKE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747092" target="_blank" rel="noopener">2674747092</a></td>
+  <td><span class="chip chip-ok">Cancellation</span></td>
+  <td>09/04/2026 03:39 PM</td>
+  <td>09/04/2026 03:45 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>STONEY LAKE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747091" target="_blank" rel="noopener">2674747091</a></td>
+  <td><span class="chip chip-ok">Cancellation</span></td>
+  <td>09/04/2026 03:38 PM</td>
+  <td>09/04/2026 03:45 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>GARDEN LAKES DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747090" target="_blank" rel="noopener">2674747090</a></td>
+  <td><span class="chip chip-ok">Cancellation</span></td>
+  <td>09/04/2026 03:37 PM</td>
+  <td>09/04/2026 03:45 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>GARDEN LAKES DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747088" target="_blank" rel="noopener">2674747088</a></td>
+  <td><span class="chip chip-ok">Cancellation</span></td>
+  <td>09/04/2026 03:37 PM</td>
+  <td>09/04/2026 03:45 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>GARDEN LAKES DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747087" target="_blank" rel="noopener">2674747087</a></td>
+  <td><span class="chip chip-ok">Cancellation</span></td>
+  <td>09/04/2026 03:36 PM</td>
+  <td>09/04/2026 03:45 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>GARDEN LAKES DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747086" target="_blank" rel="noopener">2674747086</a></td>
+  <td><span class="chip chip-ok">Cancellation</span></td>
+  <td>09/04/2026 03:36 PM</td>
+  <td>09/04/2026 03:45 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>W PARKWOOD AVE</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747085" target="_blank" rel="noopener">2674747085</a></td>
+  <td><span class="chip chip-ok">Cancellation</span></td>
+  <td>09/04/2026 03:34 PM</td>
+  <td>09/04/2026 03:45 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>FRIENDSWOOD PKWY</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747082" target="_blank" rel="noopener">2674747082</a></td>
+  <td><span class="chip chip-ok">Cancellation</span></td>
+  <td>09/04/2026 03:33 PM</td>
+  <td>09/04/2026 03:45 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>STONEY LAKE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747080" target="_blank" rel="noopener">2674747080</a></td>
+  <td><span class="chip chip-ok">Cancellation</span></td>
+  <td>09/04/2026 03:32 PM</td>
+  <td>09/04/2026 03:45 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>W PARKWOOD AVE</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674747079" target="_blank" rel="noopener">2674747079</a></td>
+  <td><span class="chip chip-ok">Cancellation</span></td>
+  <td>09/04/2026 03:32 PM</td>
+  <td>09/04/2026 03:45 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>W PARKWOOD AVE</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674617089" target="_blank" rel="noopener">2674617089</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/03/2026 02:14 AM</td>
+  <td>09/03/2026 02:15 AM</td>
+  <td>HARRIS</td>
+  <td>HOUSTON</td>
+  <td>FM 528</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674616983" target="_blank" rel="noopener">2674616983</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/03/2026 02:12 AM</td>
+  <td>09/03/2026 02:15 AM</td>
+  <td>HARRIS</td>
+  <td>HOUSTON</td>
+  <td>FM 528</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674616917" target="_blank" rel="noopener">2674616917</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/03/2026 02:11 AM</td>
+  <td>09/03/2026 02:15 AM</td>
+  <td>HARRIS</td>
+  <td>HOUSTON</td>
+  <td>FM 528</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674616856" target="_blank" rel="noopener">2674616856</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/03/2026 02:10 AM</td>
+  <td>09/03/2026 02:15 AM</td>
+  <td>HARRIS</td>
+  <td>HOUSTON</td>
+  <td>FM 528</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674616745" target="_blank" rel="noopener">2674616745</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/03/2026 02:08 AM</td>
+  <td>09/03/2026 02:15 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>E PARKWOOD AVE</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674616654" target="_blank" rel="noopener">2674616654</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/03/2026 02:05 AM</td>
+  <td>09/03/2026 02:15 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>E PARKWOOD AVE</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674616567" target="_blank" rel="noopener">2674616567</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/03/2026 02:03 AM</td>
+  <td>09/03/2026 02:15 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>E PARKWOOD AVE</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674503197" target="_blank" rel="noopener">2674503197</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/02/2026 05:37 AM</td>
+  <td>09/04/2026 05:45 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>FLAT ROCK ST</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674503154" target="_blank" rel="noopener">2674503154</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/02/2026 05:36 AM</td>
+  <td>09/04/2026 05:45 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>FLAT ROCK ST</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674503070" target="_blank" rel="noopener">2674503070</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/02/2026 05:32 AM</td>
+  <td>09/04/2026 05:45 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>RIVER ROCK CT</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674503004" target="_blank" rel="noopener">2674503004</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/02/2026 05:30 AM</td>
+  <td>09/04/2026 05:30 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>RIVER ROCK CT</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674502880" target="_blank" rel="noopener">2674502880</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/02/2026 05:26 AM</td>
+  <td>09/04/2026 05:30 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>PAMPAS TRAIL DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674502740" target="_blank" rel="noopener">2674502740</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/02/2026 05:21 AM</td>
+  <td>09/04/2026 05:30 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>PAMPAS TRAIL DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674502540" target="_blank" rel="noopener">2674502540</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/02/2026 05:13 AM</td>
+  <td>09/04/2026 05:15 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>STONEY LAKE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674502457" target="_blank" rel="noopener">2674502457</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/02/2026 05:10 AM</td>
+  <td>09/04/2026 05:15 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>STONEY LAKE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674502410" target="_blank" rel="noopener">2674502410</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/02/2026 05:08 AM</td>
+  <td>09/04/2026 05:15 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>STONEY LAKE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674502352" target="_blank" rel="noopener">2674502352</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/02/2026 05:04 AM</td>
+  <td>09/04/2026 05:00 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>STONEY LAKE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674502134" target="_blank" rel="noopener">2674502134</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/02/2026 04:55 AM</td>
+  <td>09/04/2026 05:00 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>GARDEN LAKES DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674502029" target="_blank" rel="noopener">2674502029</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/02/2026 04:51 AM</td>
+  <td>09/04/2026 05:00 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>GARDEN LAKES DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674501899" target="_blank" rel="noopener">2674501899</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/02/2026 04:46 AM</td>
+  <td>09/04/2026 04:45 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>GARDEN LAKES DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674501773" target="_blank" rel="noopener">2674501773</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/02/2026 04:42 AM</td>
+  <td>09/04/2026 04:30 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>GARDEN LAKES DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674501327" target="_blank" rel="noopener">2674501327</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/02/2026 04:27 AM</td>
+  <td>09/04/2026 04:30 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>W PARKWOOD AVE</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674491193" target="_blank" rel="noopener">2674491193</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/01/2026 03:03 PM</td>
+  <td>09/03/2026 03:00 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>PAMPAS TRAIL DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674491163" target="_blank" rel="noopener">2674491163</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/01/2026 02:57 PM</td>
+  <td>09/03/2026 03:00 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>SKIP ROCK ST</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674491141" target="_blank" rel="noopener">2674491141</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/01/2026 02:54 PM</td>
+  <td>09/03/2026 03:00 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>SKIP ROCK ST</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674491117" target="_blank" rel="noopener">2674491117</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/01/2026 02:52 PM</td>
+  <td>09/03/2026 03:00 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>SKIP ROCK ST</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674491082" target="_blank" rel="noopener">2674491082</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/01/2026 02:48 PM</td>
+  <td>09/03/2026 03:00 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>ROUND ROCK ST</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674491074" target="_blank" rel="noopener">2674491074</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/01/2026 02:46 PM</td>
+  <td>09/03/2026 02:45 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>ROUND ROCK ST</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674491059" target="_blank" rel="noopener">2674491059</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/01/2026 02:41 PM</td>
+  <td>09/03/2026 02:45 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>CASCADE FALLS DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674491050" target="_blank" rel="noopener">2674491050</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/01/2026 02:39 PM</td>
+  <td>09/03/2026 02:45 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>CASCADE FALLS DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674491044" target="_blank" rel="noopener">2674491044</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/01/2026 02:37 PM</td>
+  <td>09/03/2026 02:45 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>CASCADE FALLS DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674491040" target="_blank" rel="noopener">2674491040</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/01/2026 02:36 PM</td>
+  <td>09/03/2026 02:45 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>CASCADE FALLS DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674491023" target="_blank" rel="noopener">2674491023</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/01/2026 02:31 PM</td>
+  <td>09/03/2026 02:30 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>SANDY LAKE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674491020" target="_blank" rel="noopener">2674491020</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/01/2026 02:30 PM</td>
+  <td>09/03/2026 02:30 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>SANDY LAKE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674491013" target="_blank" rel="noopener">2674491013</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/01/2026 02:27 PM</td>
+  <td>09/03/2026 02:30 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>SANDLY LAKE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674491003" target="_blank" rel="noopener">2674491003</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/01/2026 02:25 PM</td>
+  <td>09/03/2026 02:30 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>SANDLY LAKE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674490974" target="_blank" rel="noopener">2674490974</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/01/2026 02:20 PM</td>
+  <td>09/03/2026 02:30 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>SANDLY LAKE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674490963" target="_blank" rel="noopener">2674490963</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/01/2026 02:18 PM</td>
+  <td>09/03/2026 02:30 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>SANDLY LAKE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674490950" target="_blank" rel="noopener">2674490950</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/01/2026 02:16 PM</td>
+  <td>09/03/2026 02:15 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>SANDLY LAKE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674490945" target="_blank" rel="noopener">2674490945</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/01/2026 02:15 PM</td>
+  <td>09/03/2026 02:15 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>DOMINION CT</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674490933" target="_blank" rel="noopener">2674490933</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/01/2026 02:13 PM</td>
+  <td>09/03/2026 02:15 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>ROLLING STONE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674490909" target="_blank" rel="noopener">2674490909</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/01/2026 02:10 PM</td>
+  <td>09/03/2026 02:15 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>ROLLING STONE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674490884" target="_blank" rel="noopener">2674490884</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/01/2026 02:06 PM</td>
+  <td>09/03/2026 02:15 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>MOSSY STONE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674490866" target="_blank" rel="noopener">2674490866</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/01/2026 02:02 PM</td>
+  <td>09/03/2026 02:00 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>MOSSY STONE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674490847" target="_blank" rel="noopener">2674490847</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/01/2026 01:56 PM</td>
+  <td>09/03/2026 02:00 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>FRIENDSWOOD PKWY</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674490839" target="_blank" rel="noopener">2674490839</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/01/2026 01:54 PM</td>
+  <td>09/03/2026 02:00 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>FRIENDSWOOD PKWY</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674490831" target="_blank" rel="noopener">2674490831</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/01/2026 01:45 PM</td>
+  <td>09/03/2026 01:45 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>STONEY LAKE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674490825" target="_blank" rel="noopener">2674490825</a></td>
+  <td><span class="chip chip-ok">Cancellation</span></td>
+  <td>09/01/2026 01:43 PM</td>
+  <td>09/01/2026 01:45 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>FRIENDSWOOD PKWY</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674490824" target="_blank" rel="noopener">2674490824</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/01/2026 01:43 PM</td>
+  <td>09/03/2026 01:45 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>FRIENDSWOOD PKWY</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674490822" target="_blank" rel="noopener">2674490822</a></td>
+  <td><span class="chip chip-ok">Cancellation</span></td>
+  <td>09/01/2026 01:42 PM</td>
+  <td>09/01/2026 01:45 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>W PARKWOOD AVE</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674490821" target="_blank" rel="noopener">2674490821</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/01/2026 01:41 PM</td>
+  <td>09/03/2026 01:45 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>W PARKWOOD AVE</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674490817" target="_blank" rel="noopener">2674490817</a></td>
+  <td><span class="chip chip-ok">Cancellation</span></td>
+  <td>09/01/2026 01:39 PM</td>
+  <td>09/01/2026 01:45 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>W PARKWOOD AVE</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674490815" target="_blank" rel="noopener">2674490815</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/01/2026 01:39 PM</td>
+  <td>09/03/2026 01:45 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>W PARKWOOD AVE</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674490813" target="_blank" rel="noopener">2674490813</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/01/2026 01:38 PM</td>
+  <td>09/03/2026 01:45 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>FRIENDSWOOD PKWY</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674490800" target="_blank" rel="noopener">2674490800</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/01/2026 01:34 PM</td>
+  <td>09/03/2026 01:45 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>FRIENDSWOOD PKWY</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674490777" target="_blank" rel="noopener">2674490777</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/01/2026 01:30 PM</td>
+  <td>09/03/2026 01:30 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>W PARKWOOD AVE</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674490769" target="_blank" rel="noopener">2674490769</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/01/2026 01:29 PM</td>
+  <td>09/03/2026 01:30 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>W PARKWOOD AVE</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674489846" target="_blank" rel="noopener">2674489846</a></td>
+  <td><span class="chip chip-ok">Cancellation</span></td>
+  <td>09/01/2026 10:24 AM</td>
+  <td>09/01/2026 10:30 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>S  POINTE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674489841" target="_blank" rel="noopener">2674489841</a></td>
+  <td><span class="chip chip-ok">Cancellation</span></td>
+  <td>09/01/2026 10:23 AM</td>
+  <td>09/01/2026 10:30 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>S  POINTE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674489831" target="_blank" rel="noopener">2674489831</a></td>
+  <td><span class="chip chip-ok">Cancellation</span></td>
+  <td>09/01/2026 10:22 AM</td>
+  <td>09/01/2026 10:30 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>NORTHGATE CROSSING</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674489828" target="_blank" rel="noopener">2674489828</a></td>
+  <td><span class="chip chip-ok">Cancellation</span></td>
+  <td>09/01/2026 10:22 AM</td>
+  <td>09/01/2026 10:30 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>SPRING VIEW</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674489821" target="_blank" rel="noopener">2674489821</a></td>
+  <td><span class="chip chip-ok">Cancellation</span></td>
+  <td>09/01/2026 10:21 AM</td>
+  <td>09/01/2026 10:30 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>SPRING VIEW</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674489809" target="_blank" rel="noopener">2674489809</a></td>
+  <td><span class="chip chip-ok">Cancellation</span></td>
+  <td>09/01/2026 10:20 AM</td>
+  <td>09/01/2026 10:30 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>CANYONVIEW CT</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674489802" target="_blank" rel="noopener">2674489802</a></td>
+  <td><span class="chip chip-ok">Cancellation</span></td>
+  <td>09/01/2026 10:19 AM</td>
+  <td>09/01/2026 10:30 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>SPRING VIEW</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674489784" target="_blank" rel="noopener">2674489784</a></td>
+  <td><span class="chip chip-ok">Cancellation</span></td>
+  <td>09/01/2026 10:18 AM</td>
+  <td>09/01/2026 10:30 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>SANDY LAKE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674489773" target="_blank" rel="noopener">2674489773</a></td>
+  <td><span class="chip chip-ok">Cancellation</span></td>
+  <td>09/01/2026 10:17 AM</td>
+  <td>09/01/2026 10:30 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>SANDY LAKE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674489770" target="_blank" rel="noopener">2674489770</a></td>
+  <td><span class="chip chip-ok">Cancellation</span></td>
+  <td>09/01/2026 10:16 AM</td>
+  <td>09/01/2026 10:30 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>SILVER POINT CT</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674489763" target="_blank" rel="noopener">2674489763</a></td>
+  <td><span class="chip chip-ok">Cancellation</span></td>
+  <td>09/01/2026 10:15 AM</td>
+  <td>09/01/2026 10:15 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>SANDY LAKE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674489757" target="_blank" rel="noopener">2674489757</a></td>
+  <td><span class="chip chip-ok">Cancellation</span></td>
+  <td>09/01/2026 10:15 AM</td>
+  <td>09/01/2026 10:15 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>FRIENDSWOOD PKWY</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674489749" target="_blank" rel="noopener">2674489749</a></td>
+  <td><span class="chip chip-ok">Cancellation</span></td>
+  <td>09/01/2026 10:14 AM</td>
+  <td>09/01/2026 10:15 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>FRIENDSWOOD PKWY</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674489740" target="_blank" rel="noopener">2674489740</a></td>
+  <td><span class="chip chip-ok">Cancellation</span></td>
+  <td>09/01/2026 10:13 AM</td>
+  <td>09/01/2026 10:15 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>FRIENDSWOOD PKWY</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674370984" target="_blank" rel="noopener">2674370984</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>08/31/2026 11:58 AM</td>
+  <td>09/02/2026 12:00 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>S  POINTE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674370972" target="_blank" rel="noopener">2674370972</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>08/31/2026 11:57 AM</td>
+  <td>09/02/2026 12:00 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>S  POINTE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674370955" target="_blank" rel="noopener">2674370955</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>08/31/2026 11:56 AM</td>
+  <td>09/02/2026 12:00 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>NORTHGATE CROSSING</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674370942" target="_blank" rel="noopener">2674370942</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>08/31/2026 11:55 AM</td>
+  <td>09/02/2026 12:00 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>SPRING VIEW</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674370932" target="_blank" rel="noopener">2674370932</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>08/31/2026 11:53 AM</td>
+  <td>09/02/2026 12:00 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>SPRING VIEW</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674370923" target="_blank" rel="noopener">2674370923</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>08/31/2026 11:52 AM</td>
+  <td>09/02/2026 12:00 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>CANYONVIEW CT</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674370904" target="_blank" rel="noopener">2674370904</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>08/31/2026 11:50 AM</td>
+  <td>09/02/2026 12:00 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>SPRING VIEW</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674370876" target="_blank" rel="noopener">2674370876</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>08/31/2026 11:47 AM</td>
+  <td>09/02/2026 12:00 PM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>SANDY LAKE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674370863" target="_blank" rel="noopener">2674370863</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>08/31/2026 11:46 AM</td>
+  <td>09/02/2026 11:45 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>SANDY LAKE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674370829" target="_blank" rel="noopener">2674370829</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>08/31/2026 11:41 AM</td>
+  <td>09/02/2026 11:45 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>SILVER POINT CT</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674370816" target="_blank" rel="noopener">2674370816</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>08/31/2026 11:39 AM</td>
+  <td>09/02/2026 11:45 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>SANDY LAKE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674370803" target="_blank" rel="noopener">2674370803</a></td>
+  <td><span class="chip chip-ok">Cancellation</span></td>
+  <td>08/31/2026 11:38 AM</td>
+  <td>08/31/2026 11:45 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>FRIENDSWOOD PKWY</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674370793" target="_blank" rel="noopener">2674370793</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>08/31/2026 11:37 AM</td>
+  <td>09/02/2026 11:45 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>FRIENDSWOOD PKWY</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674370778" target="_blank" rel="noopener">2674370778</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>08/31/2026 11:35 AM</td>
+  <td>09/02/2026 11:45 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>FRIENDSWOOD PKWY</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674370775" target="_blank" rel="noopener">2674370775</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>08/31/2026 11:34 AM</td>
+  <td>09/02/2026 11:45 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>FRIENDSWOOD PKWY</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674370758" target="_blank" rel="noopener">2674370758</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>08/31/2026 11:33 AM</td>
+  <td>09/02/2026 11:30 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>FRIENDSWOOD PKWY</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674039416" target="_blank" rel="noopener">2674039416</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>08/28/2026 06:00 AM</td>
+  <td>08/28/2026 06:00 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>E PARKWOOD AVE</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674039364" target="_blank" rel="noopener">2674039364</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>08/28/2026 05:58 AM</td>
+  <td>08/28/2026 06:00 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>E PARKWOOD AVE</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674039314" target="_blank" rel="noopener">2674039314</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>08/28/2026 05:55 AM</td>
+  <td>08/28/2026 06:00 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>E PARKWOOD AVE</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674039264" target="_blank" rel="noopener">2674039264</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>08/28/2026 05:53 AM</td>
+  <td>08/28/2026 06:00 AM</td>
+  <td>HARRIS</td>
+  <td>HOUSTON</td>
+  <td>FM 528</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674039197" target="_blank" rel="noopener">2674039197</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>08/28/2026 05:51 AM</td>
+  <td>08/28/2026 06:00 AM</td>
+  <td>HARRIS</td>
+  <td>HOUSTON</td>
+  <td>FM 528</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674039155" target="_blank" rel="noopener">2674039155</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>08/28/2026 05:49 AM</td>
+  <td>08/28/2026 06:00 AM</td>
+  <td>HARRIS</td>
+  <td>HOUSTON</td>
+  <td>FM 528</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674039103" target="_blank" rel="noopener">2674039103</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>08/28/2026 05:47 AM</td>
+  <td>08/28/2026 05:45 AM</td>
+  <td>HARRIS</td>
+  <td>HOUSTON</td>
+  <td>FM 528</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674039003" target="_blank" rel="noopener">2674039003</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>08/28/2026 05:43 AM</td>
+  <td>08/28/2026 05:45 AM</td>
+  <td>HARRIS</td>
+  <td>HOUSTON</td>
+  <td>BLACKHAWK BLVD</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2673775439" target="_blank" rel="noopener">2673775439</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>08/25/2026 02:44 AM</td>
+  <td>08/28/2026 02:45 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>HIGH RIDGE DR</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2673775188" target="_blank" rel="noopener">2673775188</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>08/25/2026 02:37 AM</td>
+  <td>08/28/2026 02:45 AM</td>
+  <td>GALVESTON</td>
+  <td>FRIENDSWOOD</td>
+  <td>BLUE QUAIL DR</td>
+  <td>Directional Bore</td>
+</tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="card">
+  <div class="card-head" onclick="toggleCompany('lv-electric-and-plumbing')">
+    <span class="chevron" id="chev-lv-electric-and-plumbing">&#9656;</span>
+    <span class="card-title">Lv electric and Plumbing</span>
+    <span class="card-stats">6 tickets &middot; 3 flagged</span>
+  </div>
+  <div class="panel" id="panel-lv-electric-and-plumbing" style="display:none">
+    <table>
+      <thead><tr>
+        <th>Ticket #</th><th>Type</th><th>Created</th><th>Work Date</th>
+        <th>County</th><th>City</th><th>Street</th><th>Nature of Work</th>
+      </tr></thead>
+      <tbody>
+        <tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2675292933" target="_blank" rel="noopener">2675292933</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/09/2026 06:50 AM</td>
+  <td>09/09/2026 07:00 AM</td>
+  <td>FORT BEND</td>
+  <td>HOUSTON</td>
+  <td>TX-6</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674618124" target="_blank" rel="noopener">2674618124</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>09/03/2026 02:37 AM</td>
+  <td>09/08/2026 02:45 AM</td>
+  <td>FORT BEND</td>
+  <td>HOUSTON</td>
+  <td>TX-6</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674500887" target="_blank" rel="noopener">2674500887</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/02/2026 04:15 AM</td>
+  <td>09/02/2026 04:15 AM</td>
+  <td>MONTGOMERY</td>
+  <td>CONROE</td>
+  <td>E WALLY WILKERSON PKWY</td>
+  <td>Directional Bore</td>
+</tr><tr class="flagged">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674500665" target="_blank" rel="noopener">2674500665</a></td>
+  <td><span class="chip chip-bad">No Response</span></td>
+  <td>09/02/2026 04:09 AM</td>
+  <td>09/02/2026 04:15 AM</td>
+  <td>MONTGOMERY</td>
+  <td>CONROE</td>
+  <td>AIRPORT RD</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674358416" target="_blank" rel="noopener">2674358416</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>08/31/2026 03:49 AM</td>
+  <td>09/02/2026 04:00 AM</td>
+  <td>MONTGOMERY</td>
+  <td>CONROE</td>
+  <td>AIRPORT RD</td>
+  <td>Directional Bore</td>
+</tr><tr class="">
+  <td><a class="ticket-link" href="https://txgc.texas811.org/ui/ticket/2674358242" target="_blank" rel="noopener">2674358242</a></td>
+  <td><span class="chip chip-ok">Normal</span></td>
+  <td>08/31/2026 03:46 AM</td>
+  <td>09/02/2026 03:45 AM</td>
+  <td>MONTGOMERY</td>
+  <td>CONROE</td>
+  <td>E WALLY WILKERSON PKWY</td>
+  <td>Directional Bore</td>
+</tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</main>
+<div class="footer">Texas811 dig ticket status report &middot; click a ticket number to open its live record on GeoCall for full positive-response status.</div>
+<script>
+const TM_POINTS = [{"num": "2675178425", "company": "CABLE JIMENEZ", "type": "Normal", "flagged": false, "addr": "Pierce St, HOUSTON, HARRIS", "created": "09/08/2026 04:27 PM", "workDate": "09/10/2026 04:30 PM", "county": "HARRIS", "city": "HOUSTON", "street": "Pierce St", "intersection": "st emanuel st", "nature": "Install-Conduit", "duration": "1 day ", "takenBy": "Cablejimenez.locates@gmail.com", "workDoneFor": "Econlite ", "phone": "8327203754", "lat": 29.746523, "lon": -95.358604, "url": "https://txgc.texas811.org/ui/ticket/2675178425"}, {"num": "2674630589", "company": "CABLE JIMENEZ", "type": "Normal", "flagged": false, "addr": "Pierce St, HOUSTON, HARRIS", "created": "09/03/2026 04:53 PM", "workDate": "09/08/2026 05:00 PM", "county": "HARRIS", "city": "HOUSTON", "street": "Pierce St", "intersection": "Live oak st", "nature": "Install-Conduit", "duration": "1 day ", "takenBy": "Cablejimenez.locates@gmail.com", "workDoneFor": "Econlite ", "phone": "8327203754", "lat": 29.740208, "lon": -95.35554, "url": "https://txgc.texas811.org/ui/ticket/2674630589"}, {"num": "2674630350", "company": "CABLE JIMENEZ", "type": "Normal", "flagged": false, "addr": "FM 1484, CONROE, MONTGOMERY", "created": "09/03/2026 02:40 PM", "workDate": "09/08/2026 02:45 PM", "county": "MONTGOMERY", "city": "CONROE", "street": "FM 1484", "intersection": "E WILLIAMS RD", "nature": "Install-Conduit", "duration": "EZEE FIBER", "takenBy": "Cablejimenez.locates@gmail.com", "workDoneFor": "EZEE FIBER", "phone": "8327203754", "lat": 30.395553, "lon": -95.340429, "url": "https://txgc.texas811.org/ui/ticket/2674630350"}, {"num": "2674630346", "company": "CABLE JIMENEZ", "type": "Normal", "flagged": false, "addr": "E WILLIAMS RD, CONROE, MONTGOMERY", "created": "09/03/2026 02:35 PM", "workDate": "09/08/2026 02:45 PM", "county": "MONTGOMERY", "city": "CONROE", "street": "E WILLIAMS RD", "intersection": "BROWDER TRAYLOR RD", "nature": "Install-Conduit", "duration": "EZEE FIBER", "takenBy": "Cablejimenez.locates@gmail.com", "workDoneFor": "EZEE FIBER", "phone": "8327203754", "lat": 30.393819, "lon": -95.329221, "url": "https://txgc.texas811.org/ui/ticket/2674630346"}, {"num": "2674630345", "company": "CABLE JIMENEZ", "type": "Normal", "flagged": false, "addr": "FM 1484, CONROE, MONTGOMERY", "created": "09/03/2026 02:34 PM", "workDate": "09/08/2026 02:45 PM", "county": "MONTGOMERY", "city": "CONROE", "street": "FM 1484", "intersection": "McRAE LAKE", "nature": "Install-Conduit", "duration": "EZEE FIBER", "takenBy": "Cablejimenez.locates@gmail.com", "workDoneFor": "EZEE FIBER", "phone": "8327203754", "lat": 30.387589, "lon": -95.328523, "url": "https://txgc.texas811.org/ui/ticket/2674630345"}, {"num": "2674630344", "company": "CABLE JIMENEZ", "type": "Normal", "flagged": false, "addr": "BROWDER TRAYLOR RD, CONROE, MONTGOMERY", "created": "09/03/2026 02:34 PM", "workDate": "09/08/2026 02:45 PM", "county": "MONTGOMERY", "city": "CONROE", "street": "BROWDER TRAYLOR RD", "intersection": "E WILLIAMS RD", "nature": "Install-Conduit", "duration": "EZEE FIBER", "takenBy": "Cablejimenez.locates@gmail.com", "workDoneFor": "EZEE FIBER", "phone": "8327203754", "lat": 30.392702, "lon": -95.328323, "url": "https://txgc.texas811.org/ui/ticket/2674630344"}, {"num": "2674630333", "company": "CABLE JIMENEZ", "type": "Normal", "flagged": false, "addr": "FM 1484, CONROE, MONTGOMERY", "created": "09/03/2026 02:31 PM", "workDate": "09/08/2026 02:30 PM", "county": "MONTGOMERY", "city": "CONROE", "street": "FM 1484", "intersection": "BART LAKE RD", "nature": "Install-Conduit", "duration": "EZEE FIBER", "takenBy": "Cablejimenez.locates@gmail.com", "workDoneFor": "EZEE FIBER", "phone": "8327203754", "lat": 30.376396, "lon": -95.329885, "url": "https://txgc.texas811.org/ui/ticket/2674630333"}, {"num": "2674361788", "company": "CABLE JIMENEZ", "type": "Normal", "flagged": false, "addr": "Kingsland blvd, KATY, FORT BEND", "created": "08/31/2026 05:17 AM", "workDate": "09/02/2026 05:30 AM", "county": "FORT BEND", "city": "KATY", "street": "Kingsland blvd", "intersection": "Katy Fort bend rd", "nature": "Install-Conduit", "duration": "1 month", "takenBy": "Cablejimenez.locates@gmail.com", "workDoneFor": "Econlite", "phone": "8327203754", "lat": 29.773587, "lon": -95.801702, "url": "https://txgc.texas811.org/ui/ticket/2674361788"}, {"num": "2673788738", "company": "CABLE JIMENEZ", "type": "Normal", "flagged": false, "addr": "Normandy St, CROSBY, HARRIS", "created": "08/25/2026 10:50 AM", "workDate": "08/28/2026 11:00 AM", "county": "HARRIS", "city": "CROSBY", "street": "Normandy St", "intersection": "S lake Houston pkw", "nature": "Install-Conduit", "duration": "1 day ", "takenBy": "Cablejimenez.locates@gmail.com", "workDoneFor": "Econolite ", "phone": "8327203754", "lat": 29.816784, "lon": -95.207108, "url": "https://txgc.texas811.org/ui/ticket/2673788738"}, {"num": "2674509261", "company": "G&J FIBER GROUP", "type": "DigUp", "flagged": false, "addr": "FALCON LAKE DR, FRIENDSWOOD, GALVESTON", "created": "09/02/2026 09:28 AM", "workDate": "09/02/2026 09:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FALCON LAKE DR", "intersection": "overlook dr", "nature": "Bore-Auger-directional", "duration": "30 days", "takenBy": "brittany.c@ganjfiber.com", "workDoneFor": "mho", "phone": "2817731342", "lat": 29.499563, "lon": -95.186066, "url": "https://txgc.texas811.org/ui/ticket/2674509261"}, {"num": "2674361913", "company": "G&J FIBER GROUP", "type": "No Response", "flagged": true, "addr": "Eagle Lakes Dr, FRIENDSWOOD, GALVESTON", "created": "08/31/2026 05:22 AM", "workDate": "08/31/2026 05:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "Eagle Lakes Dr", "intersection": "S FRIENDSWOOD DR", "nature": "Directional Bore", "duration": "3 weeks", "takenBy": "brittany.c@ganjfiber.com", "workDoneFor": "MHO ", "phone": "2817731342", "lat": 29.501441, "lon": -95.185827, "url": "https://txgc.texas811.org/ui/ticket/2674361913"}, {"num": "2675288684", "company": "G-REED LLC", "type": "DigUp", "flagged": false, "addr": "E PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "09/09/2026 04:27 AM", "workDate": "09/09/2026 04:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E PARKWOOD AVE", "intersection": "WINDING WAY DR", "nature": "DigUp - Hit Telephone line", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.511972, "lon": -95.185401, "url": "https://txgc.texas811.org/ui/ticket/2675288684"}, {"num": "2675052370", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FM 528, HOUSTON, HARRIS", "created": "09/07/2026 09:31 AM", "workDate": "09/07/2026 09:30 AM", "county": "HARRIS", "city": "HOUSTON", "street": "FM 528", "intersection": "BAY AREA BLVD", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.568625, "lon": -95.093112, "url": "https://txgc.texas811.org/ui/ticket/2675052370"}, {"num": "2675052350", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "E PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "09/07/2026 09:24 AM", "workDate": "09/07/2026 09:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E PARKWOOD AVE", "intersection": "PENNY LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.513069, "lon": -95.184184, "url": "https://txgc.texas811.org/ui/ticket/2675052350"}, {"num": "2675052346", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "E PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "09/07/2026 09:22 AM", "workDate": "09/07/2026 09:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E PARKWOOD AVE", "intersection": "WINDING WAY DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.513075, "lon": -95.188101, "url": "https://txgc.texas811.org/ui/ticket/2675052346"}, {"num": "2675052340", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "E PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "09/07/2026 09:20 AM", "workDate": "09/07/2026 09:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E PARKWOOD AVE", "intersection": "S FRIENDSWOOD", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.524373, "lon": -95.190336, "url": "https://txgc.texas811.org/ui/ticket/2675052340"}, {"num": "2674747286", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "ROLLING STONE DR, FRIENDSWOOD, GALVESTON", "created": "09/04/2026 04:32 PM", "workDate": "09/04/2026 04:45 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "ROLLING STONE DR", "intersection": "SANDY LAKE DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.48881, "lon": -95.19826, "url": "https://txgc.texas811.org/ui/ticket/2674747286"}, {"num": "2674747282", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "ROLLING STONE DR, FRIENDSWOOD, GALVESTON", "created": "09/04/2026 04:31 PM", "workDate": "09/04/2026 04:30 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "ROLLING STONE DR", "intersection": "SANDY LAKE DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.48881, "lon": -95.19826, "url": "https://txgc.texas811.org/ui/ticket/2674747282"}, {"num": "2674747277", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "SKIP ROCK ST, FRIENDSWOOD, GALVESTON", "created": "09/04/2026 04:29 PM", "workDate": "09/04/2026 04:30 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "SKIP ROCK ST", "intersection": "CASCADE FALLS DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.493984, "lon": -95.198903, "url": "https://txgc.texas811.org/ui/ticket/2674747277"}, {"num": "2674747275", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "ROUND ROCK ST, FRIENDSWOOD, GALVESTON", "created": "09/04/2026 04:28 PM", "workDate": "09/04/2026 04:30 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "ROUND ROCK ST", "intersection": "CASCADE FALLS DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.493984, "lon": -95.198903, "url": "https://txgc.texas811.org/ui/ticket/2674747275"}, {"num": "2674747273", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "ROUND ROCK ST, FRIENDSWOOD, GALVESTON", "created": "09/04/2026 04:27 PM", "workDate": "09/04/2026 04:30 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "ROUND ROCK ST", "intersection": "CASCADE FALLS DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.493984, "lon": -95.198903, "url": "https://txgc.texas811.org/ui/ticket/2674747273"}, {"num": "2674747271", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "CASCADE FALLS DR, FRIENDSWOOD, GALVESTON", "created": "09/04/2026 04:26 PM", "workDate": "09/04/2026 04:30 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "CASCADE FALLS DR", "intersection": "ROUND ROCK ST", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.493984, "lon": -95.198903, "url": "https://txgc.texas811.org/ui/ticket/2674747271"}, {"num": "2674747270", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "CASCADE FALLS DR, FRIENDSWOOD, GALVESTON", "created": "09/04/2026 04:26 PM", "workDate": "09/04/2026 04:30 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "CASCADE FALLS DR", "intersection": "SANDY LAKE DR ", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.493349, "lon": -95.19959, "url": "https://txgc.texas811.org/ui/ticket/2674747270"}, {"num": "2674747267", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "CASCADE FALLS DR, FRIENDSWOOD, GALVESTON", "created": "09/04/2026 04:25 PM", "workDate": "09/04/2026 04:30 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "CASCADE FALLS DR", "intersection": "SANDY LAKE DR ", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.493349, "lon": -95.19959, "url": "https://txgc.texas811.org/ui/ticket/2674747267"}, {"num": "2674747266", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "CASCADE FALLS DR, FRIENDSWOOD, GALVESTON", "created": "09/04/2026 04:24 PM", "workDate": "09/04/2026 04:30 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "CASCADE FALLS DR", "intersection": "SANDY LAKE DR ", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.493349, "lon": -95.19959, "url": "https://txgc.texas811.org/ui/ticket/2674747266"}, {"num": "2674747262", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "SANDY LAKE DR, FRIENDSWOOD, GALVESTON", "created": "09/04/2026 04:23 PM", "workDate": "09/04/2026 04:30 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "SANDY LAKE DR", "intersection": "CASCADE FALLS DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.493349, "lon": -95.19959, "url": "https://txgc.texas811.org/ui/ticket/2674747262"}, {"num": "2674747253", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "SANDY LAKE DR, FRIENDSWOOD, GALVESTON", "created": "09/04/2026 04:22 PM", "workDate": "09/04/2026 04:30 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "SANDY LAKE DR", "intersection": "MOSSY STONE DR ", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.491735, "lon": -95.198331, "url": "https://txgc.texas811.org/ui/ticket/2674747253"}, {"num": "2674747221", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FLAT ROCK ST, FRIENDSWOOD, GALVESTON", "created": "09/04/2026 04:15 PM", "workDate": "09/04/2026 04:15 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FLAT ROCK ST", "intersection": "CASCADE FALLS DR", "nature": "Directional Bore", "duration": "1 MTHS", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.494628, "lon": -95.198222, "url": "https://txgc.texas811.org/ui/ticket/2674747221"}, {"num": "2674747211", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "PAMPAS TRAIL DR, FRIENDSWOOD, GALVESTON", "created": "09/04/2026 04:13 PM", "workDate": "09/04/2026 04:15 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "PAMPAS TRAIL DR", "intersection": "SKIP ROCK ST", "nature": "Directional Bore", "duration": "1 MTHS", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.494049, "lon": -95.196033, "url": "https://txgc.texas811.org/ui/ticket/2674747211"}, {"num": "2674747207", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "SKIP ROCK ST, FRIENDSWOOD, GALVESTON", "created": "09/04/2026 04:11 PM", "workDate": "09/04/2026 04:15 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "SKIP ROCK ST", "intersection": "CASCADE FALLS DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.493984, "lon": -95.198903, "url": "https://txgc.texas811.org/ui/ticket/2674747207"}, {"num": "2674747204", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "SKIP ROCK ST, FRIENDSWOOD, GALVESTON", "created": "09/04/2026 04:10 PM", "workDate": "09/04/2026 04:15 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "SKIP ROCK ST", "intersection": "CASCADE FALLS DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.493984, "lon": -95.198903, "url": "https://txgc.texas811.org/ui/ticket/2674747204"}, {"num": "2674747199", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "SANDY LAKE DR, FRIENDSWOOD, GALVESTON", "created": "09/04/2026 04:09 PM", "workDate": "09/09/2026 04:15 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "SANDY LAKE DR", "intersection": "MOSSY STONE DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.491735, "lon": -95.198331, "url": "https://txgc.texas811.org/ui/ticket/2674747199"}, {"num": "2674747153", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "SANDY LAKE DR, FRIENDSWOOD, GALVESTON", "created": "09/04/2026 03:56 PM", "workDate": "09/04/2026 04:00 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "SANDY LAKE DR", "intersection": "MOSSY STONE DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.491735, "lon": -95.198331, "url": "https://txgc.texas811.org/ui/ticket/2674747153"}, {"num": "2674747121", "company": "G-REED LLC", "type": "Cancellation", "flagged": false, "addr": "FLAT ROCK ST, FRIENDSWOOD, GALVESTON", "created": "09/04/2026 03:47 PM", "workDate": "09/04/2026 04:00 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FLAT ROCK ST", "intersection": "CASCADE FALLS DR", "nature": "Directional Bore", "duration": "1 MTHS", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.494628, "lon": -95.198222, "url": "https://txgc.texas811.org/ui/ticket/2674747121"}, {"num": "2674747113", "company": "G-REED LLC", "type": "Cancellation", "flagged": false, "addr": "PAMPAS TRAIL DR, FRIENDSWOOD, GALVESTON", "created": "09/04/2026 03:45 PM", "workDate": "09/04/2026 03:45 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "PAMPAS TRAIL DR", "intersection": "CASCADE FALLS DR", "nature": "Directional Bore", "duration": "1 MTHS", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.49525, "lon": -95.197504, "url": "https://txgc.texas811.org/ui/ticket/2674747113"}, {"num": "2674747111", "company": "G-REED LLC", "type": "Cancellation", "flagged": false, "addr": "PAMPAS TRAIL DR, FRIENDSWOOD, GALVESTON", "created": "09/04/2026 03:45 PM", "workDate": "09/04/2026 03:45 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "PAMPAS TRAIL DR", "intersection": "SKIP ROCK ST", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.494049, "lon": -95.196033, "url": "https://txgc.texas811.org/ui/ticket/2674747111"}, {"num": "2674747105", "company": "G-REED LLC", "type": "Cancellation", "flagged": false, "addr": "STONEY LAKE DR, FRIENDSWOOD, GALVESTON", "created": "09/04/2026 03:42 PM", "workDate": "09/04/2026 03:45 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "STONEY LAKE DR", "intersection": "SANDY LAKE DR", "nature": "Directional Bore", "duration": "1 MTHS", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.494874, "lon": -95.201462, "url": "https://txgc.texas811.org/ui/ticket/2674747105"}, {"num": "2674747080", "company": "G-REED LLC", "type": "Cancellation", "flagged": false, "addr": "W PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "09/04/2026 03:32 PM", "workDate": "09/04/2026 03:45 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "W PARKWOOD AVE", "intersection": "DESOTA ST", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.495321, "lon": -95.201017, "url": "https://txgc.texas811.org/ui/ticket/2674747080"}, {"num": "2674747079", "company": "G-REED LLC", "type": "Cancellation", "flagged": false, "addr": "W PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "09/04/2026 03:32 PM", "workDate": "09/04/2026 03:45 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "W PARKWOOD AVE", "intersection": "DESOTA ST", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.495321, "lon": -95.201017, "url": "https://txgc.texas811.org/ui/ticket/2674747079"}, {"num": "2674617089", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FM 528, HOUSTON, HARRIS", "created": "09/03/2026 02:14 AM", "workDate": "09/03/2026 02:15 AM", "county": "HARRIS", "city": "HOUSTON", "street": "FM 528", "intersection": "BAY AREA BLVD", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.522202, "lon": -95.163331, "url": "https://txgc.texas811.org/ui/ticket/2674617089"}, {"num": "2674616983", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FM 528, HOUSTON, HARRIS", "created": "09/03/2026 02:12 AM", "workDate": "09/03/2026 02:15 AM", "county": "HARRIS", "city": "HOUSTON", "street": "FM 528", "intersection": "BLACKHAWK BLVD", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.521819, "lon": -95.167258, "url": "https://txgc.texas811.org/ui/ticket/2674616983"}, {"num": "2674616917", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FM 528, HOUSTON, HARRIS", "created": "09/03/2026 02:11 AM", "workDate": "09/03/2026 02:15 AM", "county": "HARRIS", "city": "HOUSTON", "street": "FM 528", "intersection": "TOWNES RD", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.521357, "lon": -95.171394, "url": "https://txgc.texas811.org/ui/ticket/2674616917"}, {"num": "2674616856", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FM 528, HOUSTON, HARRIS", "created": "09/03/2026 02:10 AM", "workDate": "09/03/2026 02:15 AM", "county": "HARRIS", "city": "HOUSTON", "street": "FM 528", "intersection": "TOWNES RD", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.51935, "lon": -95.176232, "url": "https://txgc.texas811.org/ui/ticket/2674616856"}, {"num": "2674616745", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "E PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "09/03/2026 02:08 AM", "workDate": "09/03/2026 02:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E PARKWOOD AVE", "intersection": "PENNY LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.516582, "lon": -95.180379, "url": "https://txgc.texas811.org/ui/ticket/2674616745"}, {"num": "2674616654", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "E PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "09/03/2026 02:05 AM", "workDate": "09/03/2026 02:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E PARKWOOD AVE", "intersection": "WINDING WAY DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.513365, "lon": -95.183758, "url": "https://txgc.texas811.org/ui/ticket/2674616654"}, {"num": "2674616567", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "E PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "09/03/2026 02:03 AM", "workDate": "09/03/2026 02:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E PARKWOOD AVE", "intersection": "S FRIENDSWOOD", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.510312, "lon": -95.187082, "url": "https://txgc.texas811.org/ui/ticket/2674616567"}, {"num": "2674503197", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "FLAT ROCK ST, FRIENDSWOOD, GALVESTON", "created": "09/02/2026 05:37 AM", "workDate": "09/04/2026 05:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FLAT ROCK ST", "intersection": "CASCADE FALLS DR", "nature": "Directional Bore", "duration": "1 MTHS", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.49558, "lon": -95.198936, "url": "https://txgc.texas811.org/ui/ticket/2674503197"}, {"num": "2674503154", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "FLAT ROCK ST, FRIENDSWOOD, GALVESTON", "created": "09/02/2026 05:36 AM", "workDate": "09/04/2026 05:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FLAT ROCK ST", "intersection": "CASCADE FALLS DR", "nature": "Directional Bore", "duration": "1 MTHS", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.495195, "lon": -95.199353, "url": "https://txgc.texas811.org/ui/ticket/2674503154"}, {"num": "2674503070", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "RIVER ROCK CT, FRIENDSWOOD, GALVESTON", "created": "09/02/2026 05:32 AM", "workDate": "09/04/2026 05:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "RIVER ROCK CT", "intersection": "PAMPAS TRAIL DR", "nature": "Directional Bore", "duration": "1 MTHS", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.497012, "lon": -95.200476, "url": "https://txgc.texas811.org/ui/ticket/2674503070"}, {"num": "2674503004", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "RIVER ROCK CT, FRIENDSWOOD, GALVESTON", "created": "09/02/2026 05:30 AM", "workDate": "09/04/2026 05:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "RIVER ROCK CT", "intersection": "PAMPAS TRAIL DR", "nature": "Directional Bore", "duration": "1 MTHS", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.49739, "lon": -95.20072, "url": "https://txgc.texas811.org/ui/ticket/2674503004"}, {"num": "2674502880", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "PAMPAS TRAIL DR, FRIENDSWOOD, GALVESTON", "created": "09/02/2026 05:26 AM", "workDate": "09/04/2026 05:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "PAMPAS TRAIL DR", "intersection": "CASCADE FALLS DR", "nature": "Directional Bore", "duration": "1 MTHS", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.496789, "lon": -95.198819, "url": "https://txgc.texas811.org/ui/ticket/2674502880"}, {"num": "2674502740", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "PAMPAS TRAIL DR, FRIENDSWOOD, GALVESTON", "created": "09/02/2026 05:21 AM", "workDate": "09/04/2026 05:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "PAMPAS TRAIL DR", "intersection": "SKIP ROCK ST", "nature": "Directional Bore", "duration": "1 MTHS", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.495074, "lon": -95.196691, "url": "https://txgc.texas811.org/ui/ticket/2674502740"}, {"num": "2674502540", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "STONEY LAKE DR, FRIENDSWOOD, GALVESTON", "created": "09/02/2026 05:13 AM", "workDate": "09/04/2026 05:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "STONEY LAKE DR", "intersection": "SANDY LAKE DR", "nature": "Directional Bore", "duration": "1 MTHS", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.495844, "lon": -95.200896, "url": "https://txgc.texas811.org/ui/ticket/2674502540"}, {"num": "2674502457", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "STONEY LAKE DR, FRIENDSWOOD, GALVESTON", "created": "09/02/2026 05:10 AM", "workDate": "09/04/2026 05:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "STONEY LAKE DR", "intersection": "FRIENDSWOOD PKWY ", "nature": "Directional Bore", "duration": "1 MTHS", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.493874, "lon": -95.202771, "url": "https://txgc.texas811.org/ui/ticket/2674502457"}, {"num": "2674502410", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "STONEY LAKE DR, FRIENDSWOOD, GALVESTON", "created": "09/02/2026 05:08 AM", "workDate": "09/04/2026 05:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "STONEY LAKE DR", "intersection": "FRIENDSWOOD PKWY ", "nature": "Directional Bore", "duration": "1 MTHS", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.493508, "lon": -95.202314, "url": "https://txgc.texas811.org/ui/ticket/2674502410"}, {"num": "2674502352", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "STONEY LAKE DR, FRIENDSWOOD, GALVESTON", "created": "09/02/2026 05:04 AM", "workDate": "09/04/2026 05:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "STONEY LAKE DR", "intersection": "FRIENDSWOOD PKWY ", "nature": "Directional Bore", "duration": "1 MTHS", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.492261, "lon": -95.203909, "url": "https://txgc.texas811.org/ui/ticket/2674502352"}, {"num": "2674502134", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "GARDEN LAKES DR, FRIENDSWOOD, GALVESTON", "created": "09/02/2026 04:55 AM", "workDate": "09/04/2026 05:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "GARDEN LAKES DR", "intersection": "RED ROCK DR", "nature": "Directional Bore", "duration": "1 MTHS", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.49609, "lon": -95.202975, "url": "https://txgc.texas811.org/ui/ticket/2674502134"}, {"num": "2674502029", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "GARDEN LAKES DR, FRIENDSWOOD, GALVESTON", "created": "09/02/2026 04:51 AM", "workDate": "09/04/2026 05:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "GARDEN LAKES DR", "intersection": "RED ROCK DR", "nature": "Directional Bore", "duration": "1 MTHS", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.496229, "lon": -95.203418, "url": "https://txgc.texas811.org/ui/ticket/2674502029"}, {"num": "2674501899", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "GARDEN LAKES DR, FRIENDSWOOD, GALVESTON", "created": "09/02/2026 04:46 AM", "workDate": "09/04/2026 04:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "GARDEN LAKES DR", "intersection": "FRIENDSWOOD PKWY ", "nature": "Directional Bore", "duration": "1 MTHS", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.494582, "lon": -95.205292, "url": "https://txgc.texas811.org/ui/ticket/2674501899"}, {"num": "2674501773", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "GARDEN LAKES DR, FRIENDSWOOD, GALVESTON", "created": "09/02/2026 04:42 AM", "workDate": "09/04/2026 04:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "GARDEN LAKES DR", "intersection": "FRIENDSWOOD PKWY ", "nature": "Directional Bore", "duration": "1 MTHS", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.494383, "lon": -95.204622, "url": "https://txgc.texas811.org/ui/ticket/2674501773"}, {"num": "2674501327", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "W PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "09/02/2026 04:27 AM", "workDate": "09/04/2026 04:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "W PARKWOOD AVE", "intersection": "FRIENDSWOOD PKWY ", "nature": "Directional Bore", "duration": "1 MTHS", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.496532, "lon": -95.205288, "url": "https://txgc.texas811.org/ui/ticket/2674501327"}, {"num": "2674491193", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "PAMPAS TRAIL DR, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 03:03 PM", "workDate": "09/03/2026 03:00 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "PAMPAS TRAIL DR", "intersection": "SKIP ROCK ST", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.495807, "lon": -95.198599, "url": "https://txgc.texas811.org/ui/ticket/2674491193"}, {"num": "2674491163", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "SKIP ROCK ST, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 02:57 PM", "workDate": "09/03/2026 03:00 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "SKIP ROCK ST", "intersection": "CASCADE FALLS DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.493884, "lon": -95.197427, "url": "https://txgc.texas811.org/ui/ticket/2674491163"}, {"num": "2674491141", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "SKIP ROCK ST, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 02:54 PM", "workDate": "09/03/2026 03:00 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "SKIP ROCK ST", "intersection": "CASCADE FALLS DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.493508, "lon": -95.196383, "url": "https://txgc.texas811.org/ui/ticket/2674491141"}, {"num": "2674491117", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "SKIP ROCK ST, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 02:52 PM", "workDate": "09/03/2026 03:00 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "SKIP ROCK ST", "intersection": "CASCADE FALLS DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.493389, "lon": -95.198215, "url": "https://txgc.texas811.org/ui/ticket/2674491117"}, {"num": "2674491082", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "ROUND ROCK ST, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 02:48 PM", "workDate": "09/03/2026 03:00 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "ROUND ROCK ST", "intersection": "CASCADE FALLS DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.494895, "lon": -95.199708, "url": "https://txgc.texas811.org/ui/ticket/2674491082"}, {"num": "2674491074", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "ROUND ROCK ST, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 02:46 PM", "workDate": "09/03/2026 02:45 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "ROUND ROCK ST", "intersection": "CASCADE FALLS DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.494495, "lon": -95.200168, "url": "https://txgc.texas811.org/ui/ticket/2674491074"}, {"num": "2674491059", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "CASCADE FALLS DR, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 02:41 PM", "workDate": "09/03/2026 02:45 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "CASCADE FALLS DR", "intersection": "ROUND ROCK ST", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.494675, "lon": -95.19808, "url": "https://txgc.texas811.org/ui/ticket/2674491059"}, {"num": "2674491050", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "CASCADE FALLS DR, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 02:39 PM", "workDate": "09/03/2026 02:45 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "CASCADE FALLS DR", "intersection": "SANDY LAKE DR ", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.493759, "lon": -95.199077, "url": "https://txgc.texas811.org/ui/ticket/2674491050"}, {"num": "2674491044", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "CASCADE FALLS DR, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 02:37 PM", "workDate": "09/03/2026 02:45 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "CASCADE FALLS DR", "intersection": "SANDY LAKE DR ", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.492968, "lon": -95.201031, "url": "https://txgc.texas811.org/ui/ticket/2674491044"}, {"num": "2674491040", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "CASCADE FALLS DR, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 02:36 PM", "workDate": "09/03/2026 02:45 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "CASCADE FALLS DR", "intersection": "SANDY LAKE DR ", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.492565, "lon": -95.200395, "url": "https://txgc.texas811.org/ui/ticket/2674491040"}, {"num": "2674491023", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "SANDY LAKE DR, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 02:31 PM", "workDate": "09/03/2026 02:30 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "SANDY LAKE DR", "intersection": "CASCADE FALLS DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.495165, "lon": -95.201109, "url": "https://txgc.texas811.org/ui/ticket/2674491023"}, {"num": "2674491020", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "SANDY LAKE DR, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 02:30 PM", "workDate": "09/03/2026 02:30 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "SANDY LAKE DR", "intersection": "MOSSY STONE DR ", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.49296, "lon": -95.198735, "url": "https://txgc.texas811.org/ui/ticket/2674491020"}, {"num": "2674491013", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "SANDLY LAKE DR, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 02:27 PM", "workDate": "09/03/2026 02:30 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "SANDLY LAKE DR", "intersection": "CASCADE FALLS DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.494426, "lon": -95.20169, "url": "https://txgc.texas811.org/ui/ticket/2674491013"}, {"num": "2674491003", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "SANDLY LAKE DR, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 02:25 PM", "workDate": "09/03/2026 02:30 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "SANDLY LAKE DR", "intersection": "MOSSY STONE DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.492495, "lon": -95.199767, "url": "https://txgc.texas811.org/ui/ticket/2674491003"}, {"num": "2674490974", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "SANDLY LAKE DR, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 02:20 PM", "workDate": "09/03/2026 02:30 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "SANDLY LAKE DR", "intersection": "MOSSY STONE DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.492666, "lon": -95.199067, "url": "https://txgc.texas811.org/ui/ticket/2674490974"}, {"num": "2674490963", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "SANDLY LAKE DR, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 02:18 PM", "workDate": "09/03/2026 02:30 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "SANDLY LAKE DR", "intersection": "DOMINION CT", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.491172, "lon": -95.198996, "url": "https://txgc.texas811.org/ui/ticket/2674490963"}, {"num": "2674490950", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "SANDLY LAKE DR, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 02:16 PM", "workDate": "09/03/2026 02:15 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "SANDLY LAKE DR", "intersection": "FRIENDSWOOD PKWY", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.48977, "lon": -95.198616, "url": "https://txgc.texas811.org/ui/ticket/2674490950"}, {"num": "2674490945", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "DOMINION CT, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 02:15 PM", "workDate": "09/03/2026 02:15 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "DOMINION CT", "intersection": "SANDY LAKE DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.48815, "lon": -95.197292, "url": "https://txgc.texas811.org/ui/ticket/2674490945"}, {"num": "2674490933", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "ROLLING STONE DR, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 02:13 PM", "workDate": "09/03/2026 02:15 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "ROLLING STONE DR", "intersection": "SANDY LAKE DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.490046, "lon": -95.199416, "url": "https://txgc.texas811.org/ui/ticket/2674490933"}, {"num": "2674490909", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "ROLLING STONE DR, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 02:10 PM", "workDate": "09/03/2026 02:15 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "ROLLING STONE DR", "intersection": "SANDY LAKE DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.48974, "lon": -95.200472, "url": "https://txgc.texas811.org/ui/ticket/2674490909"}, {"num": "2674490884", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "MOSSY STONE DR, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 02:06 PM", "workDate": "09/03/2026 02:15 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "MOSSY STONE DR", "intersection": "FRIENDSWOOD PKWY ", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.491157, "lon": -95.199501, "url": "https://txgc.texas811.org/ui/ticket/2674490884"}, {"num": "2674490866", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "MOSSY STONE DR, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 02:02 PM", "workDate": "09/03/2026 02:00 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "MOSSY STONE DR", "intersection": "FRIENDSWOOD PKWY ", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.491148, "lon": -95.199935, "url": "https://txgc.texas811.org/ui/ticket/2674490866"}, {"num": "2674490847", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "FRIENDSWOOD PKWY, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 01:56 PM", "workDate": "09/03/2026 02:00 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FRIENDSWOOD PKWY", "intersection": "MOSSY STONE DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.489098, "lon": -95.200037, "url": "https://txgc.texas811.org/ui/ticket/2674490847"}, {"num": "2674490839", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "FRIENDSWOOD PKWY, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 01:54 PM", "workDate": "09/03/2026 02:00 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FRIENDSWOOD PKWY", "intersection": "W PARKWOOD AVE", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.493991, "lon": -95.206614, "url": "https://txgc.texas811.org/ui/ticket/2674490839"}, {"num": "2674490831", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "STONEY LAKE DR, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 01:45 PM", "workDate": "09/03/2026 01:45 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "STONEY LAKE DR", "intersection": "FRIENDSWOOD PKWY", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.49277, "lon": -95.203459, "url": "https://txgc.texas811.org/ui/ticket/2674490831"}, {"num": "2674490825", "company": "G-REED LLC", "type": "Cancellation", "flagged": false, "addr": "FRIENDSWOOD PKWY, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 01:43 PM", "workDate": "09/01/2026 01:45 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FRIENDSWOOD PKWY", "intersection": "W PARKWOOD AVE", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.493652, "lon": -95.206559, "url": "https://txgc.texas811.org/ui/ticket/2674490825"}, {"num": "2674490824", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "FRIENDSWOOD PKWY, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 01:43 PM", "workDate": "09/03/2026 01:45 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FRIENDSWOOD PKWY", "intersection": "W PARKWOOD AVE", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.493652, "lon": -95.206559, "url": "https://txgc.texas811.org/ui/ticket/2674490824"}, {"num": "2674490822", "company": "G-REED LLC", "type": "Cancellation", "flagged": false, "addr": "W PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 01:42 PM", "workDate": "09/01/2026 01:45 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "W PARKWOOD AVE", "intersection": "DESOTA ST", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.493491, "lon": -95.20876, "url": "https://txgc.texas811.org/ui/ticket/2674490822"}, {"num": "2674490821", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "W PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 01:41 PM", "workDate": "09/03/2026 01:45 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "W PARKWOOD AVE", "intersection": "DESOTA ST", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.493491, "lon": -95.20876, "url": "https://txgc.texas811.org/ui/ticket/2674490821"}, {"num": "2674490817", "company": "G-REED LLC", "type": "Cancellation", "flagged": false, "addr": "W PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 01:39 PM", "workDate": "09/01/2026 01:45 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "W PARKWOOD AVE", "intersection": "DESOTA ST", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.490699, "lon": -95.211218, "url": "https://txgc.texas811.org/ui/ticket/2674490817"}, {"num": "2674490815", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "W PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 01:39 PM", "workDate": "09/03/2026 01:45 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "W PARKWOOD AVE", "intersection": "DESOTA ST", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.490699, "lon": -95.211218, "url": "https://txgc.texas811.org/ui/ticket/2674490815"}, {"num": "2674490813", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "FRIENDSWOOD PKWY, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 01:38 PM", "workDate": "09/03/2026 01:45 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FRIENDSWOOD PKWY", "intersection": "W PARKWOOD AVE", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.49205, "lon": -95.20446, "url": "https://txgc.texas811.org/ui/ticket/2674490813"}, {"num": "2674490800", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "FRIENDSWOOD PKWY, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 01:34 PM", "workDate": "09/03/2026 01:45 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FRIENDSWOOD PKWY", "intersection": "W PARKWOOD AVE", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.493652, "lon": -95.206559, "url": "https://txgc.texas811.org/ui/ticket/2674490800"}, {"num": "2674490777", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "W PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 01:30 PM", "workDate": "09/03/2026 01:30 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "W PARKWOOD AVE", "intersection": "DESOTA ST", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.493491, "lon": -95.20876, "url": "https://txgc.texas811.org/ui/ticket/2674490777"}, {"num": "2674490769", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "W PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 01:29 PM", "workDate": "09/03/2026 01:30 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "W PARKWOOD AVE", "intersection": "DESOTA ST", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.490699, "lon": -95.211218, "url": "https://txgc.texas811.org/ui/ticket/2674490769"}, {"num": "2674489846", "company": "G-REED LLC", "type": "Cancellation", "flagged": false, "addr": "S  POINTE DR, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 10:24 AM", "workDate": "09/01/2026 10:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "S  POINTE DR", "intersection": "LUCAS WAY", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.485672, "lon": -95.197996, "url": "https://txgc.texas811.org/ui/ticket/2674489846"}, {"num": "2674489841", "company": "G-REED LLC", "type": "Cancellation", "flagged": false, "addr": "S  POINTE DR, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 10:23 AM", "workDate": "09/01/2026 10:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "S  POINTE DR", "intersection": "NORTHGATE CROSSING", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.484195, "lon": -95.199613, "url": "https://txgc.texas811.org/ui/ticket/2674489841"}, {"num": "2674489831", "company": "G-REED LLC", "type": "Cancellation", "flagged": false, "addr": "NORTHGATE CROSSING, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 10:22 AM", "workDate": "09/01/2026 10:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "NORTHGATE CROSSING", "intersection": "SPRING VIEW ", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.483805, "lon": -95.200704, "url": "https://txgc.texas811.org/ui/ticket/2674489831"}, {"num": "2674489828", "company": "G-REED LLC", "type": "Cancellation", "flagged": false, "addr": "SPRING VIEW, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 10:22 AM", "workDate": "09/01/2026 10:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "SPRING VIEW", "intersection": "JACOB TRL", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.484246, "lon": -95.200638, "url": "https://txgc.texas811.org/ui/ticket/2674489828"}, {"num": "2674489821", "company": "G-REED LLC", "type": "Cancellation", "flagged": false, "addr": "SPRING VIEW, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 10:21 AM", "workDate": "09/01/2026 10:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "SPRING VIEW", "intersection": "CANYONVIEW CT", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.485347, "lon": -95.199561, "url": "https://txgc.texas811.org/ui/ticket/2674489821"}, {"num": "2674489809", "company": "G-REED LLC", "type": "Cancellation", "flagged": false, "addr": "CANYONVIEW CT, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 10:20 AM", "workDate": "09/01/2026 10:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "CANYONVIEW CT", "intersection": "SPRING VIEW ", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.485855, "lon": -95.198578, "url": "https://txgc.texas811.org/ui/ticket/2674489809"}, {"num": "2674489802", "company": "G-REED LLC", "type": "Cancellation", "flagged": false, "addr": "SPRING VIEW, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 10:19 AM", "workDate": "09/01/2026 10:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "SPRING VIEW", "intersection": "FRIENDSWOOD PKWY ", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.486627, "lon": -95.198252, "url": "https://txgc.texas811.org/ui/ticket/2674489802"}, {"num": "2674489784", "company": "G-REED LLC", "type": "Cancellation", "flagged": false, "addr": "SANDY LAKE DR, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 10:18 AM", "workDate": "09/01/2026 10:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "SANDY LAKE DR", "intersection": "AVERY LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.485454, "lon": -95.201542, "url": "https://txgc.texas811.org/ui/ticket/2674489784"}, {"num": "2674489773", "company": "G-REED LLC", "type": "Cancellation", "flagged": false, "addr": "SANDY LAKE DR, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 10:17 AM", "workDate": "09/01/2026 10:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "SANDY LAKE DR", "intersection": "AVERY LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.486413, "lon": -95.200446, "url": "https://txgc.texas811.org/ui/ticket/2674489773"}, {"num": "2674489770", "company": "G-REED LLC", "type": "Cancellation", "flagged": false, "addr": "SILVER POINT CT, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 10:16 AM", "workDate": "09/01/2026 10:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "SILVER POINT CT", "intersection": "SANDY LAKE DR ", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.487923, "lon": -95.199905, "url": "https://txgc.texas811.org/ui/ticket/2674489770"}, {"num": "2674489763", "company": "G-REED LLC", "type": "Cancellation", "flagged": false, "addr": "SANDY LAKE DR, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 10:15 AM", "workDate": "09/01/2026 10:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "SANDY LAKE DR", "intersection": "FRIENDSWOOD PKWY", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.487468, "lon": -95.199449, "url": "https://txgc.texas811.org/ui/ticket/2674489763"}, {"num": "2674489757", "company": "G-REED LLC", "type": "Cancellation", "flagged": false, "addr": "FRIENDSWOOD PKWY, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 10:15 AM", "workDate": "09/01/2026 10:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FRIENDSWOOD PKWY", "intersection": "EVANS GATE", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.487626, "lon": -95.198459, "url": "https://txgc.texas811.org/ui/ticket/2674489757"}, {"num": "2674489749", "company": "G-REED LLC", "type": "Cancellation", "flagged": false, "addr": "FRIENDSWOOD PKWY, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 10:14 AM", "workDate": "09/01/2026 10:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FRIENDSWOOD PKWY", "intersection": "EVANS GATE", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.488861, "lon": -95.199996, "url": "https://txgc.texas811.org/ui/ticket/2674489749"}, {"num": "2674489740", "company": "G-REED LLC", "type": "Cancellation", "flagged": false, "addr": "FRIENDSWOOD PKWY, FRIENDSWOOD, GALVESTON", "created": "09/01/2026 10:13 AM", "workDate": "09/01/2026 10:15 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FRIENDSWOOD PKWY", "intersection": "EVANS GATE", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.48988, "lon": -95.201256, "url": "https://txgc.texas811.org/ui/ticket/2674489740"}, {"num": "2674370984", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "S  POINTE DR, FRIENDSWOOD, GALVESTON", "created": "08/31/2026 11:58 AM", "workDate": "09/02/2026 12:00 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "S  POINTE DR", "intersection": "LUCAS WAY", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.485672, "lon": -95.197996, "url": "https://txgc.texas811.org/ui/ticket/2674370984"}, {"num": "2674370972", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "S  POINTE DR, FRIENDSWOOD, GALVESTON", "created": "08/31/2026 11:57 AM", "workDate": "09/02/2026 12:00 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "S  POINTE DR", "intersection": "NORTHGATE CROSSING", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.484195, "lon": -95.199613, "url": "https://txgc.texas811.org/ui/ticket/2674370972"}, {"num": "2674370955", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "NORTHGATE CROSSING, FRIENDSWOOD, GALVESTON", "created": "08/31/2026 11:56 AM", "workDate": "09/02/2026 12:00 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "NORTHGATE CROSSING", "intersection": "SPRING VIEW ", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.483805, "lon": -95.200704, "url": "https://txgc.texas811.org/ui/ticket/2674370955"}, {"num": "2674370942", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "SPRING VIEW, FRIENDSWOOD, GALVESTON", "created": "08/31/2026 11:55 AM", "workDate": "09/02/2026 12:00 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "SPRING VIEW", "intersection": "JACOB TRL", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.484246, "lon": -95.200638, "url": "https://txgc.texas811.org/ui/ticket/2674370942"}, {"num": "2674370932", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "SPRING VIEW, FRIENDSWOOD, GALVESTON", "created": "08/31/2026 11:53 AM", "workDate": "09/02/2026 12:00 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "SPRING VIEW", "intersection": "CANYONVIEW CT", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.485347, "lon": -95.199561, "url": "https://txgc.texas811.org/ui/ticket/2674370932"}, {"num": "2674370923", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "CANYONVIEW CT, FRIENDSWOOD, GALVESTON", "created": "08/31/2026 11:52 AM", "workDate": "09/02/2026 12:00 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "CANYONVIEW CT", "intersection": "SPRING VIEW ", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.485855, "lon": -95.198578, "url": "https://txgc.texas811.org/ui/ticket/2674370923"}, {"num": "2674370904", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "SPRING VIEW, FRIENDSWOOD, GALVESTON", "created": "08/31/2026 11:50 AM", "workDate": "09/02/2026 12:00 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "SPRING VIEW", "intersection": "FRIENDSWOOD PKWY ", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.486627, "lon": -95.198252, "url": "https://txgc.texas811.org/ui/ticket/2674370904"}, {"num": "2674370876", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "SANDY LAKE DR, FRIENDSWOOD, GALVESTON", "created": "08/31/2026 11:47 AM", "workDate": "09/02/2026 12:00 PM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "SANDY LAKE DR", "intersection": "AVERY LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.485454, "lon": -95.201542, "url": "https://txgc.texas811.org/ui/ticket/2674370876"}, {"num": "2674370863", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "SANDY LAKE DR, FRIENDSWOOD, GALVESTON", "created": "08/31/2026 11:46 AM", "workDate": "09/02/2026 11:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "SANDY LAKE DR", "intersection": "AVERY LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.486413, "lon": -95.200446, "url": "https://txgc.texas811.org/ui/ticket/2674370863"}, {"num": "2674370829", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "SILVER POINT CT, FRIENDSWOOD, GALVESTON", "created": "08/31/2026 11:41 AM", "workDate": "09/02/2026 11:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "SILVER POINT CT", "intersection": "SANDY LAKE DR ", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.487923, "lon": -95.199905, "url": "https://txgc.texas811.org/ui/ticket/2674370829"}, {"num": "2674370816", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "SANDY LAKE DR, FRIENDSWOOD, GALVESTON", "created": "08/31/2026 11:39 AM", "workDate": "09/02/2026 11:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "SANDY LAKE DR", "intersection": "FRIENDSWOOD PKWY", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.487468, "lon": -95.199449, "url": "https://txgc.texas811.org/ui/ticket/2674370816"}, {"num": "2674370803", "company": "G-REED LLC", "type": "Cancellation", "flagged": false, "addr": "FRIENDSWOOD PKWY, FRIENDSWOOD, GALVESTON", "created": "08/31/2026 11:38 AM", "workDate": "08/31/2026 11:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FRIENDSWOOD PKWY", "intersection": "EVANS GATE", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.48988, "lon": -95.201256, "url": "https://txgc.texas811.org/ui/ticket/2674370803"}, {"num": "2674370793", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "FRIENDSWOOD PKWY, FRIENDSWOOD, GALVESTON", "created": "08/31/2026 11:37 AM", "workDate": "09/02/2026 11:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FRIENDSWOOD PKWY", "intersection": "EVANS GATE", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.487626, "lon": -95.198459, "url": "https://txgc.texas811.org/ui/ticket/2674370793"}, {"num": "2674370778", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "FRIENDSWOOD PKWY, FRIENDSWOOD, GALVESTON", "created": "08/31/2026 11:35 AM", "workDate": "09/02/2026 11:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FRIENDSWOOD PKWY", "intersection": "EVANS GATE", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.488861, "lon": -95.199996, "url": "https://txgc.texas811.org/ui/ticket/2674370778"}, {"num": "2674370775", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "FRIENDSWOOD PKWY, FRIENDSWOOD, GALVESTON", "created": "08/31/2026 11:34 AM", "workDate": "09/02/2026 11:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FRIENDSWOOD PKWY", "intersection": "EVANS GATE", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.48988, "lon": -95.201256, "url": "https://txgc.texas811.org/ui/ticket/2674370775"}, {"num": "2674370758", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "FRIENDSWOOD PKWY, FRIENDSWOOD, GALVESTON", "created": "08/31/2026 11:33 AM", "workDate": "09/02/2026 11:30 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "FRIENDSWOOD PKWY", "intersection": "EVANS GATE", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.48988, "lon": -95.201256, "url": "https://txgc.texas811.org/ui/ticket/2674370758"}, {"num": "2674039416", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "E PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "08/28/2026 06:00 AM", "workDate": "08/28/2026 06:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E PARKWOOD AVE", "intersection": "S FRIENDSWOOD", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.510312, "lon": -95.187082, "url": "https://txgc.texas811.org/ui/ticket/2674039416"}, {"num": "2674039364", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "E PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "08/28/2026 05:58 AM", "workDate": "08/28/2026 06:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E PARKWOOD AVE", "intersection": "WINDING WAY DR", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.513365, "lon": -95.183758, "url": "https://txgc.texas811.org/ui/ticket/2674039364"}, {"num": "2674039314", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "E PARKWOOD AVE, FRIENDSWOOD, GALVESTON", "created": "08/28/2026 05:55 AM", "workDate": "08/28/2026 06:00 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "E PARKWOOD AVE", "intersection": "PENNY LN", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.516582, "lon": -95.180379, "url": "https://txgc.texas811.org/ui/ticket/2674039314"}, {"num": "2674039264", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FM 528, HOUSTON, HARRIS", "created": "08/28/2026 05:53 AM", "workDate": "08/28/2026 06:00 AM", "county": "HARRIS", "city": "HOUSTON", "street": "FM 528", "intersection": "TOWNES RD", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.51935, "lon": -95.176232, "url": "https://txgc.texas811.org/ui/ticket/2674039264"}, {"num": "2674039197", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FM 528, HOUSTON, HARRIS", "created": "08/28/2026 05:51 AM", "workDate": "08/28/2026 06:00 AM", "county": "HARRIS", "city": "HOUSTON", "street": "FM 528", "intersection": "TOWNES RD", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.521357, "lon": -95.171394, "url": "https://txgc.texas811.org/ui/ticket/2674039197"}, {"num": "2674039155", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FM 528, HOUSTON, HARRIS", "created": "08/28/2026 05:49 AM", "workDate": "08/28/2026 06:00 AM", "county": "HARRIS", "city": "HOUSTON", "street": "FM 528", "intersection": "BLACKHAWK BLVD", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.521819, "lon": -95.167258, "url": "https://txgc.texas811.org/ui/ticket/2674039155"}, {"num": "2674039103", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "FM 528, HOUSTON, HARRIS", "created": "08/28/2026 05:47 AM", "workDate": "08/28/2026 05:45 AM", "county": "HARRIS", "city": "HOUSTON", "street": "FM 528", "intersection": "BAY AREA BLVD", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.522202, "lon": -95.163331, "url": "https://txgc.texas811.org/ui/ticket/2674039103"}, {"num": "2674039003", "company": "G-REED LLC", "type": "No Response", "flagged": true, "addr": "BLACKHAWK BLVD, HOUSTON, HARRIS", "created": "08/28/2026 05:43 AM", "workDate": "08/28/2026 05:45 AM", "county": "HARRIS", "city": "HOUSTON", "street": "BLACKHAWK BLVD", "intersection": "FM 528", "nature": "Directional Bore", "duration": "1 MONTH", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.522945, "lon": -95.169926, "url": "https://txgc.texas811.org/ui/ticket/2674039003"}, {"num": "2673775439", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "HIGH RIDGE DR, FRIENDSWOOD, GALVESTON", "created": "08/25/2026 02:44 AM", "workDate": "08/28/2026 02:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "HIGH RIDGE DR", "intersection": "CONDOR DR", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.49662, "lon": -95.189613, "url": "https://txgc.texas811.org/ui/ticket/2673775439"}, {"num": "2673775188", "company": "G-REED LLC", "type": "Normal", "flagged": false, "addr": "BLUE QUAIL DR, FRIENDSWOOD, GALVESTON", "created": "08/25/2026 02:37 AM", "workDate": "08/28/2026 02:45 AM", "county": "GALVESTON", "city": "FRIENDSWOOD", "street": "BLUE QUAIL DR", "intersection": "EAGLE LAKES DR", "nature": "Directional Bore", "duration": "1 MONTH ", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "9196199019", "lat": 29.496333, "lon": -95.190191, "url": "https://txgc.texas811.org/ui/ticket/2673775188"}, {"num": "2674618124", "company": "Lv electric and Plumbing", "type": "Normal", "flagged": false, "addr": "TX-6, HOUSTON, FORT BEND", "created": "09/03/2026 02:37 AM", "workDate": "09/08/2026 02:45 AM", "county": "FORT BEND", "city": "HOUSTON", "street": "TX-6", "intersection": "BISSONNET ST", "nature": "Directional Bore", "duration": "2 WEEKS", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "2816624319", "lat": 29.68343, "lon": -95.643326, "url": "https://txgc.texas811.org/ui/ticket/2674618124"}, {"num": "2674500887", "company": "Lv electric and Plumbing", "type": "No Response", "flagged": true, "addr": "E WALLY WILKERSON PKWY, CONROE, MONTGOMERY", "created": "09/02/2026 04:15 AM", "workDate": "09/02/2026 04:15 AM", "county": "MONTGOMERY", "city": "CONROE", "street": "E WALLY WILKERSON PKWY", "intersection": "FM 1484", "nature": "Directional Bore", "duration": "2 WEEKS", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "2816624319", "lat": 30.366708, "lon": -95.44103, "url": "https://txgc.texas811.org/ui/ticket/2674500887"}, {"num": "2674500665", "company": "Lv electric and Plumbing", "type": "No Response", "flagged": true, "addr": "AIRPORT RD, CONROE, MONTGOMERY", "created": "09/02/2026 04:09 AM", "workDate": "09/02/2026 04:15 AM", "county": "MONTGOMERY", "city": "CONROE", "street": "AIRPORT RD", "intersection": "FM 1484", "nature": "Directional Bore", "duration": "2 WEEKS", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "2816624319", "lat": 30.374307, "lon": -95.413789, "url": "https://txgc.texas811.org/ui/ticket/2674500665"}, {"num": "2674358416", "company": "Lv electric and Plumbing", "type": "Normal", "flagged": false, "addr": "AIRPORT RD, CONROE, MONTGOMERY", "created": "08/31/2026 03:49 AM", "workDate": "09/02/2026 04:00 AM", "county": "MONTGOMERY", "city": "CONROE", "street": "AIRPORT RD", "intersection": "FM 1484", "nature": "Directional Bore", "duration": "2 WEEKS", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "2816624319", "lat": 30.374307, "lon": -95.413789, "url": "https://txgc.texas811.org/ui/ticket/2674358416"}, {"num": "2674358242", "company": "Lv electric and Plumbing", "type": "Normal", "flagged": false, "addr": "E WALLY WILKERSON PKWY, CONROE, MONTGOMERY", "created": "08/31/2026 03:46 AM", "workDate": "09/02/2026 03:45 AM", "county": "MONTGOMERY", "city": "CONROE", "street": "E WALLY WILKERSON PKWY", "intersection": "FM 1484", "nature": "Directional Bore", "duration": "2 WEEKS", "takenBy": "Texas811", "workDoneFor": "MHO", "phone": "2816624319", "lat": 30.366708, "lon": -95.44103, "url": "https://txgc.texas811.org/ui/ticket/2674358242"}];
+let tmMap = null;
+
+function toggleCompany(slug) {
+  const panel = document.getElementById('panel-' + slug);
+  const chev = document.getElementById('chev-' + slug);
+  const open = panel.style.display !== 'none';
+  panel.style.display = open ? 'none' : 'block';
+  chev.classList.toggle('open', !open);
+}
+
+function toggleMap() {
+  const panel = document.getElementById('panel-map');
+  const chev = document.getElementById('chev-map');
+  const open = panel.style.display !== 'none';
+  panel.style.display = open ? 'none' : 'block';
+  chev.classList.toggle('open', !open);
+  if (!open && !tmMap) initMap();
+  if (!open && tmMap) setTimeout(() => tmMap.invalidateSize(), 50);
+}
+
+function tmRow(k, v) {
+  if (!v) return '';
+  return '<div class="tm-kv"><span>' + k + '</span><span>' + v + '</span></div>';
+}
+
+function openTmPanel(p) {
+  const panel = document.getElementById('tmPanel');
+  const inner = document.getElementById('tmPanelInner');
+  inner.innerHTML =
+    '<div class="tm-ph">' +
+      '<button class="tm-close" onclick="closeTmPanel()">&times;</button>' +
+      '<div class="tm-tk">Ticket ' + p.num + '</div>' +
+      '<div class="tm-ad">' + p.addr + '</div>' +
+      '<span class="tm-badge ' + (p.flagged ? 'tm-b-red' : 'tm-b-green') + '">' + p.type + '</span>' +
+    '</div>' +
+
+    '<div class="tm-sec"><h4>General Report</h4>' +
+    tmRow('Excavator', p.company) +
+    tmRow('Created', p.created) +
+    tmRow('Work Date', p.workDate) +
+    tmRow('Taken By', p.takenBy) +
+    tmRow('Work Done For', p.workDoneFor) +
+    tmRow('Phone', p.phone) +
+    '</div>' +
+
+    '<div class="tm-sec"><h4>Ticket Details</h4>' +
+    tmRow('County', p.county) +
+    tmRow('City', p.city) +
+    tmRow('Street', p.street) +
+    tmRow('Intersection', p.intersection) +
+    tmRow('Nature of Work', p.nature) +
+    tmRow('Duration', p.duration) +
+    '</div>' +
+
+    '<div class="tm-sec"><h4>Positive Response</h4>' +
+    '<div class="tm-report">Per-utility Marked/Clear status isn\'t pulled into this dashboard &mdash; open the live ticket on GeoCall for full response history.</div>' +
+    '<a class="tm-link-btn" href="' + p.url + '" target="_blank" rel="noopener">Open Ticket on GeoCall &#8594;</a>' +
+    '</div>';
+  panel.classList.add('open');
+  setTimeout(() => tmMap.invalidateSize(), 260);
+}
+
+function closeTmPanel() {
+  document.getElementById('tmPanel').classList.remove('open');
+  setTimeout(() => tmMap.invalidateSize(), 260);
+}
+
+function initMap() {
+  if (!TM_POINTS.length) {
+    document.getElementById('tm-map').innerHTML =
+      '<div style="padding:40px;text-align:center;color:#999;">No mapped tickets yet.</div>';
+    return;
+  }
+  tmMap = L.map('tm-map');
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(tmMap);
+
+  const bounds = [];
+  TM_POINTS.forEach(function(p) {
+    const color = p.flagged ? '#d9342b' : '#2e9e4f';
+    const icon = L.divIcon({
+      className: '',
+      html: '<div style="width:16px;height:16px;border-radius:50% 50% 50% 0;background:' + color +
+            ';transform:rotate(-45deg);border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.4);"></div>',
+      iconSize: [16, 16],
+      iconAnchor: [8, 16]
+    });
+    const marker = L.marker([p.lat, p.lon], {icon: icon}).addTo(tmMap);
+    marker.on('click', function() { openTmPanel(p); });
+    bounds.push([p.lat, p.lon]);
+  });
+  tmMap.fitBounds(bounds, {padding: [30, 30]});
+}
+</script>
+</body>
+</html>
