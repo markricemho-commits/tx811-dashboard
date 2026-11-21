@@ -1,0 +1,4011 @@
+{
+ "generated": "2026-11-21T02:52-08:00",
+ "rule": "done = every span in the ticket area is Fiber Placed, Ready for QC, Complete or Existing",
+ "enabled": true,
+ "tickets": {
+  "2682447547": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 11
+   }
+  },
+  "2682447543": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 17
+   }
+  },
+  "2682447540": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 11
+   }
+  },
+  "2682447536": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 18
+   }
+  },
+  "2682447523": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 17
+   }
+  },
+  "2682447510": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 15
+   }
+  },
+  "2682447497": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 9
+   }
+  },
+  "2682447494": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 13
+   }
+  },
+  "2682447488": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 32
+   }
+  },
+  "2682447482": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 45
+   }
+  },
+  "2682193774": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 6,
+    "Proposed": 1
+   }
+  },
+  "2682193736": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 7,
+    "Proposed": 1,
+    "Fiber Placed": 4
+   }
+  },
+  "2682193670": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 1,
+    "Proposed": 3
+   }
+  },
+  "2682193620": {
+   "status": "pending",
+   "spans": {
+    "Fiber Placed": 37,
+    "Conduit Placed": 5,
+    "Proposed": 8
+   }
+  },
+  "2682193593": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 1,
+    "Proposed": 3
+   }
+  },
+  "2682193563": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 2,
+    "Proposed": 2
+   }
+  },
+  "2682075393": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 8,
+    "Conduit Placed": 43
+   }
+  },
+  "2682075392": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 30,
+    "Proposed": 2
+   }
+  },
+  "2682075391": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 10,
+    "Proposed": 1
+   }
+  },
+  "2682075388": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 12,
+    "Conduit Placed": 19,
+    "Existing": 1
+   }
+  },
+  "2682075387": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 9,
+    "Conduit Placed": 16
+   }
+  },
+  "2682075386": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 17,
+    "Conduit Placed": 20
+   }
+  },
+  "2682075383": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 4,
+    "Conduit Placed": 5
+   }
+  },
+  "2682075381": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 9,
+    "Conduit Placed": 5,
+    "Existing": 1
+   }
+  },
+  "2682075378": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 25,
+    "Existing": 1
+   }
+  },
+  "2682075377": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 21
+   }
+  },
+  "2682075375": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 26,
+    "Conduit Placed": 2,
+    "Existing": 1
+   }
+  },
+  "2682075370": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 10
+   }
+  },
+  "2682075369": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 19
+   }
+  },
+  "2682075368": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 21
+   }
+  },
+  "2682075367": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 19
+   }
+  },
+  "2682075364": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 2,
+    "Proposed": 14
+   }
+  },
+  "2682075363": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 19,
+    "Conduit Placed": 13,
+    "Existing": 1
+   }
+  },
+  "2681744841": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 6,
+    "Proposed": 1
+   }
+  },
+  "2681739626": {
+   "status": "pending",
+   "spans": {
+    "Fiber Placed": 37,
+    "Conduit Placed": 5,
+    "Proposed": 8
+   }
+  },
+  "2681739457": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 1,
+    "Proposed": 3
+   }
+  },
+  "2681739343": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 2,
+    "Proposed": 2
+   }
+  },
+  "2681738896": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 7,
+    "Proposed": 1,
+    "Fiber Placed": 4
+   }
+  },
+  "2681632329": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 8,
+    "Conduit Placed": 43
+   }
+  },
+  "2681632322": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 30,
+    "Proposed": 2
+   }
+  },
+  "2681632305": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 10,
+    "Proposed": 1
+   }
+  },
+  "2681632301": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 10,
+    "Proposed": 1
+   }
+  },
+  "2681632299": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 10,
+    "Proposed": 1
+   }
+  },
+  "2681632290": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 12,
+    "Conduit Placed": 19,
+    "Existing": 1
+   }
+  },
+  "2681632286": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 4,
+    "Conduit Placed": 7
+   }
+  },
+  "2681632283": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 9,
+    "Conduit Placed": 16
+   }
+  },
+  "2681632279": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 17,
+    "Conduit Placed": 20
+   }
+  },
+  "2681632273": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 4,
+    "Conduit Placed": 5
+   }
+  },
+  "2681632266": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 9,
+    "Conduit Placed": 5,
+    "Existing": 1
+   }
+  },
+  "2681632177": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 10
+   }
+  },
+  "2681632167": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 19
+   }
+  },
+  "2681632164": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 21
+   }
+  },
+  "2681632160": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 19
+   }
+  },
+  "2681632146": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 2,
+    "Proposed": 14
+   }
+  },
+  "2681632141": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 25,
+    "Existing": 1
+   }
+  },
+  "2681632137": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 21
+   }
+  },
+  "2681632109": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 26,
+    "Conduit Placed": 2,
+    "Existing": 1
+   }
+  },
+  "2681632096": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 19,
+    "Conduit Placed": 13,
+    "Existing": 1
+   }
+  },
+  "2680932814": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 18
+   }
+  },
+  "2680932797": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 10
+   }
+  },
+  "2680932777": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 12
+   }
+  },
+  "2680932762": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 9
+   }
+  },
+  "2680932677": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 13
+   }
+  },
+  "2680932644": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 52
+   }
+  },
+  "2680932618": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 56
+   }
+  },
+  "2680788260": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 10
+   }
+  },
+  "2680788214": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 12
+   }
+  },
+  "2680788126": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 9
+   }
+  },
+  "2680788021": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 18
+   }
+  },
+  "2680787943": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 9
+   }
+  },
+  "2680787855": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 52
+   }
+  },
+  "2680787745": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 13
+   }
+  },
+  "2680787665": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 56
+   }
+  },
+  "2680350839": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 11
+   }
+  },
+  "2680350837": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 8
+   }
+  },
+  "2680350836": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 23
+   }
+  },
+  "2680350831": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 11
+   }
+  },
+  "2680350827": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 10
+   }
+  },
+  "2680350824": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 9
+   }
+  },
+  "2680350820": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 25
+   }
+  },
+  "2680350817": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 28,
+    "Fiber Placed": 1
+   }
+  },
+  "2680350812": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 13,
+    "Fiber Placed": 1
+   }
+  },
+  "2680235651": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 7,
+    "Proposed": 1,
+    "Fiber Placed": 4
+   }
+  },
+  "2680117471": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 7,
+    "Proposed": 1,
+    "Fiber Placed": 4
+   }
+  },
+  "2679964170": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 20,
+    "Fiber Placed": 1
+   }
+  },
+  "2679964125": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 21
+   }
+  },
+  "2679964069": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 15,
+    "Fiber Placed": 1
+   }
+  },
+  "2679964015": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 12
+   }
+  },
+  "2679963979": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 31,
+    "Fiber Placed": 1
+   }
+  },
+  "2679963929": {
+   "status": "pending",
+   "spans": {
+    "Fiber Placed": 10,
+    "Conduit Placed": 7
+   }
+  },
+  "2679963738": {
+   "status": "pending",
+   "spans": {
+    "Fiber Placed": 8,
+    "Conduit Placed": 24
+   }
+  },
+  "2679963680": {
+   "status": "pending",
+   "spans": {
+    "Fiber Placed": 11,
+    "Conduit Placed": 13
+   }
+  },
+  "2679959844": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 7,
+    "Proposed": 1,
+    "Fiber Placed": 4
+   }
+  },
+  "2681625992": {
+   "status": "pending",
+   "spans": {
+    "Fiber Placed": 3,
+    "Conduit Placed": 5
+   }
+  },
+  "2681624350": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 17
+   }
+  },
+  "2681623229": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 32
+   }
+  },
+  "2681620544": {
+   "status": "pending",
+   "spans": {
+    "Fiber Placed": 2,
+    "Conduit Placed": 25
+   }
+  },
+  "2681484189": {
+   "status": "pending",
+   "spans": {
+    "Fiber Placed": 6,
+    "Conduit Placed": 17
+   }
+  },
+  "2681038079": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 19,
+    "Fiber Placed": 18
+   }
+  },
+  "2681038064": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 7,
+    "Fiber Placed": 4
+   }
+  },
+  "2681038058": {
+   "status": "unknown",
+   "spans": {}
+  },
+  "2680677709": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 14,
+    "Fiber Placed": 1
+   }
+  },
+  "2680677685": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 33,
+    "Fiber Placed": 1
+   }
+  },
+  "2680677681": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 32,
+    "Fiber Placed": 1,
+    "Proposed": 1,
+    "Existing": 2
+   }
+  },
+  "2680677677": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 11,
+    "Fiber Placed": 2
+   }
+  },
+  "2680677675": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 8,
+    "Fiber Placed": 3
+   }
+  },
+  "2680677671": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 11,
+    "Proposed": 1,
+    "Fiber Placed": 13
+   }
+  },
+  "2680677666": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 7,
+    "Fiber Placed": 3
+   }
+  },
+  "2680677665": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 8,
+    "Fiber Placed": 3
+   }
+  },
+  "2680677660": {
+   "status": "pending",
+   "spans": {
+    "Fiber Placed": 19,
+    "Conduit Placed": 20,
+    "Proposed": 1
+   }
+  },
+  "2680671134": {
+   "status": "unknown",
+   "spans": {}
+  },
+  "2680097872": {
+   "status": "unknown",
+   "spans": {}
+  },
+  "2680097599": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 7,
+    "Fiber Placed": 4
+   }
+  },
+  "2680097596": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 19,
+    "Fiber Placed": 18
+   }
+  },
+  "2680097593": {
+   "status": "pending",
+   "spans": {
+    "Fiber Placed": 5,
+    "Conduit Placed": 4
+   }
+  },
+  "2680097592": {
+   "status": "pending",
+   "spans": {
+    "Fiber Placed": 6,
+    "Conduit Placed": 8
+   }
+  },
+  "2680097577": {
+   "status": "pending",
+   "spans": {
+    "Fiber Placed": 56,
+    "Conduit Placed": 73,
+    "Proposed": 5
+   }
+  },
+  "2679853464": {
+   "status": "unknown",
+   "spans": {}
+  },
+  "2679853461": {
+   "status": "unknown",
+   "spans": {}
+  },
+  "2679853453": {
+   "status": "unknown",
+   "spans": {}
+  },
+  "2679853452": {
+   "status": "unknown",
+   "spans": {}
+  },
+  "2680919359": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 7
+   }
+  },
+  "2680917828": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 21
+   }
+  },
+  "2680917777": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 57
+   }
+  },
+  "2680917733": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 76
+   }
+  },
+  "2680780612": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 35
+   }
+  },
+  "2680780575": {
+   "status": "pending",
+   "spans": {
+    "Fiber Placed": 3,
+    "Conduit Placed": 21
+   }
+  },
+  "2680780540": {
+   "status": "pending",
+   "spans": {
+    "Fiber Placed": 1,
+    "Conduit Placed": 19
+   }
+  },
+  "2680780371": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 8
+   }
+  },
+  "2680780328": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 57,
+    "Fiber Placed": 1
+   }
+  },
+  "2680780276": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 15
+   }
+  },
+  "2680780236": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 16
+   }
+  },
+  "2680656104": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 9,
+    "Fiber Placed": 1
+   }
+  },
+  "2680656070": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 5
+   }
+  },
+  "2680656020": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 26,
+    "Fiber Placed": 1,
+    "Proposed": 3
+   }
+  },
+  "2680340230": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 71
+   }
+  },
+  "2680340184": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 37,
+    "Fiber Placed": 16
+   }
+  },
+  "2680340045": {
+   "status": "pending",
+   "spans": {
+    "Fiber Placed": 9,
+    "Conduit Placed": 23
+   }
+  },
+  "2680233010": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 35
+   }
+  },
+  "2679966862": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 21
+   }
+  },
+  "2682068446": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 11
+   }
+  },
+  "2682067792": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 12
+   }
+  },
+  "2682067742": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 21
+   }
+  },
+  "2682067724": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 20
+   }
+  },
+  "2682067710": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 20
+   }
+  },
+  "2682067693": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 6
+   }
+  },
+  "2682067667": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 13
+   }
+  },
+  "2682067635": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 10
+   }
+  },
+  "2682067613": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 7
+   }
+  },
+  "2682067592": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 6
+   }
+  },
+  "2682067567": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 9
+   }
+  },
+  "2682067070": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 33,
+    "Existing": 1
+   }
+  },
+  "2682066432": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 15,
+    "Existing": 2
+   }
+  },
+  "2682066287": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 28
+   }
+  },
+  "2682066085": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 15,
+    "Existing": 1
+   }
+  },
+  "2682065914": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 17
+   }
+  },
+  "2682065642": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 33
+   }
+  },
+  "2682064947": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 5
+   }
+  },
+  "2681506776": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 19
+   }
+  },
+  "2681506736": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 12
+   }
+  },
+  "2681506726": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 13
+   }
+  },
+  "2681506704": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 12
+   }
+  },
+  "2681506683": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 7
+   }
+  },
+  "2681506620": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 33
+   }
+  },
+  "2681506585": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 28
+   }
+  },
+  "2681506530": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 23,
+    "Existing": 1
+   }
+  },
+  "2681506422": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 15,
+    "Existing": 1
+   }
+  },
+  "2681506403": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 27,
+    "Existing": 3
+   }
+  },
+  "2681506249": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 99,
+    "Existing": 2
+   }
+  },
+  "2681506190": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 41,
+    "Existing": 2
+   }
+  },
+  "2681505951": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 1,
+    "Proposed": 5,
+    "Existing": 2
+   }
+  },
+  "2681505531": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 40,
+    "Existing": 1
+   }
+  },
+  "2681505219": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 14
+   }
+  },
+  "2680675022": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 23
+   }
+  },
+  "2680674774": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 27
+   }
+  },
+  "2680671987": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 18
+   }
+  },
+  "2680671967": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 15
+   }
+  },
+  "2680671954": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 32
+   }
+  },
+  "2680671943": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 49
+   }
+  },
+  "2680671927": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 32
+   }
+  },
+  "2680671904": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 22
+   }
+  },
+  "2680671889": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 16
+   }
+  },
+  "2680671864": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 15
+   }
+  },
+  "2680671712": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 13
+   }
+  },
+  "2680089585": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 42
+   }
+  },
+  "2680089555": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 21
+   }
+  },
+  "2680087967": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 11
+   }
+  },
+  "2680087954": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 11
+   }
+  },
+  "2680087914": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 11
+   }
+  },
+  "2680087860": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 16
+   }
+  },
+  "2680087319": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 23
+   }
+  },
+  "2680085811": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 9
+   }
+  },
+  "2680085446": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 8
+   }
+  },
+  "2680085426": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 8
+   }
+  },
+  "2680085415": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 8
+   }
+  },
+  "2680085395": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 8
+   }
+  },
+  "2680085168": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 15
+   }
+  },
+  "2680084534": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 29
+   }
+  },
+  "2680084466": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 13
+   }
+  },
+  "2680084435": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 8
+   }
+  },
+  "2680084389": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 8
+   }
+  },
+  "2679966883": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 11
+   }
+  },
+  "2679966846": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 31
+   }
+  },
+  "2679966702": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 27,
+    "Proposed": 1
+   }
+  },
+  "2679966561": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 23,
+    "Proposed": 1
+   }
+  },
+  "2679966428": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 1
+   }
+  },
+  "2679966305": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 6
+   }
+  },
+  "2679964241": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 13
+   }
+  },
+  "2679963999": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 13
+   }
+  },
+  "2679962129": {
+   "status": "unknown",
+   "spans": {}
+  },
+  "2682432930": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 7,
+    "Conduit Placed": 4
+   }
+  },
+  "2682432923": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 5,
+    "Proposed": 2
+   }
+  },
+  "2682432919": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 25,
+    "Proposed": 5
+   }
+  },
+  "2682432915": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 24,
+    "Proposed": 3
+   }
+  },
+  "2682432910": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 14,
+    "Proposed": 2
+   }
+  },
+  "2682432906": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 29,
+    "Proposed": 7
+   }
+  },
+  "2682432903": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 4,
+    "Conduit Placed": 19
+   }
+  },
+  "2682432898": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 4,
+    "Conduit Placed": 18
+   }
+  },
+  "2682432894": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 14,
+    "Proposed": 2
+   }
+  },
+  "2682432890": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 27,
+    "Proposed": 5
+   }
+  },
+  "2682432885": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 10,
+    "Proposed": 1
+   }
+  },
+  "2682326000": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 9
+   }
+  },
+  "2682325921": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 30
+   }
+  },
+  "2682325858": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 10
+   }
+  },
+  "2682325737": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 24
+   }
+  },
+  "2682325662": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 23,
+    "Conduit Placed": 2
+   }
+  },
+  "2682325520": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 8
+   }
+  },
+  "2682325397": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 22
+   }
+  },
+  "2682325345": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 12
+   }
+  },
+  "2682325204": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 18
+   }
+  },
+  "2682325159": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 41
+   }
+  },
+  "2682325004": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 16
+   }
+  },
+  "2682324955": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 24
+   }
+  },
+  "2682324903": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 34,
+    "Conduit Placed": 2
+   }
+  },
+  "2682324126": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 55,
+    "Fiber Placed": 1,
+    "Proposed": 1,
+    "Existing": 3
+   }
+  },
+  "2682323989": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 11,
+    "Proposed": 1
+   }
+  },
+  "2682321898": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 7,
+    "Conduit Placed": 19
+   }
+  },
+  "2682321876": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 6,
+    "Conduit Placed": 19
+   }
+  },
+  "2682321856": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 6
+   }
+  },
+  "2682321836": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 19,
+    "Proposed": 9
+   }
+  },
+  "2682321818": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 26,
+    "Proposed": 15
+   }
+  },
+  "2682321075": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 13,
+    "Proposed": 2
+   }
+  },
+  "2682320865": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 8,
+    "Proposed": 2
+   }
+  },
+  "2682320773": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 11,
+    "Conduit Placed": 13
+   }
+  },
+  "2682296675": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 2,
+    "Proposed": 1
+   }
+  },
+  "2682296653": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 21,
+    "Proposed": 12
+   }
+  },
+  "2682296643": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 1,
+    "Proposed": 1
+   }
+  },
+  "2682296629": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 6,
+    "Proposed": 1
+   }
+  },
+  "2682296609": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 4,
+    "Conduit Placed": 7
+   }
+  },
+  "2682296598": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 9,
+    "Proposed": 4
+   }
+  },
+  "2682296587": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 13,
+    "Proposed": 6
+   }
+  },
+  "2682177402": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 4,
+    "Proposed": 2
+   }
+  },
+  "2682057528": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 4
+   }
+  },
+  "2682054365": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 15,
+    "Proposed": 7
+   }
+  },
+  "2682054344": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 4,
+    "Conduit Placed": 5
+   }
+  },
+  "2682054320": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 10,
+    "Proposed": 9
+   }
+  },
+  "2682054298": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 9,
+    "Proposed": 8
+   }
+  },
+  "2682054269": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 27,
+    "Proposed": 18
+   }
+  },
+  "2681850435": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 16,
+    "Proposed": 6
+   }
+  },
+  "2681735175": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 6,
+    "Conduit Placed": 9
+   }
+  },
+  "2681735149": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 6,
+    "Conduit Placed": 10
+   }
+  },
+  "2681735114": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 1,
+    "Conduit Placed": 8
+   }
+  },
+  "2681735068": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 3,
+    "Conduit Placed": 7
+   }
+  },
+  "2681735025": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 8,
+    "Conduit Placed": 5
+   }
+  },
+  "2681735003": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 4,
+    "Proposed": 7
+   }
+  },
+  "2681734966": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 5,
+    "Proposed": 3
+   }
+  },
+  "2681734950": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 4,
+    "Proposed": 3
+   }
+  },
+  "2681734926": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 14,
+    "Proposed": 5
+   }
+  },
+  "2681734897": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 15,
+    "Proposed": 4
+   }
+  },
+  "2681734852": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 6,
+    "Conduit Placed": 7
+   }
+  },
+  "2681734824": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 8,
+    "Conduit Placed": 7
+   }
+  },
+  "2681734791": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 6,
+    "Conduit Placed": 9
+   }
+  },
+  "2681734738": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 13,
+    "Conduit Placed": 3
+   }
+  },
+  "2681734710": {
+   "status": "pending",
+   "spans": {
+    "Fiber Placed": 1,
+    "Conduit Placed": 8,
+    "Proposed": 6
+   }
+  },
+  "2681734688": {
+   "status": "pending",
+   "spans": {
+    "Fiber Placed": 1,
+    "Conduit Placed": 4,
+    "Proposed": 5
+   }
+  },
+  "2681734654": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 3,
+    "Proposed": 6
+   }
+  },
+  "2681734646": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 6
+   }
+  },
+  "2681734636": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 9,
+    "Conduit Placed": 2
+   }
+  },
+  "2681734609": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 11
+   }
+  },
+  "2681734591": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 14,
+    "Conduit Placed": 3
+   }
+  },
+  "2681734570": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 2,
+    "Proposed": 13
+   }
+  },
+  "2681734253": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 3,
+    "Conduit Placed": 14
+   }
+  },
+  "2681734243": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 6,
+    "Proposed": 1
+   }
+  },
+  "2681734225": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 6,
+    "Fiber Placed": 3
+   }
+  },
+  "2681617183": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 2,
+    "Proposed": 2
+   }
+  },
+  "2681617167": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 4,
+    "Conduit Placed": 27
+   }
+  },
+  "2681617150": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 29,
+    "Conduit Placed": 26
+   }
+  },
+  "2681617128": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 5,
+    "Proposed": 21
+   }
+  },
+  "2681617116": {
+   "status": "pending",
+   "spans": {
+    "Fiber Placed": 5,
+    "Conduit Placed": 13,
+    "Proposed": 20
+   }
+  },
+  "2681617105": {
+   "status": "pending",
+   "spans": {
+    "Fiber Placed": 1,
+    "Conduit Placed": 3,
+    "Proposed": 13
+   }
+  },
+  "2681617095": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 9,
+    "Proposed": 4,
+    "Fiber Placed": 1
+   }
+  },
+  "2681617085": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 9,
+    "Conduit Placed": 10
+   }
+  },
+  "2681617075": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 7,
+    "Proposed": 3
+   }
+  },
+  "2681617060": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 4,
+    "Conduit Placed": 8
+   }
+  },
+  "2681617038": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 5,
+    "Proposed": 2
+   }
+  },
+  "2681617028": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 7,
+    "Fiber Placed": 1,
+    "Proposed": 2
+   }
+  },
+  "2681617012": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 6,
+    "Proposed": 1
+   }
+  },
+  "2681616994": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 11,
+    "Proposed": 3
+   }
+  },
+  "2681376196": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 18,
+    "Conduit Placed": 36
+   }
+  },
+  "2681376176": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 7,
+    "Conduit Placed": 1
+   }
+  },
+  "2681376162": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 14,
+    "Proposed": 10
+   }
+  },
+  "2681376157": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 5,
+    "Proposed": 1
+   }
+  },
+  "2681376128": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 14,
+    "Conduit Placed": 17
+   }
+  },
+  "2681376069": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 6,
+    "Conduit Placed": 7
+   }
+  },
+  "2681372979": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 74,
+    "Conduit Placed": 75,
+    "Fiber Placed": 1
+   }
+  },
+  "2681035217": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 4,
+    "Conduit Placed": 11,
+    "Fiber Placed": 9
+   }
+  },
+  "2681035213": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 24,
+    "Proposed": 4,
+    "Fiber Placed": 1
+   }
+  },
+  "2681035208": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 10,
+    "Proposed": 2
+   }
+  },
+  "2681035204": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 6,
+    "Conduit Placed": 1
+   }
+  },
+  "2681035202": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 9,
+    "Conduit Placed": 3,
+    "Fiber Placed": 4
+   }
+  },
+  "2681035198": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 29,
+    "Proposed": 4,
+    "Fiber Placed": 1
+   }
+  },
+  "2681035194": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 8,
+    "Conduit Placed": 4
+   }
+  },
+  "2680925185": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 2,
+    "Proposed": 5
+   }
+  },
+  "2680925165": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 4
+   }
+  },
+  "2680925143": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 6,
+    "Conduit Placed": 21
+   }
+  },
+  "2680925125": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 5,
+    "Conduit Placed": 10
+   }
+  },
+  "2680925112": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 5,
+    "Conduit Placed": 10
+   }
+  },
+  "2680925101": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 6,
+    "Proposed": 6
+   }
+  },
+  "2680925082": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 3
+   }
+  },
+  "2680925068": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 2
+   }
+  },
+  "2680925055": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 5,
+    "Proposed": 1
+   }
+  },
+  "2680925039": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 6
+   }
+  },
+  "2680925018": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 4,
+    "Proposed": 1
+   }
+  },
+  "2680925004": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 3,
+    "Proposed": 2
+   }
+  },
+  "2680924992": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 8,
+    "Proposed": 3
+   }
+  },
+  "2680924979": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 3,
+    "Proposed": 2
+   }
+  },
+  "2680924965": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 1,
+    "Conduit Placed": 13
+   }
+  },
+  "2680924944": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 2,
+    "Conduit Placed": 12
+   }
+  },
+  "2680924928": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 5
+   }
+  },
+  "2680924918": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 7,
+    "Conduit Placed": 4
+   }
+  },
+  "2680924905": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 3,
+    "Proposed": 2
+   }
+  },
+  "2680924896": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 15,
+    "Proposed": 6
+   }
+  },
+  "2680924883": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 30,
+    "Proposed": 12
+   }
+  },
+  "2680924867": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 27,
+    "Proposed": 12
+   }
+  },
+  "2680924855": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 19,
+    "Proposed": 10
+   }
+  },
+  "2680924836": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 29,
+    "Proposed": 12
+   }
+  },
+  "2680924821": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 18,
+    "Proposed": 8
+   }
+  },
+  "2680924809": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 16,
+    "Proposed": 6
+   }
+  },
+  "2680815735": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 5,
+    "Proposed": 2
+   }
+  },
+  "2680898605": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 14,
+    "Proposed": 2
+   }
+  },
+  "2680898589": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 29,
+    "Proposed": 7
+   }
+  },
+  "2680898577": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 25,
+    "Proposed": 5
+   }
+  },
+  "2680898563": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 4,
+    "Conduit Placed": 19
+   }
+  },
+  "2680898553": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 4,
+    "Conduit Placed": 18
+   }
+  },
+  "2680898544": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 24,
+    "Proposed": 3
+   }
+  },
+  "2680898532": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 7,
+    "Conduit Placed": 4
+   }
+  },
+  "2680898525": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 14,
+    "Proposed": 2
+   }
+  },
+  "2680898516": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 27,
+    "Proposed": 5
+   }
+  },
+  "2680898504": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 10,
+    "Proposed": 1
+   }
+  },
+  "2680779873": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 6,
+    "Conduit Placed": 19
+   }
+  },
+  "2680779856": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 7,
+    "Conduit Placed": 19
+   }
+  },
+  "2680779837": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 6
+   }
+  },
+  "2680779826": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 19,
+    "Proposed": 9
+   }
+  },
+  "2680779806": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 26,
+    "Proposed": 15
+   }
+  },
+  "2680656105": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 2,
+    "Proposed": 1
+   }
+  },
+  "2680656096": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 1,
+    "Proposed": 1
+   }
+  },
+  "2680656089": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 21,
+    "Proposed": 12
+   }
+  },
+  "2680656078": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 4,
+    "Conduit Placed": 7
+   }
+  },
+  "2680656071": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 9,
+    "Proposed": 4
+   }
+  },
+  "2680656063": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 13,
+    "Proposed": 6
+   }
+  },
+  "2680656055": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 6,
+    "Proposed": 1
+   }
+  },
+  "2680337692": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 4,
+    "Proposed": 2
+   }
+  },
+  "2680222625": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 4
+   }
+  },
+  "2680199601": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 6,
+    "Proposed": 1
+   }
+  },
+  "2680199591": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 3,
+    "Conduit Placed": 14
+   }
+  },
+  "2680199578": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 6,
+    "Fiber Placed": 3
+   }
+  },
+  "2680092131": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 185,
+    "Proposed": 13
+   }
+  },
+  "2680090332": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 29,
+    "Conduit Placed": 26
+   }
+  },
+  "2680090211": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 7,
+    "Fiber Placed": 1,
+    "Proposed": 2
+   }
+  },
+  "2680090059": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 5,
+    "Proposed": 21
+   }
+  },
+  "2680089913": {
+   "status": "pending",
+   "spans": {
+    "Fiber Placed": 1,
+    "Conduit Placed": 3,
+    "Proposed": 13
+   }
+  },
+  "2680089821": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 9,
+    "Proposed": 4,
+    "Fiber Placed": 1
+   }
+  },
+  "2680089717": {
+   "status": "pending",
+   "spans": {
+    "Fiber Placed": 5,
+    "Conduit Placed": 13,
+    "Proposed": 20
+   }
+  },
+  "2680079769": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 2,
+    "Proposed": 2
+   }
+  },
+  "2680079752": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 4,
+    "Conduit Placed": 27
+   }
+  },
+  "2680079742": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 7,
+    "Proposed": 3
+   }
+  },
+  "2680079733": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 11,
+    "Proposed": 3
+   }
+  },
+  "2680079721": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 5,
+    "Proposed": 2
+   }
+  },
+  "2680079711": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 6,
+    "Proposed": 1
+   }
+  },
+  "2680079696": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 9,
+    "Conduit Placed": 10
+   }
+  },
+  "2680079683": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 4,
+    "Conduit Placed": 8
+   }
+  },
+  "2679516791": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 4,
+    "Conduit Placed": 11,
+    "Fiber Placed": 9
+   }
+  },
+  "2679516787": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 15,
+    "Proposed": 2
+   }
+  },
+  "2679516784": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 11
+   }
+  },
+  "2679516778": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 19,
+    "Proposed": 1
+   }
+  },
+  "2679516774": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 15,
+    "Proposed": 2
+   }
+  },
+  "2679516772": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 12,
+    "Proposed": 1
+   }
+  },
+  "2679516768": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 23,
+    "Proposed": 1
+   }
+  },
+  "2679516765": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 18
+   }
+  },
+  "2679516761": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 25
+   }
+  },
+  "2679516758": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 10
+   }
+  },
+  "2679516755": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 12
+   }
+  },
+  "2679516753": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 12
+   }
+  },
+  "2679516749": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 29,
+    "Proposed": 2
+   }
+  },
+  "2679516746": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 24,
+    "Proposed": 4,
+    "Fiber Placed": 1
+   }
+  },
+  "2679516742": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 29,
+    "Proposed": 4,
+    "Fiber Placed": 1
+   }
+  },
+  "2679516738": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 10,
+    "Proposed": 2
+   }
+  },
+  "2679516733": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 3,
+    "Conduit Placed": 24
+   }
+  },
+  "2679516730": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 8,
+    "Conduit Placed": 4
+   }
+  },
+  "2679516727": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 6,
+    "Conduit Placed": 1
+   }
+  },
+  "2679516722": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 9,
+    "Conduit Placed": 3,
+    "Fiber Placed": 4
+   }
+  },
+  "2679516718": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 4
+   }
+  },
+  "2679516714": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 7,
+    "Conduit Placed": 24
+   }
+  },
+  "2681496117": {
+   "status": "unknown",
+   "spans": {}
+  },
+  "2681496113": {
+   "status": "unknown",
+   "spans": {}
+  },
+  "2681496109": {
+   "status": "unknown",
+   "spans": {}
+  },
+  "2681496106": {
+   "status": "unknown",
+   "spans": {}
+  },
+  "2681496101": {
+   "status": "unknown",
+   "spans": {}
+  },
+  "2681038458": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 25,
+    "Fiber Placed": 1,
+    "Proposed": 2
+   }
+  },
+  "2681038239": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 21
+   }
+  },
+  "2680677364": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 28,
+    "Fiber Placed": 6
+   }
+  },
+  "2680677358": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 45,
+    "Fiber Placed": 8
+   }
+  },
+  "2680677335": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 21,
+    "Fiber Placed": 2
+   }
+  },
+  "2680677315": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 28,
+    "Fiber Placed": 8
+   }
+  },
+  "2680677289": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 24
+   }
+  },
+  "2680677256": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 9,
+    "Fiber Placed": 7
+   }
+  },
+  "2680677225": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 12,
+    "Fiber Placed": 7
+   }
+  },
+  "2680677184": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 21
+   }
+  },
+  "2680677156": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 25,
+    "Fiber Placed": 1,
+    "Proposed": 2
+   }
+  },
+  "2680677110": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 9
+   }
+  },
+  "2680677073": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 53,
+    "Fiber Placed": 38
+   }
+  },
+  "2680676938": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 26
+   }
+  },
+  "2680676894": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 2,
+    "Fiber Placed": 1,
+    "Proposed": 15
+   }
+  },
+  "2680676855": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 32
+   }
+  },
+  "2680676809": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 21
+   }
+  },
+  "2680676752": {
+   "status": "pending",
+   "spans": {
+    "Fiber Placed": 1,
+    "Conduit Placed": 1,
+    "Proposed": 20
+   }
+  },
+  "2680092527": {
+   "status": "pending",
+   "spans": {
+    "Fiber Placed": 8,
+    "Conduit Placed": 1
+   }
+  },
+  "2679967686": {
+   "status": "unknown",
+   "spans": {}
+  },
+  "2679967587": {
+   "status": "unknown",
+   "spans": {}
+  },
+  "2679967517": {
+   "status": "unknown",
+   "spans": {}
+  },
+  "2682194688": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 31,
+    "Fiber Placed": 2
+   }
+  },
+  "2682194687": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 31
+   }
+  },
+  "2682194683": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 34
+   }
+  },
+  "2682194681": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 16
+   }
+  },
+  "2682194677": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 20
+   }
+  },
+  "2682194676": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 75
+   }
+  },
+  "2682194674": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 28
+   }
+  },
+  "2682194672": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 20
+   }
+  },
+  "2682194670": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 13
+   }
+  },
+  "2682194664": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 38
+   }
+  },
+  "2682194661": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 15,
+    "Proposed": 4
+   }
+  },
+  "2681749353": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 15,
+    "Proposed": 4
+   }
+  },
+  "2681749351": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 21,
+    "Conduit Placed": 4
+   }
+  },
+  "2681749348": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 15
+   }
+  },
+  "2681749346": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 5,
+    "Conduit Placed": 7,
+    "Fiber Placed": 1
+   }
+  },
+  "2681749344": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 6,
+    "Conduit Placed": 15
+   }
+  },
+  "2681749341": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 17,
+    "Proposed": 1
+   }
+  },
+  "2681749339": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 9,
+    "Conduit Placed": 11
+   }
+  },
+  "2680802689": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 31,
+    "Fiber Placed": 2
+   }
+  },
+  "2680802634": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 31
+   }
+  },
+  "2680802546": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 34
+   }
+  },
+  "2680802457": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 16
+   }
+  },
+  "2680802242": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 20
+   }
+  },
+  "2680802122": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 75
+   }
+  },
+  "2680802069": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 28
+   }
+  },
+  "2680802008": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 20
+   }
+  },
+  "2680801886": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 13
+   }
+  },
+  "2680801803": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 38
+   }
+  },
+  "2680801703": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 15,
+    "Proposed": 4
+   }
+  },
+  "2680675361": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 69,
+    "Conduit Placed": 3
+   }
+  },
+  "2680453122": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 3,
+    "Fiber Placed": 3
+   }
+  },
+  "2680453120": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 3,
+    "Fiber Placed": 3
+   }
+  },
+  "2680453117": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 8,
+    "Fiber Placed": 4
+   }
+  },
+  "2680453116": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 16,
+    "Fiber Placed": 12
+   }
+  },
+  "2680453114": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 10,
+    "Fiber Placed": 10
+   }
+  },
+  "2680453112": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 10,
+    "Fiber Placed": 11
+   }
+  },
+  "2680453109": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 7,
+    "Fiber Placed": 11
+   }
+  },
+  "2680453108": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 4,
+    "Fiber Placed": 5
+   }
+  },
+  "2680453107": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 29,
+    "Fiber Placed": 12
+   }
+  },
+  "2680453106": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 9,
+    "Conduit Placed": 8,
+    "Fiber Placed": 1
+   }
+  },
+  "2680453102": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 11,
+    "Conduit Placed": 11
+   }
+  },
+  "2680104674": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 69,
+    "Conduit Placed": 3
+   }
+  },
+  "2680104623": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 110,
+    "Conduit Placed": 3
+   }
+  },
+  "2680104452": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 110,
+    "Conduit Placed": 3
+   }
+  },
+  "2682189056": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 8
+   }
+  },
+  "2682188955": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 18
+   }
+  },
+  "2682188907": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 6
+   }
+  },
+  "2682188882": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 11
+   }
+  },
+  "2682188766": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 7
+   }
+  },
+  "2682188706": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 9
+   }
+  },
+  "2682188659": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 26,
+    "Conduit Placed": 14
+   }
+  },
+  "2682188534": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 7,
+    "Conduit Placed": 17
+   }
+  },
+  "2682188457": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 9
+   }
+  },
+  "2682188422": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 17
+   }
+  },
+  "2682188382": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 3,
+    "Proposed": 4
+   }
+  },
+  "2682188338": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 6,
+    "Proposed": 5
+   }
+  },
+  "2682188314": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 12,
+    "Proposed": 5
+   }
+  },
+  "2682188283": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 32,
+    "Conduit Placed": 16,
+    "Existing": 1
+   }
+  },
+  "2682188249": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 41,
+    "Conduit Placed": 9
+   }
+  },
+  "2682188217": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 26,
+    "Conduit Placed": 15
+   }
+  },
+  "2682188156": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 11,
+    "Existing": 2,
+    "Proposed": 23
+   }
+  },
+  "2682188096": {
+   "status": "pending",
+   "spans": {
+    "Existing": 1,
+    "Proposed": 22
+   }
+  },
+  "2682188056": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 23,
+    "Existing": 1
+   }
+  },
+  "2682188006": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 6
+   }
+  },
+  "2682187958": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 19
+   }
+  },
+  "2682187920": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 21
+   }
+  },
+  "2682187883": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 16
+   }
+  },
+  "2682187856": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 17
+   }
+  },
+  "2682187809": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 19,
+    "Existing": 2
+   }
+  },
+  "2682187763": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 11
+   }
+  },
+  "2682187735": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 6
+   }
+  },
+  "2682187669": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 8
+   }
+  },
+  "2682187642": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 18
+   }
+  },
+  "2681740276": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 15,
+    "Fiber Placed": 7
+   }
+  },
+  "2681740245": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 15,
+    "Fiber Placed": 25
+   }
+  },
+  "2681740226": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 15,
+    "Fiber Placed": 18
+   }
+  },
+  "2681740180": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 17,
+    "Fiber Placed": 18
+   }
+  },
+  "2681740146": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 21,
+    "Fiber Placed": 16
+   }
+  },
+  "2681740120": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 17,
+    "Fiber Placed": 16
+   }
+  },
+  "2681740097": {
+   "status": "pending",
+   "spans": {
+    "Fiber Placed": 5,
+    "Conduit Placed": 4
+   }
+  },
+  "2681740076": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 4,
+    "Fiber Placed": 7
+   }
+  },
+  "2681740058": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 13,
+    "Fiber Placed": 13
+   }
+  },
+  "2681740031": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 29,
+    "Fiber Placed": 7,
+    "Proposed": 5
+   }
+  },
+  "2681739986": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 8,
+    "Fiber Placed": 8
+   }
+  },
+  "2681739958": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 20,
+    "Fiber Placed": 4
+   }
+  },
+  "2680350968": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 20,
+    "Fiber Placed": 4
+   }
+  },
+  "2680350962": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 8,
+    "Fiber Placed": 8
+   }
+  },
+  "2680342123": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 12,
+    "Fiber Placed": 7
+   }
+  },
+  "2680342094": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 29,
+    "Fiber Placed": 7,
+    "Proposed": 5
+   }
+  },
+  "2680342074": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 13,
+    "Fiber Placed": 13
+   }
+  },
+  "2680342053": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 4,
+    "Fiber Placed": 7
+   }
+  },
+  "2680342014": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 58,
+    "Fiber Placed": 39
+   }
+  },
+  "2680341977": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 26,
+    "Fiber Placed": 5
+   }
+  },
+  "2680341953": {
+   "status": "pending",
+   "spans": {
+    "Fiber Placed": 5,
+    "Conduit Placed": 4
+   }
+  },
+  "2680341912": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 17,
+    "Fiber Placed": 16
+   }
+  },
+  "2680341869": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 21,
+    "Fiber Placed": 16
+   }
+  },
+  "2680341842": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 17,
+    "Fiber Placed": 18
+   }
+  },
+  "2680341805": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 15,
+    "Fiber Placed": 18
+   }
+  },
+  "2680341768": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 15,
+    "Fiber Placed": 25
+   }
+  },
+  "2680108375": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 9
+   }
+  },
+  "2679534180": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 10,
+    "Fiber Placed": 1
+   }
+  },
+  "2679534174": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 15
+   }
+  },
+  "2679534167": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 8,
+    "Proposed": 1
+   }
+  },
+  "2679534165": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 11
+   }
+  },
+  "2679534120": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 15,
+    "Proposed": 1
+   }
+  },
+  "2679534114": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 17,
+    "Proposed": 2
+   }
+  },
+  "2679534108": {
+   "status": "pending",
+   "spans": {
+    "Fiber Placed": 2,
+    "Conduit Placed": 24
+   }
+  },
+  "2679534107": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 6,
+    "Proposed": 1
+   }
+  },
+  "2679534103": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 10,
+    "Proposed": 2
+   }
+  },
+  "2679534099": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 21,
+    "Fiber Placed": 1
+   }
+  },
+  "2679534098": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 21
+   }
+  },
+  "2679534096": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 13
+   }
+  },
+  "2679534093": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 8
+   }
+  },
+  "2679534091": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 61
+   }
+  },
+  "2679534088": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 51,
+    "Fiber Placed": 2
+   }
+  },
+  "2679534084": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 6,
+    "Proposed": 1
+   }
+  },
+  "2679534083": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 8
+   }
+  },
+  "2679534082": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 19,
+    "Proposed": 4
+   }
+  },
+  "2679534079": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 30,
+    "Fiber Placed": 3
+   }
+  },
+  "2679534078": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 55,
+    "Proposed": 6
+   }
+  },
+  "2679534077": {
+   "status": "pending",
+   "spans": {
+    "Fiber Placed": 9,
+    "Conduit Placed": 112,
+    "Proposed": 6
+   }
+  },
+  "2679534074": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 9
+   }
+  },
+  "2682324556": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 8,
+    "Proposed": 1
+   }
+  },
+  "2682193868": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 13,
+    "Conduit Placed": 9
+   }
+  },
+  "2682193829": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 7,
+    "Proposed": 5
+   }
+  },
+  "2682193793": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 11,
+    "Proposed": 5
+   }
+  },
+  "2682193758": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 16,
+    "Conduit Placed": 6,
+    "Existing": 2
+   }
+  },
+  "2682193740": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 49,
+    "Conduit Placed": 13,
+    "Existing": 2
+   }
+  },
+  "2682193724": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 78,
+    "Conduit Placed": 18,
+    "Existing": 2
+   }
+  },
+  "2682193562": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 35,
+    "Conduit Placed": 17
+   }
+  },
+  "2682193508": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 28,
+    "Conduit Placed": 13,
+    "Existing": 2
+   }
+  },
+  "2682181538": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 37
+   }
+  },
+  "2682181176": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 29
+   }
+  },
+  "2682181159": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 7
+   }
+  },
+  "2682064377": {
+   "status": "pending",
+   "spans": {
+    "Existing": 2,
+    "Proposed": 30
+   }
+  },
+  "2682063971": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 3,
+    "Proposed": 4
+   }
+  },
+  "2681743164": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 78,
+    "Conduit Placed": 18,
+    "Existing": 2
+   }
+  },
+  "2681743075": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 16,
+    "Conduit Placed": 6,
+    "Existing": 2
+   }
+  },
+  "2681743047": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 7
+   }
+  },
+  "2681742660": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 49,
+    "Conduit Placed": 13,
+    "Existing": 2
+   }
+  },
+  "2681740236": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 15
+   }
+  },
+  "2681740215": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 25,
+    "Conduit Placed": 8
+   }
+  },
+  "2681739965": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 7,
+    "Proposed": 5
+   }
+  },
+  "2681739069": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 22,
+    "Conduit Placed": 16
+   }
+  },
+  "2681739055": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 17
+   }
+  },
+  "2681739046": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 11
+   }
+  },
+  "2681738324": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 3,
+    "Conduit Placed": 16
+   }
+  },
+  "2681738280": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 13,
+    "Conduit Placed": 9
+   }
+  },
+  "2681738216": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 11,
+    "Proposed": 5
+   }
+  },
+  "2681736926": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 35,
+    "Conduit Placed": 17
+   }
+  },
+  "2681736413": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 28,
+    "Conduit Placed": 13,
+    "Existing": 2
+   }
+  },
+  "2681363269": {
+   "status": "pending",
+   "spans": {
+    "Proposed": 3,
+    "Conduit Placed": 1
+   }
+  },
+  "2681363207": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 3,
+    "Proposed": 1
+   }
+  },
+  "2680919476": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 18
+   }
+  },
+  "2680780945": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 21
+   }
+  },
+  "2680780922": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 16
+   }
+  },
+  "2680780907": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 21
+   }
+  },
+  "2680780891": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 26,
+    "Proposed": 1
+   }
+  },
+  "2680780827": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 20
+   }
+  },
+  "2680780815": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 10
+   }
+  },
+  "2680780799": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 15
+   }
+  },
+  "2680780751": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 7
+   }
+  },
+  "2680345967": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 23,
+    "Fiber Placed": 3
+   }
+  },
+  "2680345918": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 14,
+    "Fiber Placed": 2
+   }
+  },
+  "2680345898": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 37
+   }
+  },
+  "2680345869": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 29
+   }
+  },
+  "2680345822": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 7
+   }
+  },
+  "2679646178": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 28,
+    "Proposed": 1
+   }
+  },
+  "2679635202": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 12,
+    "Fiber Placed": 12
+   }
+  },
+  "2679529483": {
+   "status": "pending",
+   "spans": {
+    "Conduit Placed": 12,
+    "Fiber Placed": 12
+   }
+  }
+ },
+ "tally": {
+  "pending": 584,
+  "unknown": 16
+ }
+}
